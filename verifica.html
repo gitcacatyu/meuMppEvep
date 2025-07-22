@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modo Dark Brabo</title>
+  <style>
+    :root {
+      --bg-color: #f0f0f0;
+      --text-color: #000;
+      --box-color: #fff;
+      --btn-color: #007bff;
+      --btn-text: #fff;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      text-align: center;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    section {
+      background-color: var(--box-color);
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    input, label {
+      margin: 5px;
+    }
+
+    #res {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--btn-color);
+      color: var(--btn-text);
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    .dark-mode {
+      --bg-color: #121212;
+      --text-color: #eee;
+      --box-color: #1e1e1e;
+      --btn-color: #444;
+      --btn-text: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h2>Verificador com Modo Escuro</h2>
+    <button onclick="toggleModo()">🌙 Ativar Modo Escuro</button>
+  </header>
+
+  <section>
+    <p>
+      <label for="txtano">Ano de nascimento:</label>
+      <input type="number" id="txtano" placeholder="Ex: 2010" min="1900" max="2025">
+    </p>
+
+    <p>
+      Sexo:
+      <input type="radio" name="radsex" id="masc" checked>
+      <label for="masc">Masculino</label>
+
+      <input type="radio" name="radsex" id="femi">
+      <label for="femi">Feminino</label>
+    </p>
+
+    <p>
+      <input type="button" value="Verificar" onclick="ano()">
+    </p>
+
+    <div id="res"></div>
+  </section>
+
+  <footer>
+    <p>&copy; Mpp</p>
+  </footer>
+
+  <script>
+    function ano() {
+      const anoNascimento = document.getElementById("txtano").value;
+      const res = document.getElementById("res");
+      const anoAtual = new Date().getFullYear();
+
+      if (anoNascimento === "" || anoNascimento < 1900 || anoNascimento > anoAtual) {
+        alert("⚠️ Verifique o ano digitado!");
+        return;
+      }
+
+      const idade = anoAtual - Number(anoNascimento);
+      const sexoMasc = document.getElementById("masc").checked;
+      const genero = sexoMasc ? "homem" : "mulher";
+
+      res.innerHTML = `Detectamos um(a) <strong>${genero}</strong> de <strong>${idade} anos</strong>.`;
+
+      if (idade >= 5 && idade <= 100) {
+        setTimeout(() => {
+          location.href = "cadras.html";
+        }, 3000);
+      }
+    }
+
+    function toggleModo() {
+      const body = document.body;
+      const botao = document.querySelector("header button");
+
+      body.classList.toggle("dark-mode");
+
+      if (body.classList.contains("dark-mode")) {
+        botao.textContent = "☀️ Desativar Modo Escuro";
+      } else {
+        botao.textContent = "🌙 Ativar Modo Escuro";
+      }
+    }
+  </script>
+
+</body>
+</html>
