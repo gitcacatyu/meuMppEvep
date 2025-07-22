@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastrar-se</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .form-container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    input, button {
+      padding: 10px;
+      width: 90%;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #mensagem {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cadastro</h1>
+
+  <div class="form-container">
+    <h3>Seus dados pessoais</h3> 
+
+    <label for="nome">Nome Completo:</label><br>
+    <input type="text" id="nome" placeholder="Nome Completo"> <br><br>
+
+    <label for="senha">Senha:</label><br>
+    <input type="password" id="senha" placeholder="Senha"> <br><br>
+
+    <label for="nascimento">Data de nascimento:</label><br>
+    <input type="date" id="nascimento"> <br><br>
+
+    <!-- Botão que chama a função -->
+    <button onclick="enviarFormulario()">Enviar</button>
+
+    <p id="mensagem"></p>
+  </div>
+
+  <script>
+    function enviarFormulario() {
+      const nome = document.getElementById('nome').value;
+      const senha = document.getElementById('senha').value;
+      const nascimento = document.getElementById('nascimento').value;
+
+      if (nome === "" || senha === "" || nascimento === "") {
+        document.getElementById("mensagem").style.color = "red";
+        document.getElementById("mensagem").textContent = "Por favor, preencha todos os campos!";
+      } else {
+        document.getElementById("mensagem").style.color = "green";
+        document.getElementById("mensagem").textContent = `Cadastro enviado com sucesso! 🥳 Bem-vindo, ${nome}!`;
+        
+        console.log("Nome:", nome);
+        console.log("Senha:", senha);
+        console.log("Nascimento:", nascimento);
+
+        // Redireciona depois de um tempinho
+        setTimeout(() => {
+          location.href = 'login.html';
+        }, 2000); // espera 2 segundos antes de ir pro login
+      }
+    }
+  </script>
+</body>
+</html>
