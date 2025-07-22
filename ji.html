@@ -1,113 +1,282 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <img src="./usuarioMpp.png" alt="">
-    <title>Home Mpp</title>
-    <style>
-        body{
-            background-color: rgb(192, 224, 252);
-            font: normal 13pt Arial;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home MPP</title>
+  <style>
+    :root {
+      --bg-light: rgba(192, 224, 252, 0.562);
+      --text-light: #181717;
+      --button-bg-light: rgba(3, 3, 3, 0.37);
+      --button-text-light: #181717;
+      --shadow-light: rgba(0, 0, 0, 0.356);
 
-        }
-        
-        
-  input{
-    background-color: rgba(209, 203, 203, 0.753);
-    font: normal  10pt  Arial;
-    color: rgb(24, 23, 23);
-    border-radius: 20px;
-    transition: transform 300ms ease-in-out;
-    padding: 15px;
-    
-  }
-  input:hover{
-    transform: scale(1.1);
-    border: 1px solid black;
-    border-radius: 60px;
-    background-color: aliceblue;
-    cursor: pointer;
-  }
+      --bg-dark: #121212;
+      --text-dark: #eee;
+      --button-bg-dark: #333;
+      --button-text-dark: #fff;
+      --shadow-dark: rgba(255, 255, 255, 0.2);
+    }
 
-  h1{
-    font: normal 30pt Arial;
-    margin: 50px;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-  }
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      font: normal 13pt Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      min-height: 100vh;
+      margin: 0;
+    }
 
-  img{
-    height: 40px;
-    border-radius: 10px; 
-    margin: 600;
-    display: flex;
-    width:50 ;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 300ms ease-in-out;
-  } 
+    input, button {
+      background-color: var(--button-bg-light);
+      font: normal 10pt Arial, sans-serif;
+      color: var(--button-text-light);
+      border-radius: 20px;
+      transition: transform 300ms ease-in-out, background-color 0.3s, color 0.3s;
+      padding: 15px;
+      margin: 10px auto 20px;
+      display: block;
+      height: 60px;
+      width: 350px;
+      border-bottom: 5px solid black;
+      box-shadow: 5px 10px 17px var(--shadow-light);
+      cursor: pointer;
+      border: none;
+    }
 
-  img:hover{
-    transform: scale(1.1);
-    height: 50px;
-    border: 1px solid black;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-    </style>
-</head>
+    input:hover, button:hover {
+      transform: scale(1.1);
+      border-radius: 60px;
+      background-color: rgba(255, 255, 255, 0.544);
+      border-bottom: 3px solid black;
+      color: black;
+    }
+
+    h1 {
+      font: normal 30pt Arial, sans-serif;
+      margin: 50px 0 30px;
+    }
+
+    img {
+      height: 60px;
+      border-radius: 10px;
+      margin: 0 auto 30px;
+      display: block;
+      max-width: 90%;
+      box-shadow: 5px 5px 10px var(--shadow-light);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      border: 2px solid black;
+      background-color: rgba(255, 255, 255, 0.1);
+
+    }
+
+    img:hover {
+      transform: scale(1.2);
+      border: 1px solid black;
+      background-color: ghostwhite;
+    }
+
+     img.dark-mode {
+      filter: brightness(0.8);  
+      transition: filter 0.3s ease;
+      transform: scale(1);
+      border: 2px solid white;      
+      background-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 5px 5px 10px var(--shadow-dark);
+    }
+    img:hover.dark-mode {
+      filter: brightness(1);
+      transform: scale(1.2);
+      border: 10px solid white;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    body.dark-mode {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    body.dark-mode input, body.dark-mode button {
+      background-color: var(--button-bg-dark);
+      color: var(--button-text-dark);
+      box-shadow: 5px 10px 17px var(--shadow-dark);
+      border-bottom: 5px solid white;
+    }
+
+    body.dark-mode input:hover, body.dark-mode button:hover {
+      background-color: #555;
+      color: white;
+      border-bottom: 3px solid white;
+    }
+
+    #logoutBtn {
+      margin-top: 20px;
+      padding: 15px 30px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(45deg, #ff4d4d, #8e2de2);
+      color: white;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    #logoutBtn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    body.dark-mode #logoutBtn {
+      background: linear-gradient(45deg, #a81100, #610088);
+      color: #fff;
+      box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark-mode #logoutBtn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 24px rgba(255, 255, 255, 0.3);
+    }
+
+   
+  </style>
+</head><i class="si-home"></i>
 <body>
-     <h1>Home Mpq</h1>
 
-    <input type="button" onclick="iPS()" value="Ir para site">
-    <input type="button" onclick="vL()" value="Deslogar" > 
-    <input type="button" onclick="veVV()" value="Ver vídeo">
-
-    <p>Sobre 3.140.000 resultados
-        A frase "Olá, Mundo" é usada para fins de teste ou para iniciar o aprendizado de uma linguagem de programação. Sua origem remonta às primeiras décadas da programação de computadores e foi eternizada pelos criadores da linguagem de programação C, Brian Kernighan e Dennis Ritchie, no livro "The C Programming Language"12345.</p>
-  <input type="button" onclick="site()" value="Ir para Site 2">
-   <h6>Marque Por favor</h6><input type="checkbox" onclick="autoriz()" >
-    <script>
-        var Ir = document.getElementById(Ir);
-        var L  = document.getElementById(L);
-        var vV = document.getElementById(vV)
-        var IP2 = document.getElementById(IP2)
-        var chh = document.getElementById(chh)
-        function iPS(){
-            if (iPS==iPS) {
-                location.href = "home.html"
-            }
-       
-        }
+  <img src="./image site convidado.png" alt="Imagem do site convidado" id="img"/>
  
-        function vL() {
-            if (vL==vL){
-             location.href = "index.html"
-            }
-        }
-        function veVV() {
-            if (veVV==veVV) {
-                location.href = "vidio.html"
-            }
-        }
 
-        function site(){
-          if(site==site){
-            alert('Então vamos!')
-            location.href = 'site2.html'
-          }
-          
-        }
+  <h1>Home MPP</h1>
 
-        function autoriz(){
-          if(autoriz==autoriz){
-                    
-          }
-        }
-          
-    </script>
+  <input type="button" onclick="irParaSite()" value="MPP 1" />
+  <input type="button" onclick="deslogarEVotar()" value="Deslogar e voltar" />
+  <input type="button" onclick="verVideo()" value="Vídeo/Curiosidades" />
+  <input type="button" onclick="irParaSite2()" value="MPP 2" />
+    <input type="button" onclick="location.href='in.html'" value="Executar Código Java" />
+  <input type="button" onclick="location.href='index2.html'" value="MPP 3" />
+
+  
+  <input type="button"  value="Deus seja louvado." id="nomeD" onclick="nomeD()"  >
+   
+
+  <button id="logoutBtn" onclick="logout()">Logout</button>
+    <input type="button" value="PartyOna Fun" id="partyOnBtn" onclick="location.href= 'index3.html'" style="margin-top: 20px; padding: 10px 20px; font-size: 1rem; border-radius: 8px; cursor: pointer; background-color: #d711ff; color: white; border: none; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); transition: transform 0.2s ease;
+    :hover {
+      transform: scale(1.05);
+      background-color: #b300e6;
+      color: #fff;
+      text-decoration: none;
+    }
+    
+     dark-mode:hover {
+      transform: scale(1.05);
+      background-color: #210529;
+      color: #fff;
+      text-decoration: none;
+    }" />
+    
+    
+
+
+    
+  <button id="toggleBtn" onclick="toggleDark()" style="margin-top: 30px; padding: 10px 20px; font-size: 1rem; border-radius: 8px; cursor: pointer;">
+    🌙 Modo Escuro
+  </button>
+    <h6>Desenvolvido por EVEP</h6>
+  <script>
+    window.onload = () => {
+      const modoSalvo = localStorage.getItem('modo');
+      const body = document.body;
+      const btn = document.getElementById('toggleBtn');
+
+      if (modoSalvo === 'dark') {
+        body.classList.add('dark-mode');
+        btn.textContent = '☀️ Modo Claro';
+      }
+    };
+
+    function irParaSite() {
+      location.href = "home.html";
+    }
+
+    function deslogarEVotar() {
+      location.href = "login.html";
+    }
+
+    function verVideo() {
+      location.href = "vidio.html";
+    }
+
+    function irParaSite2() {
+      alert("Então vamos!");
+      location.href = "site2.html";
+    }
+
+
+
+    function toggleDark() {
+      const body = document.body;
+      const btn = document.getElementById("toggleBtn");
+
+      body.classList.toggle("dark-mode");
+
+      if (body.classList.contains("dark-mode")) {
+        btn.textContent = "☀️ Modo Claro";
+        localStorage.setItem('modo', 'dark');
+      } else {
+        btn.textContent = "🌙 Modo Escuro";
+        localStorage.setItem('modo', 'light');
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("logado");
+      window.location.href = "index.html"; // ou "login.html", depende do fluxo
+    }
+
+   
+  </script>
+  <input type="file" id="seletorImagem" accept="image/*" style="display: none;" />
+
+<script>
+  const imagem = document.getElementById('img');
+  const seletor = document.getElementById('seletorImagem');
+
+  // Carrega a imagem do localStorage (se tiver)
+  window.addEventListener('load', () => {
+    const imagemSalva = localStorage.getItem('imagemPerfil');
+    if (imagemSalva) {
+      imagem.src = imagemSalva;
+    }
+  });
+
+  // Quando clica na imagem, abre o seletor
+  imagem.addEventListener('click', () => {
+    seletor.click();
+  });
+
+  // Quando escolhe uma imagem nova
+  seletor.addEventListener('change', () => {
+    const arquivo = seletor.files[0];
+    if (arquivo) {
+      const leitor = new FileReader();
+      leitor.onload = function (e) {
+        const novaSrc = e.target.result;
+        imagem.src = novaSrc;
+        localStorage.setItem('imagemPerfil', novaSrc);
+      };
+      leitor.readAsDataURL(arquivo);
+    }
+  });
+
+  function nomeD() {
+    alert("Deus seja louvado!");
+  }
+</script>
+
 </body>
 </html>
