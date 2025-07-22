@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PatyOn Fun MPP EVEP - Home</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #4e008e, #9c27b0);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+    }
+
+    input {
+      width: 80%;
+    }
+
+    button {
+      background-color: #ff90e8;
+      color: #4e008e;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: white;
+    }
+
+    .video-card {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    iframe {
+      border-radius: 15px;
+    }
+
+    .actions {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .actions button {
+      background-color: #ffffff30;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 10px;
+    }
+
+    .comentarios {
+      margin-top: 10px;
+      text-align: left;
+    }
+
+    .comentarios p {
+      background: #ffffff20;
+      padding: 5px 10px;
+      border-radius: 8px;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Olá, <span id="nomeUsuario"></span>! 👋</h1>
+    <p>Adicione vídeos do TikTok abaixo:</p>
+
+    <input type="text" id="tiktokLink" placeholder="Cole o link do TikTok aqui" />
+    <br />
+    <button onclick="addTikTok()">Adicionar Vídeo</button>
+
+    <div id="tiktokVideos"></div>
+  </div>
+
+  <script>
+    const nome = localStorage.getItem("nomeUsuario") || "Visitante";
+    document.getElementById("nomeUsuario").textContent = nome;
+
+    function addTikTok() {
+      const link = document.getElementById("tiktokLink").value;
+      if (!link.includes("tiktok.com")) {
+        alert("Insira um link válido do TikTok.");
+        return;
+      }
+
+      const embedLink = link.replace("/video/", "/embed/");
+      const container = document.createElement("div");
+      container.className = "video-card";
+
+      container.innerHTML = `
+        <iframe src="${embedLink}" width="325" height="580" allow="autoplay; encrypted-media"></iframe>
+        <div class="actions">
+          <button onclick="curtir(this)">❤️ Curtir (<span>0</span>)</button>
+          <button onclick="comentar(this)">💬 Comentar</button>
+          <button onclick="salvar()">💾 Salvar</button>
+        </div>
+        <div class="comentarios">
+          <!-- Comentários aparecem aqui -->
+        </div>
+      `;
+
+      document.getElementById("tiktokVideos").prepend(container);
+      document.getElementById("tiktokLink").value = "";
+    }
+
+    function curtir(btn) {
+      const span = btn.querySelector('span');
+      let count = parseInt(span.textContent);
+      span.textContent = ++count;
+    }
+
+    function comentar(btn) {
+      const comentario = prompt("Digite seu comentário:");
+      if (comentario) {
+        const div = btn.closest(".video-card").querySelector(".comentarios");
+        const p = document.createElement("p");
+        p.textContent = `🗨️ ${comentario}`;
+        div.appendChild(p);
+      }
+    }
+
+    function salvar() {
+      alert("Simulação: vídeo salvo na sua lista! 😉");
+    }
+  </script>
+</body>
+</html>

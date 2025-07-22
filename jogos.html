@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini-Jogos | DevBrabo Edition</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/679/679720.png" type="image/png">
+  <style>
+    body {
+      background-color: #e5fbe9;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+      color: #222;
+      max-width: 900px;
+      margin: auto;
+    }
+    h1 {
+      color: #075e28;
+      text-align: center;
+      font-size: 36px;
+    }
+    h2 {
+      color: #0b8f39;
+      font-size: 24px;
+    }
+    button {
+      margin-top: 10px;
+      background-color: #0b8f39;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #066c2a;
+    }
+    .game {
+      margin-bottom: 40px;
+      border: 2px solid #0b8f39;
+      box-shadow: 2px 2px 8px #00000020;
+      padding: 15px;
+      border-radius: 12px;
+      background-color: #f3fff7;
+    }
+    .game a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: white;
+      background-color: #0b8f39;
+      padding: 10px 20px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+    a:hover {
+      background-color: #066c2a;
+    }
+    #adventureLog, #rpgLog {
+      background-color: #ffffff;
+      border: 1px solid #0b8f39;
+      padding: 10px;
+      min-height: 80px;
+      margin-top: 10px;
+    }
+    #labirintoGrid {
+      display: grid;
+      grid-template-columns: repeat(8, 40px);
+      gap: 2px;
+      margin-top: 10px;
+    }
+    .labirinto-celula {
+      width: 40px;
+      height: 40px;
+      background-color: #d3f9d8;
+      border: 1px solid #0b8f39;
+    }
+    #menuInicial {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+    }
+    .menu-btn {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #0b8f39;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .menu-btn:hover {
+      background-color: #066c2a;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎮 MPP-3 Deluxe: Mini-Jogos do DevBrabo 💻</h1>
+  <div id="menuInicial">
+    <h2>Escolha um jogo:</h2>
+    <button class="menu-btn" onclick="abrirJogo('aventura')">🗺️ Jogo de Aventura</button>
+    <button class="menu-btn" onclick="abrirJogo('rpg')">🏰 Mini RPG Texto</button>
+    <button class="menu-btn" onclick="abrirJogo('labirinto')">🌀 Mini Labirinto</button>
+    <button class="menu-btn" onclick="abrirJogo('memoria')">🧠 Jogo da Memória</button>
+    <button class="menu-btn" onclick="abrirJogo('clique')">🎯 Jogo do Clique Rápido</button>
+    <button class="menu-btn" onclick="abrirJogo('adivinha')">🔢 Jogo de Adivinhação</button>
+  </div>
+
+  <div class="game" id="aventura" style="display:none">
+    <h2>🗺️ Jogo de Aventura</h2>
+    <p>Escolha sua ação:</p>
+    <button onclick="aventura('explorar')">Explorar a floresta</button>
+    <button onclick="aventura('caverna')">Entrar na caverna</button>
+    <button onclick="aventura('descansar')">Descansar</button>
+    <button onclick="limparAventura()">🧹 Limpar</button>
+    <div id="adventureLog"></div>
+  </div>
+
+  <div class="game" id="rpg" style="display:none">
+    <h2>🏰 Mini RPG Texto</h2>
+    <p>Você está em uma taverna. Um velho te oferece uma missão. O que faz?</p>
+    <button onclick="rpg('aceitar')">Aceitar missão</button>
+    <button onclick="rpg('recusar')">Recusar e beber hidromel</button>
+    <button onclick="rpg('atacar')">Atacar o velho (maluco!)</button>
+    <button onclick="limparRpg()">🧹 Limpar</button>
+    <div id="rpgLog"></div>
+  </div>
+
+  <div class="game" id="labirinto" style="display:none">
+    <h2>🌀 Mini Labirinto</h2>
+    <p>Clique para gerar o labirinto:</p>
+    <button onclick="gerarLabirinto()">🔄 Gerar</button>
+    <div id="labirintoGrid"></div>
+  </div>
+
+  <div class="game" id="memoria" style="display:none">
+    <h2>🧠 Jogo da Memória</h2>
+    <p>Clique para ver e lembrar a ordem dos números:</p>
+    <button onclick="jogoMemoria()">🧠 Jogar</button>
+    <div id="memoriaResultado"></div>
+  </div>
+
+  <div class="game" id="clique" style="display:none">
+    <h2>🎯 Jogo do Clique Rápido</h2>
+    <p>Clique no botão o mais rápido possível!</p>
+    <button id="botaoClique" onclick="startCliqueRapido()">🚀 Começar</button>
+    <p>Depois de clicar, veja o tempo:</p>
+    <button onclick="startCliqueRapido()">🕒 Clique Aqui</button>
+    <div id="cliqueResultado"></div>
+  </div>
+
+  <div class="game" id="adivinha" style="display:none">
+    <h2>🔢 Jogo de Adivinhação</h2>
+    <p>Tente adivinhar um número de 1 a 10:</p>
+    <input id="inputNumero" type="number" min="1" max="10">
+    <label for="inputNumero">Número:</label>
+<input id="inputNumero" type="number" min="1" max="10">
+    <button onclick="jogoAdivinhacao()">🔍 Adivinhar</button>
+    <div id="adivinhaResultado"></div>
+  </div>
+
+  <script>
+    function abrirJogo(id) {
+      document.querySelectorAll('.game').forEach(div => div.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+    // Funções dos jogos permanecem as mesmas aqui ↓
+    function aventura(acao) {
+      let log = document.getElementById('adventureLog');
+      let resultado = '';
+      if (acao === 'explorar') {
+        resultado = "Você encontrou uma clareira misteriosa com um baú escondido!";
+      } else if (acao === 'caverna') {
+        resultado = "Dentro da caverna você achou uma espada lendária!";
+      } else if (acao === 'descansar') {
+        resultado = "Você descansou e recuperou sua energia.";
+      }
+      log.innerHTML += '<p>' + resultado + '</p>';
+    }
+
+    function limparAventura() {
+      document.getElementById('adventureLog').innerHTML = '';
+    }
+
+    function rpg(acao) {
+      const log = document.getElementById('rpgLog');
+      let resultado = '';
+      switch(acao) {
+        case 'aceitar':
+          resultado = "Você partiu para a missão e derrotou um dragão! 🐉🔥";
+          break;
+        case 'recusar':
+          resultado = "Você aproveitou o hidromel e fez novos amigos na taverna! 🍻";
+          break;
+        case 'atacar':
+          resultado = "O velho era um mago... você virou um sapo! 🐸";
+          break;
+      }
+      log.innerHTML += `<p>${resultado}</p>`;
+    }
+
+    function limparRpg() {
+      document.getElementById('rpgLog').innerHTML = '';
+    }
+
+    function gerarLabirinto() {
+      const grid = document.getElementById('labirintoGrid');
+      grid.innerHTML = '';
+      for (let i = 0; i < 64; i++) {
+        const celula = document.createElement('div');
+        celula.className = 'labirinto-celula';
+        grid.appendChild(celula);
+      }
+    }
+
+    function jogoMemoria() {
+      const res = document.getElementById('memoriaResultado');
+      const ordem = Array.from({length: 4}, () => Math.floor(Math.random() * 10));
+      res.innerHTML = 'Memorize: ' + ordem.join(', ');
+      setTimeout(() => {
+        res.innerHTML = 'Agora tente lembrar!';
+      }, 3000);
+    }
+
+    function startCliqueRapido() {
+  const res = document.getElementById('cliqueResultado');
+  const botao = document.getElementById('botaoClique');
+  res.innerHTML = 'Clique agora!';
+  const start = Date.now();
+
+  botao.onclick = function () {
+    const tempo = Date.now() - start;
+    res.innerHTML = `Você clicou em ${tempo} ms!`;
+    botao.onclick = startCliqueRapido; // reseta a função
+  };
+}
+
+
+   function jogoAdivinhacao() {
+  const numero = Math.floor(Math.random() * 10) + 1;
+  const input = document.getElementById('inputNumero');
+  const palpite = parseInt(input.value);
+  const res = document.getElementById('adivinhaResultado');
+
+  if (isNaN(palpite)) {
+    res.innerHTML = 'Digite um número válido!';
+    return;
+  }
+
+  if (palpite === numero) {
+    res.innerHTML = 'Acertou! 🎉';
+  } else {
+    res.innerHTML = `Errou! Era ${numero}`;
+  }
+}
+
+  </script>
+</body>
+</html>

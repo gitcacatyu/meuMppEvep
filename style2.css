@@ -1,0 +1,101 @@
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #4e008e, #9c27b0);
+  color: white;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.container {
+  margin-top: 50px;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 2em;
+  color: #ffffff;
+}
+
+small {
+  font-size: 0.6em;
+  vertical-align: top;
+}
+
+input {
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #ff90e8;
+  color: #4e008e;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+button:hover {
+  background-color: #fff;
+}
+
+.videos {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+video {
+  width: 300px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.video-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.video-card video {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.actions button {
+  background-color: #ffffff30;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.actions button:hover {
+  background-color: #d904ecce;
+}
+
+.comentarios {
+  margin-top: 10px;
+  text-align: left;
+  background-color: #9c27b0;
+}
