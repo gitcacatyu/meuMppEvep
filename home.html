@@ -1,150 +1,146 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> MPP...</title>
-    <input type="button" onclick="voltar2()" value=" <-- ">
-    <h1>Mpq</h1>
-    <img src="./vecteezy_innovations-systems-connecting-people-and-intelligence_7019138.jpg" alt="">
-      O sistema
-    <style>
-      body {
-         background-color: #8181ff;
-         color: rgb(255, 229, 197);
-         font: normal 15pt Arial;
-      }
-    h1 {
-     color: rgb(251, 180, 126);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MPP Console</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #121212;
+      color: #fff;
+      font-family: 'Arial';
     }
-    h6 {
-      font: normal 11pt Arial ;  
-      color: rgb(243, 198, 107);
+    .topo {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background: #1f1f1f;
     }
-    h4 {
-        color:rgb(89, 89, 89)
+    button {
+      background: #333;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
     }
-
-    
-    h2 {
-          color: linen;
-        }
-        img {
-          height: 100px;
-        margin: -5px;
-        padding: 1px;
-        border: 5px solid white;
-        border-radius: 50px;
-        background-color: aliceblue;
-       
-
-        }
-    img:hover {
-        height: 100px;
-        margin: -5px;
-        padding: 1px;
-        border: 5px solid white;
-        border-radius: 50px;
-        background-color: aliceblue;
-        cursor: pointer;
-       
+    #console {
+      background-color: #000;
+      color: #0f0;
+      padding: 15px;
+      height: 150px;
+      overflow-y: auto;
+      font-family: monospace;
+      border-top: 2px solid #444;
     }
-    
-  button {
-    background-color: #ffffff71 ;
-    border: outset 2px  solid  #737373;
-    background: transparent 0.5 ;
-    position: top 100px; 
-  }
-  input {
-    border: 1px solid rgb(182, 175, 175);
-    background-color: #e6e5e5;
-    transition: transform  500ms ease-in-out;
-    border-radius: 10px;
-  }
-
-  input:hover{
-   transform: scale(1.1);
-   border:1px solid #000000 ;
-   cursor: pointer;
-   background-color: #c2bdbd;
-   border-radius: 15px;
-  }
-    </style>
+    .CodeMirror {
+      height: 300px;
+      font-size: 16px;
+    }
+    .erro {
+      text-decoration: underline wavy red;
+    }
+    .aviso {
+      text-decoration: underline wavy yellow;
+    }
+  </style>
 </head>
-
 <body>
 
+  <div class="topo">
+    <h2>MPP Console </h2>
+    <div>
+      <button onclick="executar()">▶️ Executar</button>
+      <button onclick="limparConsole()">🧹 Limpar Console</button>
 
-     
-     
-     <h2>Bem-vindo ao Nosso Sistema</h2>
+    </div>
+  </div>
 
-   <p>Prezado(a) Usuário(a),
-     
-     Seja bem-vindo(a) ao nosso sistema. Nossa plataforma foi desenvolvida para oferecer a você uma experiência segura, eficiente e intuitiva, garantindo o melhor desempenho em suas atividades.
-     
-     Recursos Disponíveis:   <br>
-     - Acesso rápido e seguro aos serviços;<br>
-     - Interface intuitiva e de fácil navegação;<br>
-     - Suporte técnico especializado;<br>
-     - Atualizações constantes para melhorias de desempenho e segurança.<br>
-         
-     Política de Uso: <br>
-     Para garantir um ambiente seguro e funcional, solicitamos que todos os usuários respeitem as diretrizes de uso descritas em nossos  Termos de Serviço. <br>O uso indevido da plataforma pode resultar em sanções, incluindo a suspensão da conta. <br>
-     
-     <br> Suporte ao Usuário: <br>
-     Caso tenha alguma dúvida ou necessite de assistência, nossa equipe de suporte está à disposição por meio dos seguintes canais: <br> <br>
-     - E-mail: mppmeuprograma@gmail.com<br>
-     - Telefone: (XX) XXXX-XXXX<br><br>
-     
-     Agradecemos a sua confiança e desejamos uma excelente experiência com nossos serviços.<br><br>
-     
-     Atenciosamente,<br>  
-     Equipe Mpp</p>
-     
-     <br>
-<br>
-<br>
-<br> <br>
+  <label for="code" style="display:none;">Editor de código</label>
+  <textarea id="code" title="Editor de código" placeholder="Digite seu código JavaScript aqui"></textarea>
+  <div id="console">// Resultados aparecerão aqui</div>
 
- <h2>Sobre o Sistema</h2>
-O MPP é uma solução inovadora desenvolvida para simplificar e otimizar processos. Com funcionalidades avançadas e uma interface intuitiva, nossa plataforma permite que você alcance resultados mais rápidos e eficazes, economizando tempo e recursos. <br>
-<br>
-<h4>Funcionalidades </h4>
-<br>
-Automação Inteligente: <br> Reduza o trabalho manual e foque no que realmente importa. <br>
-Gestão Centralizada: <br> Todos os dados e operações em um único lugar. <br>
-Relatórios em Tempo Real: <br> Tome decisões baseadas em informações atualizadas. <br>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+  
 
-Segurança Avançada: <br> Seus dados protegidos com a mais alta tecnologia. <br> <br>
-Por que Escolher o Mpp? <br> <br>
+  <script>
+    const consoleDiv = document.getElementById("console");
 
-Suporte técnico especializado. <br>
-Atualizações frequentes com novas funcionalidades.
-       
-    
-    
-   
-     <h3>Oque é Sistema</h3>
-     <h5>Sistema é um conjunto de elementos ou componentes interligados que trabalham juntos para atingir um objetivo específico. Esses elementos podem ser físicos, como as partes de uma máquina, ou abstratos, como processos em uma organização. A ideia é que todos os componentes funcionem em harmonia para alcançar um resultado desejado.</h5>
-   
-     <h7>Criadores: Carlos Alberto e Rebeca Lacerda.</h7> <h5>Design Rebeca Lacerda, Conteúdo/Interatividade Carlos Alberto</h5>
-<script>
+    const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+      mode: "javascript",
+      theme: "dracula",
+      lineNumbers: true,
+      matchBrackets: true,
+      extraKeys: {
+        "Ctrl-Space": "autocomplete"
+      }
+    });
 
-var vol = document.getElementById('voltar2'); 
+    editor.on("change", () => {
+      localStorage.setItem("codigoBrabo", editor.getValue());
+      detectarErros();
+    });
 
-function voltar2() {
-  if(voltar2 == voltar2) {
-           location.href = "ji.html";
+    window.onload = () => {
+      const salvo = localStorage.getItem("codigoBrabo");
+      if (salvo) editor.setValue(salvo);
+    };
+
+    function limparConsole() {
+      consoleDiv.textContent = " >";
     }
-}
 
+    function executar() {
+      limparConsole();
+      const originalLog = console.log;
+    console.log = function(...args) {
+  const linha = args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : a).join(' ');
+  const node = document.createElement("div");
+  node.textContent = "> " + linha;
+  consoleDiv.appendChild(node);
+  originalLog(...args);
+};
 
-</script>
+      try {
+        eval(editor.getValue());
+      } catch (err) {
+        consoleDiv.textContent += "\n❌ Erro: " + err.message;
+      }
+      console.log = originalLog;
+    }
 
+    function detectarErros() {
+      const code = editor.getValue();
+      const lines = code.split("\n");
+      editor.operation(() => {
+        for (let i = 0; i < lines.length; i++) {
+          editor.removeLineClass(i, "text", "erro");
+          editor.removeLineClass(i, "text", "aviso");
+        }
 
+        lines.forEach((linha, i) => {
+          if (linha.trim().length > 0 && !linha.endsWith(";") && !linha.includes("{") && !linha.includes("}")) {
+            editor.addLineClass(i, "text", "aviso");
+            setTimeout(() => editor.removeLineClass(i, "text", "aviso"), 5000);
+          }
+        });
 
-     
+        try {
+          new Function(code); // Verifica se JS é válido
+        } catch (e) {
+          const msg = e.stack.match(/<anonymous>:(\d+):/);
+          if (msg && msg[1]) {
+            const erroLinha = parseInt(msg[1]) - 1;
+            editor.addLineClass(erroLinha, "text", "erro");
+          }
+        }
+      });
+    }
+  </script>
+
 </body>
 </html>

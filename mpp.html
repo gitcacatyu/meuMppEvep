@@ -1,70 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mpp 2 //</title>
-    <style>
-        body{
-            font: 13pt Arial;
-            background-color: rgba(248, 97, 42, 0.781);
-            
-        }
-        H2{
-            display: flex;
-            justify-content: center;
-            
-        }
-        input{
-        transition: transform 300ms ease-in-out;
-        border-radius: 20px;
-        border: 1px solid black;
-        padding: 10px;
-        width: 100px;
-        display: block;
-        align-items: center;
-        justify-content: center;
-        height: 40px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mpp 2 //</title>
+  <style>
+    :root {
+      --bg-color: rgb(255, 138, 95);
+      --text-color: #000;
+      --btn-bg: #fff;
+      --btn-text: #000;
+      --btn-shadow: gray;
+    }
 
-        input:hover{
-           transform: scale(1.1);
-           border-radius: 10px;
-           border: 3px solid rgb(56, 41, 21);
-           padding: 5px;
-           
-        }
-    </style>
+    body {
+      font: 13pt Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: all 0.4s ease;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h2 {
+      display: flex;
+      justify-content: center;
+      cursor: default;
+      box-shadow: 1px 2px 3px rgb(255, 123, 0);
+      font-size: 2rem;
+      margin-bottom: 40px;
+    }
+
+    input[type="button"] {
+      transition: transform 300ms ease-in-out, background-color 0.3s ease;
+      border-radius: 20px;
+      border: 2px solid black;
+      padding: 10px;
+      width: 170px;
+      margin: 15px auto;
+      display: block;
+      height: 45px;
+      box-shadow: 5px 10px 15px var(--btn-shadow);
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    input[type="button"]:hover {
+      transform: scale(1.1);
+      border: 3px solid rgb(56, 41, 21);
+      background-color: #eee;
+    }
+
+    #toggleBtn {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 25px;
+      background-color: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+    }
+
+    #toggleBtn:hover {
+      background-color: #555;
+      transform: scale(1.05);
+    }
+
+    /* DARK MODE */
+    body.dark-mode {
+      --bg-color: #1e1e1e;
+      --text-color: #fff;
+      --btn-bg: #222;
+      --btn-text: #fff;
+      --btn-shadow: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark-mode input[type="button"]:hover {
+      background-color: #444;
+      color: #fff;
+    }
+
+    body.dark-mode #toggleBtn {
+      background-color: #fff;
+      color: #111;
+    }
+
+    body.dark-mode #toggleBtn:hover {
+      background-color: #ccc;
+    }
+  </style>
 </head>
 <body>
-    <H2>Nossa Home</H2> 
-    <input type="button" onclick="Sitt()" value="Site">
-    <input type="button" onclick="vol5()"  value="← Voltar">
-    <input type="button" onclick="c1()" value="Casa 1"> 
- 
-     
-<script>
- var tyu = document.getElementById(tyu)
- var ty = document.getElementById(ty) 
- var t = document.getElementById(t)
+  <h2>Nossa Home</h2>
+  <input type="button" onclick="Sitt()" value="Site" />
+  <input type="button" onclick="vol5()" value="← Voltar" />
+  <input type="button" onclick="c1()" value="Casa 1" />
 
+  <button id="toggleBtn" onclick="toggleDark()">🌙 Modo Escuro</button>
 
- function  Sitt(){
-    if(Sitt==Sitt){
-       location.href = 'in.html'
+  <script>
+    // Redirecionamentos
+    function Sitt() {
+      location.href = 'in.html';
     }
- }
 
- function  vol5(){
-    if(vol5==vol5){
-       location.href ='site2.html'
+    function vol5() {
+      location.href = 'site2.html';
     }
-} 
-function  c1(){
-    if(c1==c1){
-       location.href = 'c.html'
+
+    function c1() {
+      location.href = 'c.html';
     }
-}
-</script>
+
+    // Dark mode com localStorage
+    window.onload = () => {
+      const modoSalvo = localStorage.getItem('modo');
+      if (modoSalvo === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('toggleBtn').textContent = '☀️ Modo Claro';
+      }
+    };
+
+    function toggleDark() {
+      const body = document.body;
+      const btn = document.getElementById('toggleBtn');
+
+      body.classList.toggle('dark-mode');
+
+      if (body.classList.contains('dark-mode')) {
+        btn.textContent = '☀️ Modo Claro';
+        localStorage.setItem('modo', 'dark');
+      } else {
+        btn.textContent = '🌙 Modo Escuro';
+        localStorage.setItem('modo', 'light');
+      }
+    }
+  </script>
 </body>
 </html>

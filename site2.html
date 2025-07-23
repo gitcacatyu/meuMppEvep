@@ -1,60 +1,187 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mpp2</title>
-    <style>
-        body{
-            background-color: salmon;
-            font: normal 15pt Arial;
-        }
-        input {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-            color: white;
-            background-color: brown;
-        }
-        input:hover{
-            color: black;
-            background-color: rgb(197, 69, 52);
-            border: 2px solid black;
-            border-radius: 15px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mpp2 - Versão Hard + Dark Mode</title>
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f67280, #c06c84);
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      text-align: center;
+    -webkit-user-select: none;
+    user-select: none;
+    user-select: none;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+
+    h2 {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 50px;
+      line-height: 1.4;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 360px;
+      margin-bottom: 40px;
+    }
+
+    input[type="button"] {
+      background-color: #a52a2a;
+      border: none;
+      border-radius: 15px;
+      padding: 18px 40px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 6px 10px rgba(165, 45, 45, 0.8);
+      transition: 
+        background-color 0.3s ease, 
+        color 0.3s ease,
+        transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+        box-shadow 0.3s ease;
+      flex: 1 1 120px;
+      -webkit-user-select: none;
+    }
+
+    input[type="button"]:hover {
+      background-color: #c54534;
+      color: black;
+      box-shadow: 0 8px 20px rgba(255, 69, 69, 0.9);
+      transform: scale(1.15) rotate(3deg);
+      border-radius: 30px;
+    }
+
+    input[type="button"]:active {
+      transform: scale(0.95);
+      box-shadow: 0 4px 6px rgba(165, 45, 45, 0.6);
+    }
+
+    /* Botão toggle dark mode */
+    #toggleDarkBtn {
+      background: #444;
+      color: #eee;
+      font-size: 1.2rem;
+      padding: 12px 30px;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.7);
+      transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+     -webkit-user-select: none;
+     user-select: none;
+      margin-bottom: 20px;
+    }
+
+    #toggleDarkBtn:hover {
+      background: #666;
+      transform: scale(1.1);
+    }
+
+    /* Modo escuro */
+    body.dark-mode {
+      background: linear-gradient(135deg, #1e1e1e, #121212);
+      color: #ddd;
+    }
+
+    body.dark-mode h2, body.dark-mode h3 {
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.9);
+    }
+
+    body.dark-mode input[type="button"] {
+      background-color: #550000;
+      color: #f8d7d7;
+      box-shadow: 0 6px 10px rgba(139, 0, 0, 0.8);
+    }
+
+    body.dark-mode input[type="button"]:hover {
+      background-color: #800000;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(255, 0, 0, 0.9);
+    }
+
+    body.dark-mode #toggleDarkBtn {
+      background: #eee;
+      color: #111;
+    }
+
+    body.dark-mode #toggleDarkBtn:hover {
+      background: #ccc;
+    }
+  </style>
 </head>
 <body>
-        <H2>Você chegou a Mpp2</H2>    
-           <h3>Vamos endender que essa é a versão atualizada e também uma versão mais bonita do site</h3>
-  
-               
+  <h2>Você chegou na Mpp2</h2>
+  <h3>Vamos entender que essa é a <br> versão atualizada e também uma <br> versão mais bonita do site</h3>
 
-  
+  <div class="btn-container">
+    <input type="button" onclick="gobo()" value="← Voltar" />
+    <input type="button" onclick="gobo2()" value="Avançar →" />
+  </div>
 
+  <button id="toggleDarkBtn" onclick="toggleDarkMode()">🌙 Modo Escuro</button>
 
-       <input type="button"  onclick="gobo()" value="←">
-       <input type="button"  onclick="gobo2()" value="→">
+  <script>
+    // No load, pega o modo salvo
+    window.onload = () => {
+      const modoSalvo = localStorage.getItem('modo');
+      if (modoSalvo === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('toggleDarkBtn').textContent = '☀️ Modo Claro';
+      }
+    }
 
+    function gobo() {
+      location.href = 'ji.html';
+    }
 
-       <script>
-        var gobush2 = document.getElementById(gobush2)
+    function gobo2() {
+      location.href = 'mpp.html';
+    }
 
-        var gobush = document.getElementById(gobush)
+    function toggleDarkMode() {
+      const body = document.body;
+      const btn = document.getElementById('toggleDarkBtn');
 
-        function gobo(){
-            if(gobo==gobo){
-                location.href = 'ji.html'
-            }
-        }
+      body.classList.toggle('dark-mode');
 
-        function gobo2(){
-            if(gobo2==gobo2){
-                location.href = 'mpp.html'
-            }
-        }
-       </script>
-
+      if(body.classList.contains('dark-mode')) {
+        btn.textContent = '☀️ Modo Claro';
+        localStorage.setItem('modo', 'dark');
+      } else {
+        btn.textContent = '🌙 Modo Escuro';
+        localStorage.setItem('modo', 'light');
+      }
+    }
+  </script>
 </body>
 </html>
