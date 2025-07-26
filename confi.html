@@ -39,6 +39,29 @@
       margin-top: 20px;
       font-size: 14px;
     }
+    .ajuda-google {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #4285f4; /* azul do Google */
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  transition: background-color 0.3s;
+}
+
+.ajuda-google:hover {
+  background-color: #3367d6;
+}
+
     </style>
   <script defer>
     // Mostra o nome do usuário salvo
@@ -54,6 +77,11 @@
       localStorage.removeItem("nome");
       window.location.href = "index.html";
     }
+
+     function abrirAjuda() {
+    alert("Precisa de ajuda? Chama o suporte ou leia o FAQ do site!");
+     window.location.href = 'ajuda.html';
+  }
   </script>
 </head>
 <body>
@@ -68,7 +96,11 @@
     <button onclick="window.location.href='ji.html'">Voltar para Home</button>
     <button onclick="DeslogarEVoltar()">Sair</button>
     <button onclick="window.location.href='curio.html'">Curiosidades</button>
+
   </main>
+<div class="ajuda-google" onclick="abrirAjuda()">
+  ?
+</div>
 
   <footer>
     <p>&copy; MPP - Meu Primeiro Programa. </p>

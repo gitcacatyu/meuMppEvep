@@ -141,8 +141,29 @@
       transform: scale(1.1);
       box-shadow: 0 12px 24px rgba(255, 255, 255, 0.3);
     }
-
+  
+    .configurar {
+      background-color: #f0f0f0;
+      color: #333;
+      font-size: 1.2rem;
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
    
+    .configurar:hover {
+      background-color: #e0e0e0;
+      transform: scale(1.05);
+    }
+
+     .configurar::before {
+    content: "⚙️ ";
+    margin-right: 5px;
+     }
+
   </style>
 </head><i class="si-home"></i>
 <body>
@@ -151,16 +172,15 @@
  
 
   <h1>Home MPP</h1>
-  <input type="button" onclick="location.href='confi.html'" value="Configuração" />
+ 
   <input type="button" onclick="irParaSite()" value="MPP 1" />
   <input type="button" onclick="deslogarEVotar()" value="Deslogar e voltar" />
   <input type="button" onclick="verVideo()" value="Vídeo/Curiosidades" />
   <input type="button" onclick="irParaSite2()" value="MPP 2" />
     <input type="button" onclick="location.href='in.html'" value="Executar Código Java" />
   <input type="button" onclick="location.href='index2.html'" value="MPP 3" />
-
-  
   <input type="button"  value="Deus seja louvado." id="nomeD" onclick="nomeD()"  >
+
    
 
   <button id="logoutBtn" onclick="logout()">Logout</button>
@@ -182,7 +202,8 @@
     
 
 
-    
+    <button class="configurar" onclick="window.location.href='confi.html'"> Configurar</button>
+ 
   <button id="toggleBtn" onclick="toggleDark()" style="margin-top: 30px; padding: 10px 20px; font-size: 1rem; border-radius: 8px; cursor: pointer;">
     🌙 Modo Escuro
   </button>
