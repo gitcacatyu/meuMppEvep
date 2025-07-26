@@ -104,7 +104,7 @@
   <h2>Nossa Home</h2>
   <input type="button" onclick="Sitt()" value="Site" />
   <input type="button" onclick="vol5()" value="← Voltar" />
-  <input type="button" onclick="c1()" value="Casa 1" />
+  <input type="button" onclick="c1()" value="Navegar" />
 
   <button id="toggleBtn" onclick="toggleDark()">🌙 Modo Escuro</button>
 
@@ -145,6 +145,14 @@
         localStorage.setItem('modo', 'light');
       }
     }
+     // Cria uma barreira no histórico
+  history.pushState(null, null, location.href);
+  history.pushState(null, null, location.href);
+
+  window.addEventListener("popstate", function (event) {
+    // Quando tentar voltar ou avançar, joga de volta pra frente
+    history.pushState(null, null, location.href);
+  });
   </script>
 </body>
 </html>

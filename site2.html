@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mpp2 - Versão Hard + Dark Mode</title>
+  <title>MPP2</title>
   <style>
     /* Reset básico */
     * {
@@ -146,7 +146,8 @@
   <div class="btn-container">
     <input type="button" onclick="gobo()" value="← Voltar" />
     <input type="button" onclick="gobo2()" value="Avançar →" />
-  </div>
+    <input type="button" onclick="sairDoSite()" value="Sair do Site" >
+    </div>
 
   <button id="toggleDarkBtn" onclick="toggleDarkMode()">🌙 Modo Escuro</button>
 
@@ -182,6 +183,26 @@
         localStorage.setItem('modo', 'light');
       }
     }
+   
+  // Bloqueia botão de voltar e avançar
+  history.pushState(null, null, location.href);
+  history.pushState(null, null, location.href);
+  window.addEventListener("popstate", function () {
+    history.pushState(null, null, location.href);
+  });
+
+   history.pushState(null, null, location.href);
+    history.pushState(null, null, location.href);
+    window.addEventListener("popstate", function () {
+      alert("🚫 Você não pode voltar!");
+      history.pushState(null, null, location.href = "site2.html");
+    });
+
+    // BOTÃO DE SAIR (abre outra aba)
+    function sairDoSite() {
+      window.open("https://www.google.com", "_blank"); // pode mudar para qualquer URL
+    }
+
   </script>
 </body>
 </html>

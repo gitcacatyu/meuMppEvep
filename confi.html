@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuração - MPP</title>
+  <style>
+    body {
+      background-color: #f0f0f0;
+      color: #333;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    header {
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    main {
+      margin: 20px auto;
+      max-width: 600px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    footer {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    </style>
+  <script defer>
+    // Mostra o nome do usuário salvo
+    window.onload = () => {
+      const nome = localStorage.getItem("nome");
+      if (nome) {
+        document.getElementById("userNome").textContent = nome;
+      }
+    };
+
+    // Função pra deslogar e voltar pro login
+    function DeslogarEVoltar() {
+      localStorage.removeItem("nome");
+      window.location.href = "index.html";
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>Configurações do MPP</h1>
+  </header>
+
+  <main>
+    <p>Bem-vindo, <strong><span id="userNome">Usuário</span></strong>!</p>
+    <p>Escolha o que deseja configurar abaixo:</p>
+
+    <button onclick="window.location.href='ji.html'">Voltar para Home</button>
+    <button onclick="DeslogarEVoltar()">Sair</button>
+    <button onclick="window.location.href='curio.html'">Curiosidades</button>
+  </main>
+
+  <footer>
+    <p>&copy; MPP - Meu Primeiro Programa. </p>
+  </footer>
+</body>
+</html>

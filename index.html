@@ -152,6 +152,14 @@
       }
     }
 
+     // Cria uma barreira no histórico
+  history.pushState(null, null, location.href);
+  history.pushState(null, null, location.href);
+
+  window.addEventListener("popstate", function (event) {
+    // Quando tentar voltar ou avançar, joga de volta pra frente
+    history.pushState(null, null, location.href);
+  });
     
   </script>
 

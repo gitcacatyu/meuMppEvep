@@ -30,7 +30,7 @@
       min-height: 100vh;
       margin: 0;
     }
-
+  
     input, button {
       background-color: var(--button-bg-light);
       font: normal 10pt Arial, sans-serif;
@@ -151,7 +151,7 @@
  
 
   <h1>Home MPP</h1>
-
+  <input type="button" onclick="location.href='confi.html'" value="Configuração" />
   <input type="button" onclick="irParaSite()" value="MPP 1" />
   <input type="button" onclick="deslogarEVotar()" value="Deslogar e voltar" />
   <input type="button" onclick="verVideo()" value="Vídeo/Curiosidades" />
@@ -276,6 +276,23 @@
   function nomeD() {
     alert("Deus seja louvado!");
   }
+
+  // Previne o usuário de voltar para a página anterior
+  // Se o usuário tentar voltar, empurra ele pra frente
+  history.pushState(null, null, location.href);
+  window.onpopstate = function () {
+    history.go(1);
+  };
+
+
+ // Cria uma barreira no histórico
+  history.pushState(null, null, location.href);
+  history.pushState(null, null, location.href);
+
+  window.addEventListener("popstate", function (event) {
+    // Quando tentar voltar ou avançar, joga de volta pra frente
+    history.pushState(null, null, location.href);
+  });
 </script>
 
 </body>

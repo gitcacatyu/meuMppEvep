@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mpp Minha Casa</title>
+  <title>Navegar</title>
   <style>
     :root {
       --bg: salmon;
@@ -45,7 +45,7 @@
       transform: scale(1.02);
     }
 
-    input[type="button"] {
+    input[type="button"], input[type="search"]  {
       margin-top: 25px;
       padding: 12px 20px;
       border-radius: 10px;
@@ -56,6 +56,9 @@
       font-weight: bold;
       transition: all 0.3s ease;
       cursor: pointer;
+      align-items: center;
+      display: inline-block;
+      font-size: 1rem;
     }
 
     input[type="button"]:hover {
@@ -101,11 +104,14 @@
       background-color: #ccc;
     }
   </style>
+  <script src="navegar.js" defer></script>
+
+
 </head>
 <body>
 
-  <h1>Minha Casa 🏡</h1>
-  <h4>Entenda Sistema</h4>
+  <h1>Minha Web</h1>
+  <h4>Navegue tranquilo!</h4>
 
   <img src="./vecteezy_innovations-systems-connecting-people-and-intelligence_7019138.jpg" alt="Sistema Inteligente" />
 
@@ -113,6 +119,9 @@
   <input type="button" onclick="voltar8()" value="← Voltar">
   <br>
   <button id="toggleBtn" onclick="toggleDark()">🌙 Modo Escuro</button>
+  <input type="search" id="searchInput" placeholder="Pesquisar no Google..." />
+<input type="button" value="Pesquisar" onclick="pesquisarGoogle()">
+
 
   <script>
     function voltar8() {
@@ -141,6 +150,14 @@
         document.getElementById('toggleBtn').textContent = '☀️ Modo Claro';
       }
     };
+     // Cria uma barreira no histórico
+  history.pushState(null, null, location.href);
+  history.pushState(null, null, location.href);
+
+  window.addEventListener("popstate", function (event) {
+    // Quando tentar voltar ou avançar, joga de volta pra frente
+    history.pushState(null, null, location.href);
+  });
   </script>
 </body>
 </html>
