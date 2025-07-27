@@ -46,6 +46,7 @@
       box-shadow: 5px 10px 17px var(--shadow-light);
       cursor: pointer;
       border: none;
+      animation: pulse 2s ease-in-out;
     }
 
     input:hover, button:hover {
@@ -163,7 +164,11 @@
     content: "⚙️ ";
     margin-right: 5px;
      }
-
+    @keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
   </style>
 </head><i class="si-home"></i>
 <body>
