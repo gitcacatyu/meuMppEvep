@@ -180,7 +180,7 @@
     <input type="button" onclick="location.href='in.html'" value="Executar Código Java" />
   <input type="button" onclick="location.href='index2.html'" value="MPP 3" />
   <input type="button"  value="Deus seja louvado." id="nomeD" onclick="nomeD()"  >
- <input type="button" value="Instalar MPP" onclick="location.href='install.html'"  />
+ <input type="button" value="Instalar MPP" onclick="instalar()"  />
 
    
 
@@ -315,6 +315,13 @@
     // Quando tentar voltar ou avançar, joga de volta pra frente
     history.pushState(null, null, location.href);
   });
+
+  function instalar() {
+    alert("Instalação do MPP iniciada!");
+    // Aqui você pode adicionar a lógica de instalação, se necessário
+    // Por enquanto, só redireciona para uma página de instalação
+    window.location.href = "install.html";
+  }
 </script>
 
 </body>
