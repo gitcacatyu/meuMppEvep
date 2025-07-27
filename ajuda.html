@@ -77,6 +77,16 @@
     a:hover {
       text-decoration: underline;
     }
+        .ajuda-btn {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
   </style>
 </head>
 <body>
@@ -112,13 +122,15 @@
 
   <h2>Ajuda</h2>
   <p>Se você precisar de mais ajuda, mande sua dúvida abaixo:</p>
-  <input type="text" id="helpInput" placeholder="Digite sua dúvida ou sugestão...">
+<label for="helpInput">Sua dúvida:</label>
+  <input type="text" id="helpInput" placeholder="Digite sua dúvida aqui...">
   <button onclick="enviarAjuda()">Enviar Ajuda</button>
 
   <script>
     function enviarAjuda() {
       const texto = document.getElementById("helpInput").value.trim();
       if (texto !== "") {
+        alert("Sua dúvida foi preparada para envio por e-mail!");
         const email = "carlosalbertolacerdadias@gmail.com"; // << Coloca teu e-mail aqui!
         const assunto = encodeURIComponent("Ajuda do MPP");
         const corpo = encodeURIComponent(texto);
@@ -127,6 +139,8 @@
         alert("Por favor, digite sua dúvida antes de enviar.");
       }
     }
+
+
   </script>
 
   <h2>Contato</h2>
