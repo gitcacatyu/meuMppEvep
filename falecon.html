@@ -66,9 +66,9 @@
     function enviarAjuda() {
       const texto = document.getElementById("helpInput").value.trim();
       if (texto !== "") {
-        alert("Sua dúvida foi preparada para envio por e-mail!");
+        alert("Suas sugestões são muito preciosas!!!");
         const email = "carlosalbertolacerdadias@gmail.com"; // << Coloca teu e-mail aqui!
-        const assunto = encodeURIComponent("Fale conosco!");
+        const assunto = encodeURIComponent("Fale conosco");
         const corpo = encodeURIComponent(texto);
         window.location.href = `mailto:${email}?subject=${assunto}&body=${corpo}`;
       } else {
