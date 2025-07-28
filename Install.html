@@ -74,7 +74,19 @@
     <h2>Download do Instalador</h2>
     <p>Clique no botão abaixo para baixar o instalador do MPP:</p>  
      
-    <a class="botao-instalar" href="Baixar/mpp-installer.zip" download>Instalar</a>
+   <a id="botaoInstalar" class="botao-instalar" href="Baixar/mpp-installer.zip" download>
+  Instalar
+</a>
+
+<script>
+  document.getElementById("botaoInstalar").addEventListener("click", function (e) {
+    alert("Opa, mande um email em ajuda para instalar a amostra grátis!");
+
+    // Se quiser impedir o download depois do alerta:
+    // e.preventDefault(); 
+  });
+</script>
+
 
 </body>
 </html>
