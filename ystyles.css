@@ -1,0 +1,67 @@
+.fightarea {
+  display: flex;
+  gap: 20px;
+  font: normal 25px Arial;
+}
+
+#char, 
+#monster {
+  flex: 10;
+}
+
+.lifebar {
+  height: 10px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  font: normal 25px Arial;
+}
+
+.lifebar .bar {
+  height: inherit;
+  background-color: red;
+  border-radius: 5px;
+  font: normal 25px Arial;
+}
+
+h1 {
+  font: normal 40px Arial;
+}
+
+.selection-area {
+  margin: 50px;
+  border: #333 solid 2px;
+  font: normal 15px Arial;
+}
+
+.log {
+  border: 1px dotted #999;
+  height: 200px;
+  overflow-y: scroll;
+  font: normal 25px Arial;
+}
+
+.startBtn {
+  font: normal 25px Arial;
+  border-radius: 25px;
+  border: #999 solid 2px;
+  margin: 20px;
+}
+
+.startBtn:hover {
+  border-radius: 25px;
+  border: #333 solid 3px;
+}
+
+.attackButton {
+  border-radius: 50px;
+  background-color: rgb(0, 0, 0);
+  color: aliceblue;
+  font: normal 25px Arial;
+}
+
+.attackButton:hover {
+  color: black;
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  font: normal 25px Arial;
+}

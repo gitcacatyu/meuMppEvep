@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Arena de Luta</title>
+  <link rel="stylesheet" href="ystyles.css" />
+</head>
+<body>
+
+  <h1> Arena de Luta </h1>
+  <h3>Cada jogador clica em "Atacar" no seu tempo... cuidado com a sorte!</h3>
+
+  <div class="fightarea">
+    <div id="char">
+      <div class="lifebar">
+        <div class="bar" style="width: 100%;"></div>
+      </div>
+      <strong class="name">--</strong>
+      <div><button class="attackButton">Atacar</button></div>
+    </div>
+
+    <div id="monster">
+      <div class="lifebar">
+        <div class="bar" style="width: 100%;"></div>
+      </div>
+      <strong class="name">--</strong>
+      <div><button class="attackButton">Atacar</button></div>
+    </div>
+  </div>
+
+  <ul class="log"></ul>
+
+  <button onclick="location.reload()" style="margin-top: 20px;">🔁 Jogar Novamente</button>
+
+  <script src="classe.js"></script>
+  <script src="ocript.js"></script>
+</body>
+</html>

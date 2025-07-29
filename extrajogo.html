@@ -1,0 +1,56 @@
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Escolha seu Lutador</title>
+  <link rel="stylesheet" href="ystyles.css" />
+</head>
+<body>
+  <h1>Escolha seus lutadores</h1>
+
+  <div class="selection-area">
+    <div>
+      <h2>Jogador 1</h2>
+      <select id="player1-select">
+        <option value="Knight">Cavaleiro</option>
+        <option value="Sorcerer">Feiticeiro</option>
+        <option value="BigMonster">Monstro Grande</option>
+        <option value="LittleMonster">Monstro Pequeno</option>
+        <option value="DragonDark">Dragão Sombrio</option>
+        <option value="DragonLight">Dragão Esplandecente</option>
+      </select>
+    </div>
+
+    <div>
+      <h2>Jogador 2</h2>
+      <select id="player2-select">
+        <option value="Knight">Cavaleiro</option>
+        <option value="Sorcerer">Feiticeiro</option>
+        <option value="BigMonster">Monstro Grande</option>
+        <option value="LittleMonster">Monstro Pequeno</option>
+        <option value="DragonDark">Dragão Sombrio</option>
+        <option value="DragonLight">Dragão Esplandecente</option>
+      </select>
+    </div>
+  </div>
+
+  <button id="startBtn">Começar Luta!</button>
+
+  <script>
+    document.getElementById("startBtn").addEventListener("click", () => {
+      const p1 = document.getElementById("player1-select").value;
+      const p2 = document.getElementById("player2-select").value;
+        localStorage.removeItem("player1");
+        localStorage.removeItem("player2");
+
+      // Guardar seleção no localStorage
+      localStorage.setItem("player1", p1);
+      localStorage.setItem("player2", p2);
+
+      // Ir pra arena de luta
+      window.location.href = "fight.html";
+
+      
+    });
+  </script>
+</body>
+</html>
