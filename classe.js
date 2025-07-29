@@ -22,7 +22,7 @@ class Character {
   class Knight extends Character {
       constructor(name) {
        super(name);
-       this.life = 220;
+       this.life = 230;
        this.attack = 30;
        this.defense = 15;
        this.maxLife = this.life;
@@ -61,7 +61,7 @@ class Character {
       class LittleMonster extends Character {
         constructor() {
             super('Little Monster');
-            this.life = 100;
+            this.life = 110;
             this.attack = 35;
             this.defense = 17;
             this.maxLife = this.life;
