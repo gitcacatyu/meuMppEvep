@@ -14,6 +14,8 @@ const createCharacter = (type, name = type) => {
     case "LittleMonster": return new LittleMonster();
     case "DragonDark": return new DragonDark();
     case "DragonLight": return new DragonLight();
+    case "DragonVee": return new DragonVee(); 
+    case "DragonEletro": return new DragonEletro();
     default: return new Knight(name);
   }
 };

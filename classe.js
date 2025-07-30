@@ -20,8 +20,8 @@ class Character {
   }
   
   class Knight extends Character {
-      constructor(name) {
-       super(name);
+      constructor() {
+       super('Cavaleiro');
        this.life = 230;
        this.attack = 30;
        this.defense = 15;
@@ -29,6 +29,25 @@ class Character {
       }
     }
 
+     class DragonEletro extends Character {
+      constructor() {
+       super('Dragon Elétrico');
+       this.life = 360;
+       this.attack = 90;
+       this.defense = 10;
+       this.maxLife = this.life;
+      }
+    }
+
+       class DragonVee extends Character {
+      constructor() {
+       super('Dragon Vento');
+       this.life =  320;
+       this.attack = 60;
+       this.defense = 50;
+       this.maxLife = this.life;
+      }
+    }
 
      class DragonDark extends Character {
       constructor() {
@@ -40,8 +59,8 @@ class Character {
       }
     }
       class Sorcerer extends Character {
-        constructor(name) {
-          super(name);
+        constructor() {
+          super('Mago');
           this.life = 120;
           this.attack = 50;
           this.defense = 13;
