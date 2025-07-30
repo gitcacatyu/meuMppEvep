@@ -188,6 +188,9 @@ class Character {
        
        
         this.update();
+           const attackedEl = attacked === this.fighter1 ? this.fighter1El : this.fighter2El;
+            attackedEl.classList.add('fighterFlash');
+            setTimeout(() => attackedEl.classList.remove('fighterFlash'), 200);
 
         }
    }

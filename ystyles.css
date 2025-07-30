@@ -131,3 +131,12 @@ input:hover{
     border-radius: 50%;
     background-color: rgb(0, 0, 68);
 }
+@keyframes flash {
+  0% { background-color: transparent; }
+  50% { background-color: rgba(255, 255, 0, 0.5); }
+  100% { background-color: transparent; }
+}
+
+.fighterFlash {
+  animation: flash 0.2s ease;
+}
