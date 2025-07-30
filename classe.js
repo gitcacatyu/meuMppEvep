@@ -38,6 +38,46 @@ class Character {
        this.maxLife = this.life;
       }
     }
+  
+    class DragonAgua extends Character {
+      constructor() {
+       super('Dragon Água');
+       this.life = 390;
+       this.attack = 95;
+       this.defense = 10;
+       this.maxLife = this.life;
+      }
+    }
+  
+         class DragonTerra extends Character {
+      constructor() {
+       super('Dragon Terra');
+       this.life = 320;
+       this.attack = 60;
+       this.defense = 40;
+       this.maxLife = this.life;
+      }
+    }
+     
+      class DragonPlanta extends Character {
+      constructor() {
+       super('Dragon Planta');
+       this.life = 310;
+       this.attack = 70;
+       this.defense = 80;
+       this.maxLife = this.life;
+      }
+    }
+
+      class DragonFogo extends Character {
+      constructor() {
+       super('Dragon Fogo');
+       this.life = 370;
+       this.attack = 80;
+       this.defense = 7;
+       this.maxLife = this.life;
+      }
+    }
 
        class DragonVee extends Character {
       constructor() {
