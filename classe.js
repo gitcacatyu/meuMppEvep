@@ -219,3 +219,13 @@ class Character {
             }
        }
    }
+
+   window.onload = () => {
+      let tema = localStorage.getItem("tema");
+      if (!tema) {
+        tema = "escuro";
+        localStorage.setItem("tema", tema);
+      }
+      document.body.className = tema;
+      document.getElementById("temaSelect").value = tema;
+    }

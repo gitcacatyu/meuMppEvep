@@ -4,6 +4,7 @@
   <title>Escolha seu Lutador</title>
   <link rel="stylesheet" href="ystyles.css" />
 </head>
+
 <body>
     <input type="button" value="?" onclick="location.href= 'ajujolu.html'">
   <h1>Escolha seus lutadores</h1>
@@ -64,6 +65,15 @@
 
       
     });
+     window.onload = () => {
+      let tema = localStorage.getItem("tema");
+      if (!tema) {
+        tema = "escuro";
+        localStorage.setItem("tema", tema);
+      }
+      document.body.className = tema;
+      document.getElementById("temaSelect").value = tema;
+    }
   </script>
 </body>
 </html>

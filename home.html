@@ -7,6 +7,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
   <style>
+
+     body.escuro {
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+    body.verde {
+      background-color: #001f00;
+      color: #00ff00;
+    }
+    body.rosa {
+      background-color: #ffe6f0;
+      color: #cc0066;
+    }
     body {
       margin: 0;
       padding: 0;
@@ -139,6 +152,16 @@
           }
         }
       });
+    }
+
+     window.onload = () => {
+      let tema = localStorage.getItem("tema");
+      if (!tema) {
+        tema = "escuro";
+        localStorage.setItem("tema", tema);
+      }
+      document.body.className = tema;
+      document.getElementById("temaSelect").value = tema;
     }
   </script>
 

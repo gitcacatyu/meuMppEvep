@@ -2,7 +2,18 @@ body{
  background-color: rgb(70, 69, 69);
 }
 
-
+ body.escuro {
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+    body.verde {
+      background-color: #001f00;
+      color: #00ff00;
+    }
+    body.rosa {
+      background-color: #ffe6f0;
+      color: #cc0066;
+    }
 
 .fightarea {
   display: flex;

@@ -12,7 +12,18 @@
       padding: 20px;
       text-align: center;
     }
-
+ body.escuro {
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+    body.verde {
+      background-color: #001f00;
+      color: #00ff00;
+    }
+    body.rosa {
+      background-color: #ffe6f0;
+      color: #cc0066;
+    }
     input {
       transition: transform 300ms ease-in-out;
       border-bottom: 5px solid black;
@@ -91,6 +102,16 @@
   <script>
     function volt8() {
       location.href = "ji.html";
+    }
+
+     window.onload = () => {
+      let tema = localStorage.getItem("tema");
+      if (!tema) {
+        tema = "escuro";
+        localStorage.setItem("tema", tema);
+      }
+      document.body.className = tema;
+      document.getElementById("temaSelect").value = tema;
     }
   </script>
 </body>

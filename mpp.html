@@ -5,6 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mpp 2 //</title>
   <style>
+
+     body.escuro {
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+    body.verde {
+      background-color: #001f00;
+      color: #00ff00;
+    }
+    body.rosa {
+      background-color: #ffe6f0;
+      color: #cc0066;
+    }
     :root {
       --bg-color: rgb(255, 138, 95);
       --text-color: #000;
@@ -153,6 +166,15 @@
     // Quando tentar voltar ou avançar, joga de volta pra frente
     history.pushState(null, null, location.href);
   });
+   window.onload = () => {
+      let tema = localStorage.getItem("tema");
+      if (!tema) {
+        tema = "escuro";
+        localStorage.setItem("tema", tema);
+      }
+      document.body.className = tema;
+      document.getElementById("temaSelect").value = tema;
+    }
   </script>
 </body>
 </html>
