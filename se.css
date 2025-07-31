@@ -1,0 +1,76 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    margin: 20px;
+    text-shadow: 0 0 5px #08ffd6;
+}
+
+canvas {
+    border: 2px solid #08ffd6;
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+.colorArea {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.color {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 2px solid white;
+    transition: transform 0.2s;
+}
+
+.color:hover {
+    transform: scale(1.1);
+}
+
+.color.active {
+    border: 3px solid #08ffd6;
+}
+
+/* Cores reais */
+.color-black { background-color: black; }
+.color-blue { background-color: blue; }
+.color-red { background-color: red; }
+.color-green { background-color: green; }
+.color-yellow { background-color: yellow; }
+.color-gray { background-color: gray; }
+.color-brown { background-color: brown; }
+.color-white { background-color: white; }
+
+button.clear {
+    padding: 10px 20px;
+    background-color: #08ffd6;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button.clear:hover {
+    background-color: #06d6b5;
+}
+
+footer {
+    margin-top: 30px;
+    font-size: 14px;
+    color: #ccc;
+}
