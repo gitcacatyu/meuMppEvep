@@ -1,0 +1,157 @@
+/* estilos mantidos do jogo original */
+
+#botao {
+ background-color:moccasin ;
+ border: 3px solid peru ;
+ border-radius: 10%;
+ padding: 5px;
+ display: flex;
+ gap: 8px;
+ margin: 14px;
+  }
+
+
+  #oi {
+    border: solid 3px rgb(93, 97, 97);
+    background: rgb(179, 181, 190);
+    padding: 5px;
+    border-radius: 10% ;
+    margin: 14px;
+  }
+
+#tao {
+    
+    border: solid 3px rgb(0, 255, 255);
+    background: rgb(28, 56, 181);
+    padding: 6px;
+    border-radius: 10%;
+    margin: 14px;
+    gap: 8px;
+    display: flex;
+}
+
+#po {
+    border: solid 3px rgb(90, 95, 91);
+    background: rgb(216, 216, 216);
+    padding: 15px;
+    border-radius: 10%;
+    margin: 14px;
+    gap: 8px;
+    display: flex;
+
+}
+
+
+#ta {
+
+    border: solid 3px rgb(0, 237, 43);
+    background: rgb(82, 124, 48);
+    padding: 6px;
+    border-radius: 10%;
+    margin: 14px;
+    gap: 8px;
+    display: flex;
+}
+
+#bo  {
+    border: solid 3px rgb(9, 244, 56);
+    background: rgb(200, 255, 2);
+    padding: 6px;
+    border-radius: 10%;
+    margin: 14px;
+    gap: 8px;
+    display: flex;
+}
+
+#otao {
+    border: solid 3px rgb(241, 182, 6);
+    background: rgb(255, 208, 0);
+    padding: 6px;
+    border-radius: 10%;
+    margin: 14px;
+    gap: 8px;
+    display: flex;
+}
+
+#t {
+    border: solid 3px rgb(0, 0, 0);
+    background: rgba(255, 255, 255, 0.625);
+    padding: 6px;
+    border-radius: 10%;
+    margin: 14px;
+    gap: 8px;
+    display: flex;
+}
+
+#a {
+    border: solid 3px rgb(255, 162, 2);
+    background: rgba(206, 93, 93, 0.625);
+    padding: 6px;
+    border-radius: 10%;
+    margin: 14px;
+    gap: 8px;
+    display: flex;
+}
+
+
+    
+#p {
+    border: solid 3px rgb(146, 15, 234);
+    background: rgba(231, 178, 5, 0.625);
+    padding: 6px;
+    border-radius: 10%;
+    margin: 14px;
+    gap: 8px;
+    display: flex;
+}
+
+#e {
+    border: solid 3px rgb(18, 44, 208);
+    background: rgba(13, 143, 180, 0.625);
+    padding: 6px;
+    border-radius: 10%;
+    margin: 14px;
+    gap: 8px;
+    display: flex;
+}
+
+#o {
+    border: solid 3px rgba(24, 163, 59, 0.625);
+    background: rgb(170, 9, 38);
+    padding: 6px;
+    border-radius: 10%;
+    margin: 14px;
+    gap: 8px;
+    display: flex;
+}
+
+
+#d {
+    border: solid 3px rgb(255, 47, 0);
+    background: rgb(208, 255, 0);
+    padding: 6px;
+    border-radius: 10%;
+    margin: 14px;
+    gap: 8px;
+    display: flex;
+}
+
+#n {
+    border: solid 3px rgba(253, 255, 253, 0.893);
+    background: rgba(82, 79, 82, 0.472);
+    padding: 6px;
+    border-radius: 10%;
+    margin: 14px;
+    gap: 8px;
+    display: flex;
+}
+
+#r {
+    border: solid 3px rgba(254, 226, 15, 0.899);
+    background: rgba(255, 168, 6, 0.916);
+    padding: 6px;
+    border-radius: 10%;
+    margin: 14px;
+    gap: 8px;
+    display: flex;
+}

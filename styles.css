@@ -1,0 +1,25 @@
+body {
+  background-color: #000;
+  color: #0f0;
+  font-family: 'Courier New', monospace;
+  overflow: hidden;
+}
+
+button {
+  font-family: 'Courier New', monospace;
+  background: #111;
+  color: #0f0;
+  border: 2px solid #0f0;
+  box-shadow: 0 0 10px #0f0;
+  animation: glitch 1s infinite;
+  position: absolute;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  60% { transform: translate(-1px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  100% { transform: translate(0); }
+}
