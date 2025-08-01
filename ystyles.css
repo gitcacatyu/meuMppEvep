@@ -25,6 +25,8 @@ body{
 #char, 
 #monster {
   flex: 10;
+  
+
 }
 
 .lifebar {
@@ -63,11 +65,13 @@ h1 {
   border-radius: 25px;
   border: #999 solid 2px;
   margin: 20px;
+ 
 }
 
 .startBtn:hover {
   border-radius: 25px;
   border: #333 solid 3px;
+   cursor: pointer;
 }
 
 .attackButton {
@@ -83,7 +87,16 @@ h1 {
   border: none;
   font: normal 25px Arial;
 }
+#passe{
+  width: 100px;
+  border-radius: 20px;
+}
 
+#passe:hover{
+  background-color: #fbff00;
+  color: #ffc400;
+  cursor: pointer;
+}
 @media (max-width: 768px) {
   body {
     padding: 10px;

@@ -145,6 +145,25 @@ class Character {
        this.maxLife = this.life;
       }
     }
+
+    class DragonApelaoJ extends Character {
+      constructor() {
+       super('Dragon Apelão Júnior');
+       this.life = 500;
+       this.attack = 118;
+       this.defense = 99;
+       this.maxLife = this.life;
+      }
+    }
+    class DragonXavierJ extends Character {
+      constructor() {
+       super('Dragon Chave Xavier Júnior');
+       this.life = 550;
+       this.attack = 119;
+       this.defense = 99;
+       this.maxLife = this.life;
+      }
+    }
      class DragonDark extends Character {
       constructor() {
        super('Dragon Sombrio Sombras');
