@@ -20,6 +20,10 @@ const createCharacter = (type, name = type) => {
     case "DragonTerra": return new DragonTerra();
     case "DragonPlanta": return new DragonPlanta();
     case "DragonFogo": return new DragonFogo();
+    case "DragonMisto": return new DragonMisto();
+    case "DragonMetal": return new DragonMetal();
+    case "DragonAtaqueForte": return new DragonAtaqueForte();
+    case "DragonDefeseForte": return new DragonDefeseForte();
     default: return new Knight(name);
   }
 };

@@ -89,6 +89,43 @@ class Character {
       }
     }
 
+    class DragonMisto extends Character {
+      constructor() {
+       super('Dragon Misto');
+       this.life =  470;
+       this.attack = 90;
+       this.defense = 50;
+       this.maxLife = this.life;
+      }
+    }
+
+    class DragonAtaqueForte extends Character {
+      constructor() {
+       super('Dragon Ataque');
+       this.life =  400;
+       this.attack = 115;
+       this.defense = 10;
+       this.maxLife = this.life;
+      }
+    }
+    class DragonDefeseForte extends Character {
+      constructor() {
+       super('Dragon Defese');
+       this.life =  420;
+       this.attack = 75;
+       this.defense = 115;
+       this.maxLife = this.life;
+      }
+    }
+          class DragonMetal extends Character {
+      constructor() {
+       super('Dragon Metal');
+       this.life =  490;
+       this.attack = 99;
+       this.defense = 60;
+       this.maxLife = this.life;
+      }
+    }
      class DragonDark extends Character {
       constructor() {
        super('Dragon Sombrio Sombras');
