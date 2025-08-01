@@ -22,7 +22,7 @@ class Character {
   class King extends Character {
       constructor() {
        super('Rei');
-       this.life = 490;
+       this.life = 500;
        this.attack = 100;
        this.defense = 80;
        this.maxLife = this.life;
@@ -32,7 +32,7 @@ class Character {
    class Queen extends Character {
       constructor() {
        super('Rainha');
-       this.life = 420;
+       this.life = 490;
        this.attack = 80;
        this.defense = 100;
        this.maxLife = this.life;
