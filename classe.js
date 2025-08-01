@@ -23,7 +23,7 @@ class Character {
       constructor() {
        super('Rei');
        this.life = 490;
-       this.attack = 110;
+       this.attack = 100;
        this.defense = 80;
        this.maxLife = this.life;
       }
