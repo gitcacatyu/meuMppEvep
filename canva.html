@@ -1,33 +1,137 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desenhando no Canvas</title>
-    <link rel="stylesheet" href="se.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="se.css">
+  <title>Desenhando no MPP - Mobile</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+    }
+    header {
+      background: #222;
+      width: 100%;
+      text-align: center;
+      padding: 10px;
+      font-size: 1.5em;
+    }
+    canvas {
+      border: 2px solid #0f0;
+      margin: 10px 0;
+      touch-action: none;
+      background: #fff;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+    }
+    .controls input[type="color"],
+    .controls input[type="range"],
+    .controls button {
+      font-size: 1em;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 8px;
+    }
+    button {
+      background: #0f0;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      canvas {
+        width: 90vw;
+        height: 60vh;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Desenhando no MPP</h1>
+  <header>Desenhando no MPP 📱</header>
 
-    <canvas id="tela" width="2000" height="800"></canvas>
-     
-                      <br><p>Borracha -></p> 
-    <div class="colorArea">
-        <div data-color="black" class="color color-black active"></div>
-        <div data-color="blue" class="color color-blue"></div>
-        <div data-color="red" class="color color-red"></div>
-        <div data-color="green" class="color color-green"></div>
-        <div data-color="yellow" class="color color-yellow"></div>
-        <div data-color="gray" class="color color-gray"></div>
-        <div data-color="brown" class="color color-brown"></div>
-        <div data-color="white" class="color color-white"></div>
-    </div>
+  <canvas id="canvas" width="360" height="480"></canvas>
 
-    <button class="clear">Limpar Quadro</button>
+  <div class="controls">
+    <input type="color" id="colorPicker" value="#000000">
+    <input type="range" id="brushSize" min="1" max="20" value="5">
+    <button onclick="clearCanvas()">Limpar</button>
+  </div>
 
-    <footer>Criado pela MPP</footer>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let painting = false;
 
-    <script src="ki.js"></script>
+    function resizeCanvas() {
+      canvas.width = window.innerWidth * 0.9;
+      canvas.height = window.innerHeight * 0.6;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function startPosition(e) {
+      painting = true;
+      draw(e);
+    }
+
+    function endPosition() {
+      painting = false;
+      ctx.beginPath();
+    }
+
+    function draw(e) {
+      if (!painting) return;
+
+      const touch = e.touches ? e.touches[0] : e;
+      const rect = canvas.getBoundingClientRect();
+      const x = (touch.clientX - rect.left);
+      const y = (touch.clientY - rect.top);
+
+      ctx.lineWidth = document.getElementById('brushSize').value;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = document.getElementById('colorPicker').value;
+
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Eventos para mouse
+    canvas.addEventListener('mousedown', startPosition);
+    canvas.addEventListener('mouseup', endPosition);
+    canvas.addEventListener('mousemove', draw);
+
+    // Eventos para toque
+    canvas.addEventListener('touchstart', startPosition);
+    canvas.addEventListener('touchend', endPosition);
+    canvas.addEventListener('touchmove', function(e) {
+      e.preventDefault(); // Evita rolagem
+      draw(e);
+    }, { passive: false });
+  </script>
+  <script src="ki.js"></script>
 </body>
 </html>
