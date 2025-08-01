@@ -97,6 +97,10 @@ h1 {
   color: #ffc400;
   cursor: pointer;
 }
+
+
+
+
 @media (max-width: 768px) {
   body {
     padding: 10px;

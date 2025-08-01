@@ -1,3 +1,4 @@
+<!-- fight.html -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -29,10 +30,42 @@
   </div>
 
   <ul class="log"></ul>
+<audio id="somAtaque" src="ataque.mp3"></audio>
+<audio id="somDefesa" src="defesa.mp3"></audio>
+<audio id="somMorte" src="perdeu.mp3"></audio>
 
   <button onclick="location.reload()" style="margin-top: 20px;">🔁 Jogar Novamente</button>
   <select id="temaSelect"></select>
+
   <script src="classe.js"></script>
   <script src="ocript.js"></script>
+  <script>
+    /*// Certifica que os sons estão carregando
+    const ataque = new Audio('ataque.mp3');
+    const defesa = new Audio('defesa.mp3');
+    const perdeu = new Audio('perdeu.mp3');
+
+    function atacar() {
+      ataque.play();
+      console.log("Ataque feito!");
+    }
+
+    function defender() {
+      defesa.play();
+      console.log("Defesa feita!");
+    }
+
+    function morrer() {
+      perdeu.play();
+      console.log("Morte rolando!");
+    }
+
+    // Agora liga os botões no ataque
+    document.querySelectorAll(".attackButton").forEach(btn => {
+      btn.addEventListener("click", atacar);
+    });
+    */
+  </script>
+
 </body>
 </html>

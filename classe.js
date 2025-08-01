@@ -253,12 +253,20 @@ class Character {
        let actualDefense = attacked.defense * defenseFactor;
        
     
-       if(actualAttack > actualDefense) {
+              if (actualAttack > actualDefense) {
           attacked.life -= actualAttack;
+          playSomAtaque();
           this.log.addMessage(`${attacking.name} causou ${actualAttack.toFixed(2)} de dano em ${attacked.name}`);
-       } else {
-        this.log.addMessage(`${attacked.name} coseguiu defender...`)
-       }
+
+          if (attacked.life <= 0) {
+            playSomMorte();
+            this.log.addMessage(`${attacked.name} morreu!`);
+          }
+        } else {
+          playSomDefesa();
+          this.log.addMessage(`${attacked.name} conseguiu defender...`);
+        }
+
 
        
        
@@ -304,3 +312,27 @@ class Character {
       document.body.className = tema;
       document.getElementById("temaSelect").value = tema;
     }
+
+function playSomAtaque() {
+  const som = document.getElementById("somAtaque");
+  if (som) {
+    som.currentTime = 0;
+    som.play();
+  }
+}
+
+function playSomDefesa() {
+  const som = document.getElementById("somDefesa");
+  if (som) {
+    som.currentTime = 0;
+    som.play();
+  }
+}
+
+function playSomMorte() {
+  const som = document.getElementById("somMorte");
+  if (som) {
+    som.currentTime = 0;
+    som.play();
+  }
+}
