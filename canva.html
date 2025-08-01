@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="se.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Desenhando no MPP - Mobile</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: sans-serif;
       background: #111;
@@ -33,26 +28,49 @@
       touch-action: none;
       background: #fff;
     }
-    .controls {
+    .controls, .colorArea {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 10px;
       padding: 10px;
     }
-    .controls input[type="color"],
-    .controls input[type="range"],
-    .controls button {
+    .color {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #fff;
+    }
+    .color.active {
+      border: 3px solid #0f0;
+    }
+    .color-black { background: black; }
+    .color-blue { background: blue; }
+    .color-red { background: red; }
+    .color-green { background: green; }
+    .color-yellow { background: yellow; }
+    .color-gray { background: gray; }
+    .color-brown { background: brown; }
+    .color-white { background: white; }
+    button {
       font-size: 1em;
       padding: 5px 10px;
       border: none;
       border-radius: 8px;
-    }
-    button {
       background: #0f0;
       color: #000;
       font-weight: bold;
       cursor: pointer;
+    }
+    footer {
+      padding: 10px;
+      font-size: 0.9em;
+      text-align: center;
+      width: 100%;
+      background: #222;
+      position: absolute;
+      bottom: 0;
     }
 
     @media (max-width: 600px) {
@@ -67,32 +85,33 @@
   <header>Desenhando no MPP 📱</header>
 
   <canvas id="canvas" width="360" height="480"></canvas>
-    <div class="colorArea">
-        <div data-color="black" class="color color-black active"></div>
-        <div data-color="blue" class="color color-blue"></div>
-        <div data-color="red" class="color color-red"></div>
-        <div data-color="green" class="color color-green"></div>
-        <div data-color="yellow" class="color color-yellow"></div>
-        <div data-color="gray" class="color color-gray"></div>
-        <div data-color="brown" class="color color-brown"></div>
-        <div data-color="white" class="color color-white"></div>
-    </div>
 
-    <button class="clear">Limpar Quadro</button>
-
-    <footer>Criado pela MPP</footer>
-
-    <script src="ki.js"></script>
+  <div class="colorArea">
+    <div data-color="black" class="color color-black active"></div>
+    <div data-color="blue" class="color color-blue"></div>
+    <div data-color="red" class="color color-red"></div>
+    <div data-color="green" class="color color-green"></div>
+    <div data-color="yellow" class="color color-yellow"></div>
+    <div data-color="gray" class="color color-gray"></div>
+    <div data-color="brown" class="color color-brown"></div>
+    <div data-color="white" class="color color-white"></div>
+  </div>
 
   <div class="controls">
-    <input type="color" id="colorPicker" value="#000000">
     <input type="range" id="brushSize" min="1" max="20" value="5">
-    <button onclick="clearCanvas()">Limpar</button>
+    <button id="clearBtn">Limpar Quadro</button>
   </div>
+
+  <footer>Criado pela MPP</footer>
 
   <script>
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
+    const brushSize = document.getElementById('brushSize');
+    const clearBtn = document.getElementById('clearBtn');
+    const colorButtons = document.querySelectorAll('.color');
+
+    let currentColor = 'black';
     let painting = false;
 
     function resizeCanvas() {
@@ -118,12 +137,12 @@
 
       const touch = e.touches ? e.touches[0] : e;
       const rect = canvas.getBoundingClientRect();
-      const x = (touch.clientX - rect.left);
-      const y = (touch.clientY - rect.top);
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
 
-      ctx.lineWidth = document.getElementById('brushSize').value;
+      ctx.lineWidth = brushSize.value;
       ctx.lineCap = "round";
-      ctx.strokeStyle = document.getElementById('colorPicker').value;
+      ctx.strokeStyle = currentColor;
 
       ctx.lineTo(x, y);
       ctx.stroke();
@@ -131,23 +150,30 @@
       ctx.moveTo(x, y);
     }
 
-    function clearCanvas() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    // Eventos para mouse
+    // Eventos de mouse
     canvas.addEventListener('mousedown', startPosition);
     canvas.addEventListener('mouseup', endPosition);
     canvas.addEventListener('mousemove', draw);
 
-    // Eventos para toque
+    // Eventos de toque
     canvas.addEventListener('touchstart', startPosition);
     canvas.addEventListener('touchend', endPosition);
     canvas.addEventListener('touchmove', function(e) {
-      e.preventDefault(); // Evita rolagem
+      e.preventDefault();
       draw(e);
     }, { passive: false });
+
+    clearBtn.addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+    colorButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        colorButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentColor = btn.getAttribute('data-color');
+      });
+    });
   </script>
-  <script src="ki.js"></script>
 </body>
 </html>
