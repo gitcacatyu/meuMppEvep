@@ -10,6 +10,8 @@ const createCharacter = (type, name = type) => {
   switch (type) {
     case "Knight": return new Knight(name);
     case "Sorcerer": return new Sorcerer(name);
+    case "King": return new King(name);
+    case "Queen": return new Queen(name);
     case "BigMonster": return new BigMonster();
     case "LittleMonster": return new LittleMonster();
     case "DragonDark": return new DragonDark();

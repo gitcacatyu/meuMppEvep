@@ -19,7 +19,26 @@ class Character {
      }
   }
   
-  class Knight extends Character {
+  class King extends Character {
+      constructor() {
+       super('Rei');
+       this.life = 490;
+       this.attack = 110;
+       this.defense = 80;
+       this.maxLife = this.life;
+      }
+    }
+
+   class Queen extends Character {
+      constructor() {
+       super('Rainha');
+       this.life = 420;
+       this.attack = 80;
+       this.defense = 100;
+       this.maxLife = this.life;
+      }
+    }
+    class Knight extends Character {
       constructor() {
        super('Cavaleiro');
        this.life = 230;
