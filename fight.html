@@ -10,6 +10,7 @@
 
   <h1> Arena de Luta </h1>
   <h3>Cada jogador clica em "Atacar" no seu tempo... cuidado com a sorte!</h3>
+<h3>Moedas: <span id="moedasDisplay">0</span></h3>
 
   <div class="fightarea">
     <div id="char">
@@ -67,13 +68,32 @@
       btn.addEventListener("click", atacar);
     });
     */
-   function fimDaLuta(vencedor) {
+  function fimDaLuta(vencedor) {
   let ganho = vencedor === "player1" ? 25 : 10;
   let moedas = parseInt(localStorage.getItem("coins") || "0");
   moedas += ganho;
   localStorage.setItem("coins", moedas);
   alert(`Você ganhou ${ganho} moedas! Total: ${moedas}`);
 }
+
+
+function atualizarMoedas() {
+  const moedas = parseInt(localStorage.getItem("coins") || "0");
+  document.getElementById("moedasDisplay").innerText = moedas;
+}
+
+window.onload = () => {
+  atualizarMoedas();
+}
+if (player2.life <= 0) {
+  log.addMessage("Player 1 venceu!");
+  fimDaLuta("player1");
+}
+if (player2.life <= 0) {
+  log.addMessage("Player 1 venceu!");
+  fimDaLuta("player2");
+}
+
 
   </script>
 <audio id="somAtaque" src="sons/som_ataque.mp3"></audio>
