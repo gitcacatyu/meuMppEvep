@@ -67,6 +67,14 @@
       btn.addEventListener("click", atacar);
     });
     */
+   function fimDaLuta(vencedor) {
+  let ganho = vencedor === "player1" ? 25 : 10;
+  let moedas = parseInt(localStorage.getItem("coins") || "0");
+  moedas += ganho;
+  localStorage.setItem("coins", moedas);
+  alert(`Você ganhou ${ganho} moedas! Total: ${moedas}`);
+}
+
   </script>
 <audio id="somAtaque" src="sons/som_ataque.mp3"></audio>
 <audio id="somDefesa" src="sons/som_defesa.mp3"></audio>

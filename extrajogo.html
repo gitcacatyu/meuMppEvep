@@ -6,9 +6,12 @@
 </head>
 
 <body>
-  <input type="button" value="PASSE" id="passe" onclick="alert('Em breve - Will be soon')">
-    <input type="button" value="?" onclick="location.href= 'ajujolu.html'">
+  <input type="button" value="PASSE" id="passe" onclick="location.href= 'passe.html'">
+  <input type="button" value="?" onclick="location.href= 'ajujolu.html'">
   <h1>Escolha seus lutadores</h1>
+
+  <!-- Exibe as moedas -->
+  <h3>Moedas: <span id="moedasDisplay">0</span></h3>
 
   <div class="selection-area">
     <div>
@@ -16,7 +19,7 @@
       <select id="player1-select">
         <option value="Knight">Cavaleiro</option>
         <option value="Sorcerer">Feiticeiro</option>
-         <option value="King">Rei</option>
+        <option value="King">Rei</option>
         <option value="Queen">Rainha</option>
         <option value="BigMonster">Monstro Grande</option>
         <option value="LittleMonster">Monstro Pequeno</option>
@@ -24,20 +27,20 @@
         <option value="DragonLight">Dragão Esplandecente</option>
         <option value="DragonVee">Dragão Vento</option>
         <option value="DragonEletro">Dragão Elétrico</option>
-          <option value="DragonAgua">Dragão Água</option>
-            <option value="DragonTerra">Dragão Terra</option>
-              <option value="DragonPlanta">Dragão Planta</option>
-                <option value="DragonFogo">Dragão Fogo</option>
-                <option value="DragonMisto">Dragão Misto</option>
-                <option value="DragonMetal">Dragão Metal</option>
-                <option value="DragonAtaqueForte">Dragão Ataque Forte</option>
-                <option value="DragonDefeseForte">Dragão Defese Forte</option>
-                <option value="DragonApelao">Dragão Apelão Passe</option>
-                <option value="DragonFORTE">Dragão FORTE Passe</option>
-                <option value="DragonLendario">Dragão Lendário Passe</option>
-                <option value="DragonXavier">Dragão Xavier Passe</option>
-                <option value="DragonApelaoJ">Dragão Apelão J.</option>
-                <option value="DragonXavierJ">Dragão Xavier J.</option>
+        <option value="DragonAgua">Dragão Água</option>
+        <option value="DragonTerra">Dragão Terra</option>
+        <option value="DragonPlanta">Dragão Planta</option>
+        <option value="DragonFogo">Dragão Fogo</option>
+        <option value="DragonMisto">Dragão Misto</option>
+        <option value="DragonMetal">Dragão Metal</option>
+        <option value="DragonAtaqueForte">Dragão Ataque Forte</option>
+        <option value="DragonDefeseForte">Dragão Defese Forte</option>
+        <option value="DragonApelao">Dragão Apelão Passe</option>
+        <option value="DragonFORTE">Dragão FORTE Passe</option>
+        <option value="DragonLendario">Dragão Lendário Passe</option>
+        <option value="DragonXavier">Dragão Xavier Passe</option>
+        <option value="DragonApelaoJ">Dragão Apelão J.</option>
+        <option value="DragonXavierJ">Dragão Xavier J.</option>
       </select>
     </div>
 
@@ -52,55 +55,93 @@
         <option value="LittleMonster">Monstro Pequeno</option>
         <option value="DragonDark">Dragão Sombrio</option>
         <option value="DragonLight">Dragão Esplandecente</option>
-         <option value="DragonVee">Dragão Vento</option>
-         <option value="DragonEletro">Dragão Elétrico</option>
-           <option value="DragonAgua">Dragão Água</option>
-             <option value="DragonTerra">Dragão Terra</option>
-               <option value="DragonPlanta">Dragão Planta</option>
-                 <option value="DragonFogo">Dragão Fogo</option>
-                 <option value="DragonMisto">Dragão Misto</option>
-                <option value="DragonMetal">Dragão Metal</option>
-                <option value="DragonAtaqueForte">Dragão Ataque Forte</option>
-                <option value="DragonDefeseForte">Dragão Defese Forte</option>
-                 <option value="DragonApelao">Dragão Apelão Passe</option>
-                 <option value="DragonFORTE">Dragão FORTE Passe</option>
-                 <option value="DragonLendario">Dragão Lendário Passe</option>
-                 <option value="DragonXavier">Dragão Xavier Passe</option>
-                 <option value="DragonApelaoJ">Dragão Apelão J.</option>
-                  <option value="DragonXavierJ">Dragão Xavier J.</option>
-
-              </select>
+        <option value="DragonVee">Dragão Vento</option>
+        <option value="DragonEletro">Dragão Elétrico</option>
+        <option value="DragonAgua">Dragão Água</option>
+        <option value="DragonTerra">Dragão Terra</option>
+        <option value="DragonPlanta">Dragão Planta</option>
+        <option value="DragonFogo">Dragão Fogo</option>
+        <option value="DragonMisto">Dragão Misto</option>
+        <option value="DragonMetal">Dragão Metal</option>
+        <option value="DragonAtaqueForte">Dragão Ataque Forte</option>
+        <option value="DragonDefeseForte">Dragão Defese Forte</option>
+        <option value="DragonApelao">Dragão Apelão Passe</option>
+        <option value="DragonFORTE">Dragão FORTE Passe</option>
+        <option value="DragonLendario">Dragão Lendário Passe</option>
+        <option value="DragonXavier">Dragão Xavier Passe</option>
+        <option value="DragonApelaoJ">Dragão Apelão J.</option>
+        <option value="DragonXavierJ">Dragão Xavier J.</option>
+      </select>
     </div>
   </div>
 
   <button id="startBtn">Começar Luta!</button>
 
   <script>
+    // Função para verificar as moedas
+    function verificarMoedas() {
+      const moedas = parseInt(localStorage.getItem("coins") || "0"); // Verifica se tem moedas no localStorage
+      return moedas;
+    }
+
+    // Função para atualizar as moedas na tela
+    function atualizarMoedas() {
+      const moedas = verificarMoedas();
+      document.getElementById("moedasDisplay").innerText = moedas;
+    }
+
+    // Função para bloquear os dragões com passe, se o jogador tiver menos de 420 moedas
+    function bloquearDragões() {
+      let moedas = verificarMoedas();
+
+      const dragõesPasse = [
+        "DragonApelao", 
+        "DragonFORTE", 
+        "DragonLendario", 
+        "DragonXavier"
+      ];
+
+      [ "player1-select", "player2-select" ].forEach(id => {
+        const select = document.getElementById(id);
+        Array.from(select.options).forEach(opt => {
+          if (dragõesPasse.includes(opt.value) && moedas < 420) {
+            opt.disabled = true;
+            opt.text += " (Bloqueado - Passe)";
+          }
+        });
+      });
+    }
+
+    // Função para adicionar moedas depois de uma luta
+    function fimDaLuta(vencedor) {
+      let ganho = vencedor === "player1" ? 25 : 10;
+      let moedas = verificarMoedas();
+      moedas += ganho;
+      localStorage.setItem("coins", moedas);
+      atualizarMoedas(); // Atualiza as moedas na tela
+      alert(`Você ganhou ${ganho} moedas! Total: ${moedas}`);
+    }
+ 
+    // Inicia a função de bloqueio de dragões e mostra as moedas
+    window.onload = () => {
+      bloquearDragões();
+      atualizarMoedas(); // Atualiza as moedas ao carregar a página
+    };
+
+    // Quando o jogador clicar para começar a luta, armazena as escolhas e vai para a página de luta
     document.getElementById("startBtn").addEventListener("click", () => {
       const p1 = document.getElementById("player1-select").value;
       const p2 = document.getElementById("player2-select").value;
-        localStorage.removeItem("player1");
-        localStorage.removeItem("player2");
 
-      // Guardar seleção no localStorage
+      // Guarda as escolhas no localStorage
       localStorage.setItem("player1", p1);
       localStorage.setItem("player2", p2);
 
-      // Ir pra arena de luta
+      // Redireciona para a página de luta
       window.location.href = "fight.html";
-
-      
     });
-     window.onload = () => {
-      let tema = localStorage.getItem("tema");
-      if (!tema) {
-        tema = "escuro";
-        localStorage.setItem("tema", tema);
-      }
-      document.body.className = tema;
-      document.getElementById("temaSelect").value = tema;
-    }
   </script>
+
   <select id="temaSelect"></select>
 </body>
 </html>

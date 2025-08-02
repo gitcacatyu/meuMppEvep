@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passes</title>
+    <style>
+        body{
+            background-color: #ffc400e5;
+            color: #8d8d8d;  
+            font: normal 20px Arial;
+            cursor: default;
+        }
+        #comprarPasse{
+        width: 200px;
+        border-radius: 20px;
+        background-color: blue;
+        }
+
+        #comprarPasse:hover{
+        background-color: #c7c7c7;
+        color: #838383;
+        cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+          <h1>Viva algo Premium!</h1>
+          <h3>Seja FELIZ sem gastar nada!</h3>
+
+     <h1>Passe Dragões Espertos</h1>
+     <p>Viva Dragões Super Invesíveis!</p>
+     <input type="button" value="Comprar Passe de Dragões" id="comprarPasse" onclick="comprarPasse()">
+
+
+     <script>
+ 
+        function comprarPasse() {
+  // Verifica se o jogador tem moedas suficientes
+  let moedas = parseInt(localStorage.getItem("coins") || "0");
+  const custoPasse = 420; // Preço do Passe
+
+  if (moedas >= custoPasse) {
+    // Deduz as moedas
+    moedas -= custoPasse;
+    localStorage.setItem("coins", moedas);
+
+    // Exibe uma mensagem de sucesso
+    alert("Passe de Dragões comprado com sucesso!");
+
+    // Atualiza a exibição das moedas
+    atualizarMoedas();
+
+    // Desbloqueia os dragões especiais
+    desbloquearDragoes();
+  } else {
+    // Caso não tenha moedas suficientes
+    alert("Você não tem moedas suficientes para comprar o Passe.");
+    alert("Seja VIP e Mande um email para conseguir 300 moedas GRATIS! OBS: Conseguir VIP em envio de E mail!");
+  }
+}
+
+function desbloquearDragoes() {
+  // Lista de dragões especiais
+  const dragõesPasse = ["DragonApelao", "DragonFORTE", "DragonLendario", "DragonXavier"];
+
+  // Habilita os dragões especiais no select
+  ["player1-select", "player2-select"].forEach(id => {
+    const select = document.getElementById(id);
+    Array.from(select.options).forEach(opt => {
+      if (dragõesPasse.includes(opt.value)) {
+        opt.disabled = false;
+        opt.text = opt.text.replace(" (Bloqueado - Passe)", "");
+      }
+    });
+  });
+}
+ window.onload = () => {
+  atualizarMoedas();
+  };
+
+     </script>
+</body>
+</html>

@@ -173,6 +173,45 @@ class Character {
        this.maxLife = this.life;
       }
     }
+         
+     class DragonApelao extends Character {
+      constructor() {
+       super('Dragon Apelão');
+       this.life = 600;
+       this.attack = 180;
+       this.defense = 120;
+       this.maxLife = this.life;
+      }
+    }
+
+ class DragonFORTE extends Character {
+      constructor() {
+       super('Dragon FORTE');
+       this.life = 700;
+       this.attack = 190;
+       this.defense = 130;
+       this.maxLife = this.life;
+      }
+    }
+
+     class DragonLendario extends Character {
+      constructor() {
+       super('Dragon Lendário');
+       this.life = 700;
+       this.attack = 200;
+       this.defense = 100;
+       this.maxLife = this.life;
+      }
+    }
+  class DragonXavier extends Character {
+      constructor() {
+       super('Dragon Xavier');
+       this.life = 800;
+       this.attack = 199;
+       this.defense = 99;
+       this.maxLife = this.life;
+      }
+    }
       class Sorcerer extends Character {
         constructor() {
           super('Mago');
@@ -336,3 +375,103 @@ function playSomMorte() {
     som.play();
   }
 }
+
+// Verifica ou inicia as moedas no localStorage
+let moedas = parseInt(localStorage.getItem("moedas")) || 0;
+let passeLiberado = moedas >= 420;
+
+// Exibe no console (ou você pode exibir na tela)
+console.log("Moedas:", moedas);
+console.log("Passe Dragões Espertos:", passeLiberado);
+
+// Lista de dragões (coloque aqui todos os seus personagens)
+const todosOsDragoes = [
+  // Dragões do passe
+  { nome: "Dragon Apelão", value: "DragonApelao", passe: true },
+  { nome: "Dragon FORTE", value: "DragonFORTE", passe: true },
+  { nome: "Dragon Lendário", value: "DragonLendario", passe: true },
+  { nome: "Dragon Xavier", value: "DragonXavier", passe: true },
+  // Adicione os outros 18 aqui, com passe: false
+  { nome: "Cavaleiro", value: "Knight", passe: false },
+   { nome: "Mago", value: "Sorcerer", passe: false },
+    { nome: "Rei", value: "King", passe: false },
+     { nome: "Rainha", value: "Queen", passe: false },
+      { nome: "Montro Grande", value: "BigMonster", passe: false },
+       { nome: "", value: "Knight", passe: false },
+        { nome: "Monstro Pequeno", value: "LittleMonster", passe: false },
+         { nome: "Dragão Sombrio", value: "DragonDark", passe: false },
+          { nome: "Dragão Esplandecente", value: "DragonLight", passe: false },
+            { nome: "Dragão Vento", value: "DragonVee", passe: false },
+              { nome: "Dragão Elétrico", value: "DragonEletro", passe: false },
+                { nome: "Dragão Água", value: "DragonAgua", passe: false },
+                   { nome: "Dragão Terra", value: "DragonTerra", passe: false },
+                     { nome: "Dragão Planta", value: "DragonPlanta", passe: false },
+                     { nome: "Dragão Fogo", value: "DragonFogo", passe: false },
+                     { nome: "Dragão Misto", value: "DragonMisto", passe: false },
+                     { nome: "Dragão Metal", value: "DragonMetal", passe: false },
+                     { nome: "Dragão Ataque Forte", value: "DragonAtaqueForte", passe: false },
+                     { nome: "Dragão Defese Forte", value: "DragonDefeseForte", passe: false },
+                     { nome: "Dragão Apelão J.", value: "DragonApelaoJ", passe: false },
+                     { nome: "Dragão Xavier J.", value: "DragonXavierJ", passe: false },
+];  
+
+// Função para preencher o <select> com os personagens
+function preencherSelectComDragoes(idSelect) {
+  const seletor = document.getElementById(idSelect);
+  if (!seletor) return;
+
+  todosOsDragoes.forEach(dr => {
+    const opt = document.createElement("option");
+    opt.value = dr.value;
+    opt.textContent = dr.nome;
+
+    if (dr.passe && !passeLiberado) {
+      opt.disabled = true;
+      opt.textContent += " 🔒 (Passe)";
+    }
+
+    seletor.appendChild(opt);
+  });
+}
+
+// Chamar isso assim que a página carregar
+preencherSelectComDragoes("player1-select");
+preencherSelectComDragoes("player2-select");
+
+// Função que você chama quando a luta termina
+function fimDaLuta(vencedor, jogadorEscolhido) {
+  let ganho = (vencedor === jogadorEscolhido) ? 25 : 10;
+  moedas += ganho;
+  localStorage.setItem("moedas", moedas);
+  alert(`Você ganhou ${ganho} moedas! Total: ${moedas}`);
+}
+
+
+  const dragõesPasse = [
+    "DragonApelao", 
+    "DragonFORTE", 
+    "DragonLendario", 
+    "DragonXavier",
+ 
+  ];
+
+  const bloquearDragõesDoPasse = () => {
+    let moedas = parseInt(localStorage.getItem("coins") || "0");
+
+    // Função pra desabilitar opções de passe se moedas < 420
+    if (moedas < 420) {
+      [ "player1-select", "player2-select" ].forEach(id => {
+        const select = document.getElementById(id);
+        Array.from(select.options).forEach(opt => {
+          if (dragõesPasse.includes(opt.value)) {
+            opt.disabled = true;
+            opt.text += " (Bloqueado - Passe)";
+          }
+        });
+      });
+    }
+  };
+
+  bloquearDragõesDoPasse();
+
+

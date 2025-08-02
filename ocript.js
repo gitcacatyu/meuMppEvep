@@ -9,7 +9,7 @@ const player2Type = localStorage.getItem("player2");
 const createCharacter = (type, name = type) => {
   switch (type) {
     case "Knight": return new Knight(name);
-    case "Sorcerer": return new Sorcerer(name);
+    case "Sorcerer": return new Sorcerer(name);                 
     case "King": return new King(name);
     case "Queen": return new Queen(name);
     case "BigMonster": return new BigMonster();
@@ -26,6 +26,10 @@ const createCharacter = (type, name = type) => {
     case "DragonMetal": return new DragonMetal();
     case "DragonAtaqueForte": return new DragonAtaqueForte();
     case "DragonDefeseForte": return new DragonDefeseForte();
+    case "DragonApelao": return new DragonApelao();
+    case "DragonFORTE": return new DragonFORTE();
+    case "DragonXavier": return new DragonXavier();
+    case "DragonLendario": return new DragonLendario();
     case "DragonApelaoJ": return new DragonApelaoJ();
     case "DragonXavierJ": return new DragonXavierJ();
     default: return new Knight(name);
