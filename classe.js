@@ -240,68 +240,68 @@ class Character {
      }
 
 
-      doAttack(attacking, attacked)  {
-       if(attacking.life  <= 0 || attacked.life <= 0) {
-        this.log.addMessage("Alguém está morto.");
-        return;
-       }
-        
-       let attackFactor = (Math.random() * 2).toFixed(2);
-       let defenseFactor = (Math.random() * 2).toFixed(2);
+    doAttack(attacking, attacked) {
+  if (attacking.life <= 0 || attacked.life <= 0) {
+    this.log.addMessage("Alguém está morto.");
+    return;
+  }
 
-       let actualAttack = attacking.attack * attackFactor;
-       let actualDefense = attacked.defense * defenseFactor;
-       
-    
-              if (actualAttack > actualDefense) {
-          attacked.life -= actualAttack;
-          playSomAtaque();
-          this.log.addMessage(`${attacking.name} causou ${actualAttack.toFixed(2)} de dano em ${attacked.name}`);
+  let attackFactor = (Math.random() * 2).toFixed(2);
+  let defenseFactor = (Math.random() * 2).toFixed(2);
 
-          if (attacked.life <= 0) {
-            playSomMorte();
-            this.log.addMessage(`${attacked.name} morreu!`);
-          }
-        } else {
-          playSomDefesa();
-          this.log.addMessage(`${attacked.name} conseguiu defender...`);
-        }
+  let actualAttack = attacking.attack * attackFactor;
+  let actualDefense = attacked.defense * defenseFactor;
 
+  const somAtaque = document.getElementById('somAtaque');
+  const somDefesa = document.getElementById('somDefesa');
+  const somMorte = document.getElementById('somMorte');
 
-       
-       
-        this.update();
-           const attackedEl = attacked === this.fighter1 ? this.fighter1El : this.fighter2El;
-            attackedEl.classList.add('fighterFlash');
-            setTimeout(() => attackedEl.classList.remove('fighterFlash'), 200);
+  if (actualAttack > actualDefense) {
+    attacked.life -= actualAttack;
+    this.log.addMessage(`${attacking.name} causou ${actualAttack.toFixed(2)} de dano em ${attacked.name}`);
+    somAtaque.currentTime = 0;
+    somAtaque.play();
+  } else {
+    this.log.addMessage(`${attacked.name} conseguiu defender...`);
+    somDefesa.currentTime = 0;
+    somDefesa.play();
+  }
 
-        }
-   }
+  if (attacked.life <= 0) {
+    this.log.addMessage(`${attacked.name} foi derrotado!`);
+    somMorte.currentTime = 0;
+    somMorte.play();
+  }
 
-   class Log {
-    list = [];
-   
-    constructor(listEl) {
-       this.listEl = listEl;
+  this.update();
+
+  const attackedEl = attacked === this.fighter1 ? this.fighter1El : this.fighter2El;
+  attackedEl.classList.add('fighterFlash');
+  setTimeout(() => attackedEl.classList.remove('fighterFlash'), 200);
+}
+
+}
+
+class Log {
+  list = [];
+ 
+  constructor(listEl) {
+     this.listEl = listEl;
+  }
+
+  addMessage(msg) {
+    this.list.push(msg);
+    this.render();
+  }
+
+  render() {
+    this.listEl.innerHTML = '';
+
+    for(let i in this.list) {
+       this.listEl.innerHTML += `<li>${this.list[i]}</li>`;
     }
-
-
-    addMessage(msg) {
-      this.list.push(msg);
-      this.render();
-
-       }
-
-       render() {
-         this.listEl.innerHTML = '';
-
-          for(let i in this.list) {
-             this.listEl.innerHTML += `<li>${this.list[i]}</li>`;
-
-            
-            }
-       }
-   }
+  }
+}
 
    window.onload = () => {
       let tema = localStorage.getItem("tema");
