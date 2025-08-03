@@ -270,12 +270,13 @@ class Character {
        
      update() {
        this.fighter1El.querySelector('.name').innerHTML = `${this.fighter1.name} - ${this.fighter1.life.toFixed(1)}  HP`;
-       let f1Pct = (this.fighter1.life / this.fighter1.maxLife) *100;
-       this.fighter1El.querySelector('.bar').style.width = `${f1Pct}% `;
+       let f1Pct = Math.max(0, (this.fighter1.life / this.fighter1.maxLife) * 100);
+        this.fighter1El.querySelector('.bar').style.width = `${f1Pct}%`;
 
        this.fighter2El.querySelector('.name').innerHTML = `${this.fighter2.name} - ${this.fighter2.life.toFixed(1)}  HP`;
-       let f2Pct = (this.fighter2.life / this.fighter2.maxLife) *100;
-       this.fighter2El.querySelector('.bar').style.width = `${f2Pct}%` ;
+       let f2Pct = Math.max(0, (this.fighter2.life / this.fighter2.maxLife) * 100);
+       this.fighter2El.querySelector('.bar').style.width = `${f2Pct}%`;
+
      }
 
 
@@ -307,22 +308,23 @@ class Character {
   }
 
   if (attacked.life <= 0) {
-    this.log.addMessage(`${attacked.name} foi derrotado!`);
-    somMorte.currentTime = 0;
-    somMorte.play();
-    if (attacked.life <= 0) {
+  attacked.life = 0; // Garante que vai pra 0 certinho
   this.log.addMessage(`${attacked.name} foi derrotado!`);
   somMorte.currentTime = 0;
   somMorte.play();
 
-  if (attacked === this.fighter1) {
-    fimDaLuta("player2");
-  } else {
-    fimDaLuta("player1");
-  }
+  // Atualiza as barras
+  this.update();
+
+  // Desativa os botões
+  this.fighter1El.querySelector('.attackButton').disabled = true;
+  this.fighter2El.querySelector('.attackButton').disabled = true;
+
+  const vencedor = attacked === this.fighter1 ? "player2" : "player1";
+  fimDaLuta(vencedor);
+ 
 }
 
-  }
 
   this.update();
 
@@ -458,7 +460,7 @@ preencherSelectComDragoes("player2-select");
 
 
   const bloquearDragõesDoPasse = () => {
-    let moedas = parseInt(localStorage.getItem("coins") || "0");
+    let moedas = parseInt(localStorage.getItem("moedas") || "0");
 
     // Função pra desabilitar opções de passe se moedas < 420
     if (moedas < 420) {
@@ -472,28 +474,13 @@ preencherSelectComDragoes("player2-select");
         });
       });
     }
-  
-if (player1.life <= 0) {
-  log.addMessage("Player 2 venceu!");
-  fimDaLuta("player2");
-}
-if (player2.life <= 0) {
-  log.addMessage("Player 1 venceu!");
-  fimDaLuta("player1");
-}
 
 
-function fimDaLuta(vencedor) {
-  let ganho = vencedor === "player1" ? 50 : 10;
-  let moedas = parseInt(localStorage.getItem("coins") || "0");
-  moedas += ganho;
-  localStorage.setItem("coins", moedas);
-  alert(`Você ganhou ${ganho} moedas! Total: ${moedas}`);
-}
 
+//
 
   bloquearDragõesDoPasse();
 
 
 }
-
+//

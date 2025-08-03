@@ -39,20 +39,24 @@
  
  // Exemplo de código ao clicar no botão de compra
 const precoPasse = 420;
-let moedas = parseInt(localStorage.getItem("coins") || "0");
+let moedas = parseInt(localStorage.getItem("moedas") || "0");
 
 if (moedas >= precoPasse) {
   moedas -= precoPasse;
-  localStorage.setItem("coins", moedas);
+  localStorage.setItem("moedas", moedas); // <- Aqui tava errado!
   localStorage.setItem("passeAtivo", "true");
   alert("Passe comprado com sucesso!");
 } else {
-  alert("Você não tem moedas suficientes para comprar o passe.");
+
 }
 
- window.onload = () => {
-  atualizarMoedas();
-  };
+window.onload = () => {
+  atualizarMoedas(); // <- Essa função tem que existir e atualizar a tela
+};
+function atualizarMoedas() {
+  const moedas = parseInt(localStorage.getItem("moedas") || "0");
+  document.getElementById("moedasDisplay").innerText = moedas;
+}
 
      </script>
 </body>

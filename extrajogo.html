@@ -6,7 +6,7 @@
 </head>
 
 <body>
-  <input type="button" value="PASSE" id="passe" onclick="location.href= ''">
+  <input type="button" value="PASSE" id="passe" onclick="location.href= 'passe.html'">
   <input type="button" value="?" onclick="location.href= 'ajujolu.html'">
   <h1>Escolha seus lutadores</h1>
 
@@ -80,7 +80,7 @@
   <script>
     // Função para verificar as moedas
     function verificarMoedas() {
-      const moedas = parseInt(localStorage.getItem("coins") || "0"); // Verifica se tem moedas no localStorage
+      const moedas = parseInt(localStorage.getItem("moedas") || "0"); // Verifica se tem moedas no localStorage
       return moedas;
     }
 
@@ -104,10 +104,12 @@
       [ "player1-select", "player2-select" ].forEach(id => {
         const select = document.getElementById(id);
         Array.from(select.options).forEach(opt => {
-          if (dragõesPasse.includes(opt.value) && moedas < 420) {
-            opt.disabled = true;
+          const passeAtivo = localStorage.getItem("passeAtivo") === "true";
+
+          if (dragõesPasse.includes(opt.value) && !passeAtivo) {
+           opt.disabled = true;
             opt.text += " (Bloqueado - Passe)";
-          }
+           }
         });
       });
     }
