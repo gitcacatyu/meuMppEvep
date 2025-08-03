@@ -310,6 +310,18 @@ class Character {
     this.log.addMessage(`${attacked.name} foi derrotado!`);
     somMorte.currentTime = 0;
     somMorte.play();
+    if (attacked.life <= 0) {
+  this.log.addMessage(`${attacked.name} foi derrotado!`);
+  somMorte.currentTime = 0;
+  somMorte.play();
+
+  if (attacked === this.fighter1) {
+    fimDaLuta("player2");
+  } else {
+    fimDaLuta("player1");
+  }
+}
+
   }
 
   this.update();
@@ -435,25 +447,15 @@ function preencherSelectComDragoes(idSelect) {
 }
 
 // Chamar isso assim que a página carregar
+window.onload = () => {
+  todosOsDragoes();
+}
 preencherSelectComDragoes("player1-select");
 preencherSelectComDragoes("player2-select");
 
 // Função que você chama quando a luta termina
-function fimDaLuta(vencedor, jogadorEscolhido) {
-  let ganho = (vencedor === jogadorEscolhido) ? 25 : 10;
-  moedas += ganho;
-  localStorage.setItem("moedas", moedas);
-  alert(`Você ganhou ${ganho} moedas! Total: ${moedas}`);
-}
 
 
-  const dragõesPasse = [
-    "DragonApelao", 
-    "DragonFORTE", 
-    "DragonLendario", 
-    "DragonXavier",
- 
-  ];
 
   const bloquearDragõesDoPasse = () => {
     let moedas = parseInt(localStorage.getItem("coins") || "0");
@@ -470,8 +472,28 @@ function fimDaLuta(vencedor, jogadorEscolhido) {
         });
       });
     }
-  };
+  
+if (player1.life <= 0) {
+  log.addMessage("Player 2 venceu!");
+  fimDaLuta("player2");
+}
+if (player2.life <= 0) {
+  log.addMessage("Player 1 venceu!");
+  fimDaLuta("player1");
+}
+
+
+function fimDaLuta(vencedor) {
+  let ganho = vencedor === "player1" ? 50 : 10;
+  let moedas = parseInt(localStorage.getItem("coins") || "0");
+  moedas += ganho;
+  localStorage.setItem("coins", moedas);
+  alert(`Você ganhou ${ganho} moedas! Total: ${moedas}`);
+}
+
 
   bloquearDragõesDoPasse();
 
+
+}
 

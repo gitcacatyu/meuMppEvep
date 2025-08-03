@@ -26,55 +26,30 @@
 </head>
 <body>
           <h1>Viva algo Premium!</h1>
-          <h3>Seja FELIZ sem gastar nada!</h3>
+          <h3>Seja FELIZ sem gastar nada!</h3><br>
+<h3>Moedas: <span id="moedasDisplay">0</span></h3><br>
 
      <h1>Passe Dragões Espertos</h1>
+     <h3>Preço 420 Moedas</h3>
      <p>Viva Dragões Super Invesíveis!</p>
      <input type="button" value="Comprar Passe de Dragões" id="comprarPasse" onclick="comprarPasse()">
 
 
      <script>
  
-        function comprarPasse() {
-  // Verifica se o jogador tem moedas suficientes
-  let moedas = parseInt(localStorage.getItem("coins") || "0");
-  const custoPasse = 420; // Preço do Passe
+ // Exemplo de código ao clicar no botão de compra
+const precoPasse = 420;
+let moedas = parseInt(localStorage.getItem("coins") || "0");
 
-  if (moedas >= custoPasse) {
-    // Deduz as moedas
-    moedas -= custoPasse;
-    localStorage.setItem("coins", moedas);
-
-    // Exibe uma mensagem de sucesso
-    alert("Passe de Dragões comprado com sucesso!");
-
-    // Atualiza a exibição das moedas
-    atualizarMoedas();
-
-    // Desbloqueia os dragões especiais
-    desbloquearDragoes();
-  } else {
-    // Caso não tenha moedas suficientes
-    alert("Você não tem moedas suficientes para comprar o Passe.");
-    alert("Seja VIP e Mande um email para conseguir 300 moedas GRATIS! OBS: Conseguir VIP em envio de E mail!");
-  }
+if (moedas >= precoPasse) {
+  moedas -= precoPasse;
+  localStorage.setItem("coins", moedas);
+  localStorage.setItem("passeAtivo", "true");
+  alert("Passe comprado com sucesso!");
+} else {
+  alert("Você não tem moedas suficientes para comprar o passe.");
 }
 
-function desbloquearDragoes() {
-  // Lista de dragões especiais
-  const dragõesPasse = ["DragonApelao", "DragonFORTE", "DragonLendario", "DragonXavier"];
-
-  // Habilita os dragões especiais no select
-  ["player1-select", "player2-select"].forEach(id => {
-    const select = document.getElementById(id);
-    Array.from(select.options).forEach(opt => {
-      if (dragõesPasse.includes(opt.value)) {
-        opt.disabled = false;
-        opt.text = opt.text.replace(" (Bloqueado - Passe)", "");
-      }
-    });
-  });
-}
  window.onload = () => {
   atualizarMoedas();
   };

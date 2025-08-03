@@ -68,13 +68,7 @@
       btn.addEventListener("click", atacar);
     });
     */
-  function fimDaLuta(vencedor) {
-  let ganho = vencedor === "player1" ? 25 : 10;
-  let moedas = parseInt(localStorage.getItem("coins") || "0");
-  moedas += ganho;
-  localStorage.setItem("coins", moedas);
-  alert(`Você ganhou ${ganho} moedas! Total: ${moedas}`);
-}
+  
 
 
 function atualizarMoedas() {
@@ -84,14 +78,6 @@ function atualizarMoedas() {
 
 window.onload = () => {
   atualizarMoedas();
-}
-if (player2.life <= 0) {
-  log.addMessage("Player 1 venceu!");
-  fimDaLuta("player1");
-}
-if (player2.life <= 0) {
-  log.addMessage("Player 1 venceu!");
-  fimDaLuta("player2");
 }
 
 

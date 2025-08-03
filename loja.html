@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Loja do Passe</title>
+  <link rel="stylesheet" href="ystyles.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+
+    .passe-box {
+      background-color: #222;
+      color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 400px;
+      margin: auto;
+      text-align: center;
+      box-shadow: 0 0 10px #0f0;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="passe-box">
+    <h2>Passe dos Dragões Espertos 🐉</h2>
+    <p>Compre o passe e desbloqueie:</p>
+    <ul style="text-align: left;">
+      <li>🟥 Dragon Apelão</li>
+      <li>🟦 Dragon FORTE</li>
+      <li>🟨 Dragon Lendário</li>
+      <li>🟩 Dragon Xavier</li>
+    </ul>
+    <p><strong>Preço:</strong> 420 moedas</p>
+    <p>Suas moedas: <span id="moedasDisplay">0</span></p>
+    <button onclick="comprarPasse()">Comprar Passe</button>
+    <p id="mensagem" style="margin-top: 10px;"></p>
+  </div>
+
+  <script>
+    function atualizarMoedas() {
+      const moedas = parseInt(localStorage.getItem("moedas") || "0");
+      document.getElementById("moedasDisplay").textContent = moedas;
+    }
+
+    function comprarPasse() {
+      let moedas = parseInt(localStorage.getItem("moedas") || "0");
+      const preco = 420;
+
+      if (moedas >= preco) {
+        moedas -= preco;
+        localStorage.setItem("moedas", moedas);
+        localStorage.setItem("passeAtivo", "true");
+        document.getElementById("mensagem").textContent = "✅ Passe comprado com sucesso!";
+        document.getElementById("mensagem").style.color = "lime";
+        atualizarMoedas();
+      } else {
+        document.getElementById("mensagem").textContent = "❌ Você não tem moedas suficientes!";
+        document.getElementById("mensagem").style.color = "red";
+      }
+    }
+
+    window.onload = () => {
+      atualizarMoedas();
+    };
+  </script>
+      <script src="classe.js"></script>
+</body>
+</html>
