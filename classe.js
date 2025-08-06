@@ -483,4 +483,26 @@ preencherSelectComDragoes("player2-select");
 
 
 }
+const recompensa = Math.floor(Math.random() * 100) + 20;
+moedas += recompensa;
+Log.innerHTML += `<li>💰 Você ganhou ${recompensa} moedas!</li>`;
+
+document.body.classList.add('fim-da-luta');
+setTimeout(() => document.body.classList.remove('fim-da-luta'), 2000);
+
+
+function pegarImagemDoDragao(nome) {
+  switch(nome.toLowerCase()) {
+    case "DragonEletro ":
+      return "img/Eletro.png";
+    case "DragonDark":
+      return "img/Sombra.png";
+    case "DragonLight":
+      return "img/luz.png";
+    default:
+    
+  }
+}
+
+
 //

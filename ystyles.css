@@ -176,3 +176,12 @@ input:hover{
 .fighterFlash {
   animation: flash 0.2s ease;
 }
+
+.fim-da-luta {
+  animation: piscar 0.3s alternate 6;
+}
+
+@keyframes piscar {
+  from { background-color: black; }
+  to { background-color: red; }
+}

@@ -14,6 +14,8 @@
 
   <div class="fightarea">
     <div id="char">
+  <img id="imgChar" src="imgs/default_dragao.png" width="150" />
+ 
       <div class="lifebar">
         <div class="bar" style="width: 100%;"></div>
       </div>
@@ -21,7 +23,12 @@
       <div><button class="attackButton">Atacar</button></div>
     </div>
 
+
+
+
     <div id="monster">
+  <img id="imgMonster" src="imgs/default_dragao.png" width="150" />
+
       <div class="lifebar">
         <div class="bar" style="width: 100%;"></div>
       </div>
@@ -79,11 +86,46 @@ function atualizarMoedas() {
 window.onload = () => {
   atualizarMoedas();
 }
+function fimDaLuta(vencedor) {
+  const log = document.querySelector(".log");
+  const mensagem = document.createElement("li");
+  mensagem.innerText = `🔥 A luta acabou! Vencedor: ${vencedor} 🔥`;
+  log.appendChild(mensagem);
+
+  // Toca som de morte só por dramatização 😅
+  document.getElementById("somMorte").play();
+}
+
+function fimDaLuta(vencedor) {
+  const logEl = document.querySelector(".log");
+  const mensagem = document.createElement("li");
+  mensagem.innerText = `🏆 Fim da luta! Vencedor: ${vencedor}`;
+  logEl.appendChild(mensagem);
+
+  // Dá moedas pro jogador vencedor!
+  let moedas = parseInt(localStorage.getItem("moedas") || "0");
+  moedas += 50;
+  localStorage.setItem("moedas", moedas);
+
+  // Atualiza o número de moedas na tela
+  const display = document.getElementById("moedasDisplay");
+  if (display) display.innerText = moedas;
+
+  // Opcional: você pode colocar um delay e depois mostrar um botão de reiniciar, ou redirecionar, etc.
+}
 
 
+function atualizarImagensDoCombate(nome1, nome2) {
+  const img1 = document.getElementById("imgChar");
+  const img2 = document.getElementById("imgMonster");
+
+  img1.src = pegarImagemDoDragao(nome1);
+  img2.src = pegarImagemDoDragao(nome2);
+
+
+}
+ atualizarImagensDoCombate(jogador1.nome, jogador2.nome);
+ fimDaLuta(jogador1.nome); // ou quem for o vencedor
   </script>
-<audio id="somAtaque" src="sons/som_ataque.mp3"></audio>
-<audio id="somDefesa" src="sons/som_defesa.mp3"></audio>
-<audio id="somMorte" src="sons/som_morte.mp3"></audio>
 </body>
 </html>

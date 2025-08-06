@@ -138,7 +138,7 @@
     window.onload = () => {
       let tema = localStorage.getItem("tema");
       if (!tema) {
-        tema = "escuro";
+        tema = "claro";
         localStorage.setItem("tema", tema);
       }
       document.body.className = tema;
