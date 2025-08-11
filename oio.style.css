@@ -1,0 +1,30 @@
+iframe {
+  width: 50%;
+  height: 100vh;
+  border: none;
+}
+.editor-container {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+textarea {
+  flex-grow: 1;
+  font-family: monospace;
+  font-size: 14px;
+  padding: 10px;
+  resize: none;
+}
+#cssCode{
+    background-color: rgba(54, 54, 54, 0.671);
+    color: lightblue;
+}
+#jsCode{
+    background-color: rgba(54, 54, 54, 0.671);
+    color: yellow;
+}
+#htmlCode{
+    background-color: rgba(54, 54, 54, 0.671);
+    color: orangered;
+}

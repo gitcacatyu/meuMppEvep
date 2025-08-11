@@ -14,7 +14,7 @@
 
   <div class="fightarea">
     <div id="char">
-  <img id="imgChar" src="imgs/default_dragao.png" width="150" />
+  <img id="imgChar" src=" " width="150" />
  
       <div class="lifebar">
         <div class="bar" style="width: 100%;"></div>
@@ -27,7 +27,7 @@
 
 
     <div id="monster">
-  <img id="imgMonster" src="imgs/default_dragao.png" width="150" />
+  <img id="imgMonster" src=" " width="150" />
 
       <div class="lifebar">
         <div class="bar" style="width: 100%;"></div>
@@ -37,18 +37,33 @@
     </div>
   </div>
 
+
   <ul class="log"></ul>
 <audio id="somAtaque" src="sons/som_ataque.mp3"></audio>
 <audio id="somDefesa" src="sons/som_defesa.mp3"></audio>
 <audio id="somMorte" src="sons/som_morte.mp3"></audio>
+
+  <audio id="musicaLuta" autoplay loop>
+  <source src="https://www.fesliyanstudios.com/play-mp3/6671" type="audio/mpeg">
+  Seu navegador não suporta áudio :(
+</audio>
+
+<!-- Botão para mutar/desmutar -->
+<button onclick="toggleSom()">🎵 Mutar / Desmutar</button>
+
+<script>
+  function toggleSom() {
+    const musica = document.getElementById('musicaLuta');
+    musica.muted = !musica.muted;
+  }
+</script>
 
 
 
   <button onclick="location.reload()" style="margin-top: 20px;">🔁 Jogar Novamente</button>
   <select id="temaSelect"></select>
 
-  <script src="classe.js"></script>
-  <script src="ocript.js"></script>
+  
   <script>
     /*// Certifica que os sons estão carregando
     const ataque = new Audio('ataque.mp3');
@@ -119,13 +134,32 @@ function atualizarImagensDoCombate(nome1, nome2) {
   const img1 = document.getElementById("imgChar");
   const img2 = document.getElementById("imgMonster");
 
-  img1.src = pegarImagemDoDragao(nome1);
-  img2.src = pegarImagemDoDragao(nome2);
+  try {
+    img1.src = pegarImagemDoDragao(nome1);
+  } catch (e) {
+    console.error(e.message);
+    img1.src = "img/erro.png"; // imagem genérica de erro
+  }
 
-
+  try {
+    img2.src = pegarImagemDoDragao(nome2);
+  } catch (e) {
+    console.error(e.message);
+    img2.src = "img/erro.png"; // imagem genérica de erro
+  }
 }
- atualizarImagensDoCombate(jogador1.nome, jogador2.nome);
- fimDaLuta(jogador1.nome); // ou quem for o vencedor
+
+
+
+
+
+    document.getElementById('botaoLuta').addEventListener('click', () => {
+  document.getElementById('musicaLuta').play();
+});
+
   </script>
+  </div> <!-- final do seu HTML -->
+<script src="classe.js"></script>
+<script src="fight.js"></script>
 </body>
 </html>

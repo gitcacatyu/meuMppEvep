@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="oio.css">
+<title>Editor HTML + CSS Simples</title>
+
+<!-- Container editor e preview lado a lado -->
+<div style="display: flex; height: 100vh;">
+
+  <!-- Área dos códigos (HTML, CSS, JS) -->
+  <div class="editor-container" style="width: 50%; display: flex; flex-direction: column;">
+    <label class="label">HTML</label>
+    <textarea id="htmlCode" spellcheck="false" style="flex:1; font-family: monospace; font-size: 14px; padding: 10px; resize:none;">
+<h1>Olá, Mundo!</h1></textarea>
+
+    <label class="label">CSS</label>
+    <textarea id="cssCode" spellcheck="false" style="flex:1; font-family: monospace; font-size: 14px; padding: 10px; resize:none;">
+body { background: #222; color: #eee; }</textarea>
+
+    <label class="label">JavaScript</label>
+    <textarea id="jsCode" spellcheck="false" style="flex:1; font-family: monospace; font-size: 14px; padding: 10px; resize:none;">
+console.log('Rodando JS!');</textarea>
+  </div>
+
+  <!-- Área onde vai aparecer o resultado -->
+  <iframe id="preview" sandbox="allow-scripts" style="width: 50%; height: 100vh; border: none; background: white;"></iframe>
+</div>
+
+
+<script src="pot.js"></script>
+
+</body>
+</html>

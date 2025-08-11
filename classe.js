@@ -263,7 +263,7 @@ class Character {
      
      start() {
         this.update();
-
+         atualizarImagensDoCombate(this.fighter1.name, this.fighter2.name);
         this.fighter1El.querySelector('.attackButton').addEventListener('click', () => this.doAttack(this.fighter1, this.fighter2) );
         this.fighter2El.querySelector('.attackButton').addEventListener('click', () => this.doAttack(this.fighter2, this.fighter1) );
      }
@@ -492,17 +492,24 @@ setTimeout(() => document.body.classList.remove('fim-da-luta'), 2000);
 
 
 function pegarImagemDoDragao(nome) {
-  switch(nome.toLowerCase()) {
-    case "DragonEletro ":
-      return "img/Eletro.png";
-    case "DragonDark":
-      return "img/Sombra.png";
-    case "DragonLight":
-      return "img/luz.png";
-    default:
-    
-  }
+  nome = nome.toLowerCase();
+
+  if (nome.includes('xavier')) return 'xavierpasse.png';
+  if (nome.includes('dark') || nome.includes('sombra')) return 'sombra.png';
+  if (nome.includes('agua')) return 'agua.png';
+  if (nome.includes('esplandecente')) return 'esplandecente.png'; // 👈 AQUI
+
+  throw new Error(`Imagem do dragão "${nome}" não encontrada!`);
 }
+
+function atualizarImagensDoCombate(nome1, nome2) {
+  const img1 = document.getElementById("imgChar");
+  const img2 = document.getElementById("imgMonster");
+
+  img1.src = pegarImagemDoDragao(nome1);
+  img2.src = pegarImagemDoDragao(nome2);
+}
+
 
 
 //

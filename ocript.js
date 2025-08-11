@@ -53,3 +53,10 @@ stage.start();
 //
 
 
+// Só se char e monster estiverem definidos!
+if (typeof char !== "undefined" && typeof monster !== "undefined") {
+  atualizarImagensDoCombate(char.name, monster.name);
+  fimDaLuta(char.name); // ou monster.name dependendo de quem venceu
+}
+
+ 
