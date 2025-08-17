@@ -1,5 +1,6 @@
 body{
- background-color: rgb(70, 69, 69);
+ background-color: rgb(255, 255, 255);
+ background: linear-gradient(90deg, orange, blue);
 }
 
  body.escuro {
@@ -25,22 +26,34 @@ body{
 #char, 
 #monster {
   flex: 10;
-  
-
+  width: 300px;
+  height: 300px;
+  border: 1px solid #000000;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #242424;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.13), rgba(255, 174, 0, 0.548), rgba(0, 47, 255, 0.603));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .lifebar {
   height: 10px;
-  border: 1px solid #333;
+  border: 1px solid #000000;
   border-radius: 5px;
   font: normal 25px Arial;
 }
 
 .lifebar .bar {
   height: inherit;
-  background-color: red;
-  border-radius: 5px;
-  font: normal 25px Arial;
+  background: linear-gradient(100deg, rgb(255, 0, 0), rgb(21, 255, 0));
+  height: 100%;
+  width: 100%; /* vida cheia */
+  background: linear-gradient(90deg, #ff0000, #00ff00); /* gradiente do vermelho para verde */
+  border-radius: 8px;
+  transition: width 0.4s ease-in-out; /* efeito suave ao perder vida */
 }
 
 h1 {
@@ -51,6 +64,7 @@ h1 {
   margin: 50px;
   border: #333 solid 2px;
   font: normal 15px Arial;
+  background: linear-gradient(90deg,  rgb(255, 136, 0), rgb(255, 255, 255));
 }
 
 .log {
@@ -58,6 +72,9 @@ h1 {
   height: 200px;
   overflow-y: scroll;
   font: normal 25px Arial;
+  background-color: #ffffff;
+  color: #242424;
+  background: linear-gradient(90deg, white, rgba(0, 0, 255, 0.726), rgba(255, 0, 0, 0.603));
 }
 
 .startBtn {
@@ -65,27 +82,29 @@ h1 {
   border-radius: 25px;
   border: #999 solid 2px;
   margin: 20px;
+ background: linear-gradient(90deg, rgba(0, 0, 255, 0.726), rgba(255, 0, 0, 0.603));
  
 }
 
 .startBtn:hover {
   border-radius: 25px;
   border: #333 solid 3px;
-   cursor: pointer;
+  cursor: pointer;
+  background: linear-gradient(90deg, white, rgba(0, 0, 255, 0.726), rgba(255, 0, 0, 0.603));
 }
 
 .attackButton {
   border-radius: 50px;
-  background-color: rgb(0, 0, 0);
+  background-color: #444444;
   color: aliceblue;
   font: normal 25px Arial;
 }
 
 .attackButton:hover {
-  color: black;
-  background-color: rgba(255, 255, 255, 0);
+  color: rgb(0, 0, 0);
   border: none;
   font: normal 25px Arial;
+  background: linear-gradient(90deg, rgb(255, 152, 152), rgb(255, 255, 255));
 }
 #passe{
   width: 100px;
@@ -98,7 +117,10 @@ h1 {
   cursor: pointer;
 }
 
-
+li {
+   list-style: crosser;
+   font: normal 20px Arial;
+}
 
 
 @media (max-width: 768px) {

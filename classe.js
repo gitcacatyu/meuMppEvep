@@ -441,7 +441,7 @@ function preencherSelectComDragoes(idSelect) {
 
     if (dr.passe && !passeLiberado) {
       opt.disabled = true;
-      opt.textContent += " 🔒 (Passe)";
+      opt.textContent += " 🔒 (Passe Dragões Espertos)";
     }
 
     seletor.appendChild(opt);
@@ -494,10 +494,15 @@ setTimeout(() => document.body.classList.remove('fim-da-luta'), 2000);
 function pegarImagemDoDragao(nome) {
   nome = nome.toLowerCase();
 
-  if (nome.includes('xavier')) return 'xavierpasse.png';
+  if (nome.includes('eletro') || nome.includes('l')) return 'eletro.png';
+  if (nome.includes('lendario') || nome.includes('n')) return 'lendariopasse.png'; 
+  if (nome.includes('xavier') || nome.includes('x')) return 'xavierpasse.png';
   if (nome.includes('dark') || nome.includes('sombra')) return 'sombra.png';
-  if (nome.includes('agua')) return 'agua.png';
-  if (nome.includes('esplandecente')) return 'esplandecente.png'; // 👈 AQUI
+  if (nome.includes('agua') || nome.includes('g')) return 'agua.png';
+  if (nome.includes('light') || nome.includes('esplandecente')) return 'luz.png';
+  if (nome.includes('apelao') || nome.includes('a')) return 'apelaopasse.png';
+  if (nome.includes('fogo') || nome.includes('f')) return 'fogo.png';
+
 
   throw new Error(`Imagem do dragão "${nome}" não encontrada!`);
 }

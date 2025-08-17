@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saiba Mais +</title>
+    <style>
+        /* Reset básico */
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Fundo com gradiente */
+body {
+  background: linear-gradient(135deg, #ffb347, #ffcc33);
+  color: #222;
+  padding: 20px;
+}
+
+/* Título principal */
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+/* Links de navegação */
+h6 a {
+  display: inline-block;
+  margin: 10px 5px;
+  text-decoration: none;
+  color: #fff;
+  background: #333;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: background 0.3s, transform 0.2s;
+}
+
+h6 a:hover {
+  background: #ff6600;
+  transform: scale(1.05);
+}
+
+/* Texto explicativo */
+h3 {
+  font-size: 1.4rem;
+  margin: 15px 0;
+  color: #222;
+}
+
+h4 {
+  margin: 10px 0;
+  color: #444;
+}
+
+/* Caixa de níveis */
+div {
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilizando os parágrafos dos níveis */
+div p {
+  font-size: 1.1rem;
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 6px;
+  background: #f5f5f5;
+  transition: transform 0.2s, box-shadow 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+div p::before {
+  content: "⚠️"; /* ícone de alerta */
+}
+
+/* Hover nos parágrafos */
+div p:hover {
+  transform: scale(1.03);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Cores diferentes conforme a urgência */
+div p:nth-child(2) { background: #ffeeba; } /* Level 1 */
+div p:nth-child(3) { background: #ffe39f; } /* Level 2 */
+div p:nth-child(4) { background: #ffd67f; } /* Level 3 */
+div p:nth-child(5) { background: #ffca66; } /* Level 4 */
+div p:nth-child(6) { background: #ffbd4d; } /* Level 5 */
+div p:nth-child(8) { background: #ffa94d; } /* Level 6 */
+div p:nth-child(9) { background: #ff9933; } /* Level 7 */
+div p:nth-child(10) { background: #ff8519; } /* Level 8 */
+div p:nth-child(11) {
+  background: #ff6600;
+  color: #fff;
+  animation: pulse 1s infinite alternate;
+} /* Level 9 */
+div p:nth-child(12) {
+  background: #ff4500;
+  color: #fff;
+  animation: pulse 0.7s infinite alternate;
+} /* Level 10 */
+
+/* Animação para pulsar os níveis mais urgentes */
+@keyframes pulse {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(1.05); opacity: 0.8; }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h3, h4 {
+    font-size: 1.2rem;
+  }
+
+  div p {
+    font-size: 1rem;
+  }
+}
+
+
+    </style>
+</head>
+<body>
+      <h1>Saiba Mais + </h1>
+        <h6>
+            <a href="falecon.html">Voltar ↩</a>
+        </h6>
+        <h6>
+            <a href="ji.html">Voltar para a página inicial ↩</a>
+        </h6>
+        <h6>
+            <a href="ajuda.html" onclick="Subir()">Ir para ajuda ↩</a>
+        </h6>
+         <h1>Ajuda tem mais Prioridade do que Fala conosco... 
+
+            Por quê? </h1>
+           <h3> Porque a Ajuda é mais urgente e direta, enquanto Fale Conosco pode ser mais geral e menos imediato.</h3>
+        <h4>Ajuda é mais importante que Fale Conosco, pois resolve problemas específicos e urgentes, enquanto Fale Conosco é mais para feedback ou questões gerais.</h4>
+         <h3>O símbolo > ! Pode representar isso:</h3>
+         <div>
+            <h3>Aqui é o ADD. de Fale conosco</h3>
+            <p>! > Level 1 de urgência! Respondemos á: 1h a 4h.</p>
+            <p>!! > Level 2 de urgência! Respondemos á: 1h a 3h. </p>
+            <p>!!! > Level 3 de urgência! Respondemos á: 1h a 2h.</p>
+            <p>!!!! > Level 4 de urgência! Respondemos á: 50min a 1h.</p>
+            <p>!!!!! > Level 5 de urgência! Respondemos á: 40min a  1h.</p>
+            <h4>Daqui para frente é o ADD. de Ajuda</h4>
+            <p>!!!!!! > Level 6 de urgência! Respondemos á: 30min a 50min.</p>
+            <p>!!!!!!! > Level 7 de urgência! Respondemos á: 30min a 40min.</p>
+            <p>!!!!!!!! > Level 8 de urgência! Respondemos á: 20min a 40min.</p>
+            <p>!!!!!!!!! > Level 9 de urgência! Respondemos á: 10min a 20min.</p>
+            <p>!!!!!!!!!! > Level 10 de urgência! Respondemos á: 0min a 10min.</p>
+         </div>   
+           <h2>Se desrespeitar essa regra, acaba que você vai ficar com +1 hora dependendo do que você escolher...</h2>
+    <script>
+        function Subir() {
+           confirm("Você está indo para ajuda, mas lembre-se você não vai para lá só porque quer, você vai para lá porque precisa de ajuda! Se não precisar, não vá!");
+              if (!confirm("Você tem certeza que precisa de ajuda?")) {
+                event.preventDefault(); // Impede a navegação se o usuário não confirmar
+              }
+        }
+    </script>
+</body>
+</html>

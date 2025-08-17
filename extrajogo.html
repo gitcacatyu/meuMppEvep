@@ -116,7 +116,7 @@
 
     // Função para adicionar moedas depois de uma luta
     function fimDaLuta(vencedor) {
-      let ganho = vencedor === "player1" ? 25 : 10;
+      let ganho = vencedor === "player1" ? 50 : 30; // Exemplo de ganho de moedas
       let moedas = verificarMoedas();
       moedas += ganho;
       localStorage.setItem("coins", moedas);
