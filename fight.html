@@ -14,7 +14,7 @@
 
   <div class="fightarea">
     <div id="char">
-  <img id="imgChar" src=" " width="150" />
+  <img id="imgChar" src="" width="150" />
  
       <div class="lifebar">
         <div class="bar" style="width: 100%;"></div>
@@ -27,7 +27,7 @@
 
 
     <div id="monster">
-  <img id="imgMonster" src=" " width="150" />
+  <img id="imgMonster" src="erro.png" width="150" />
 
       <div class="lifebar">
         <div class="bar" style="width: 100%;"></div>
@@ -138,14 +138,14 @@ function atualizarImagensDoCombate(nome1, nome2) {
     img1.src = pegarImagemDoDragao(nome1);
   } catch (e) {
     console.error(e.message);
-    img1.src = "erro.png"; // imagem genérica de erro
+    img1.src = ""; // imagem genérica de erro
   }
 
   try {
     img2.src = pegarImagemDoDragao(nome2);
   } catch (e) {
     console.error(e.message);
-    img2.src = "erro.png"; // imagem genérica de erro
+    img2.src = ""; // imagem genérica de erro
   }
 }
 
@@ -153,12 +153,17 @@ function atualizarImagensDoCombate(nome1, nome2) {
 
 
 
-    document.getElementById('botaoLuta').addEventListener('click', () => {
-  document.getElementById('musicaLuta').play();
+document.addEventListener('DOMContentLoaded', () => {
+  const botao = document.getElementById('startBtn');
+  if (botao) {
+    botao.addEventListener('click', () => {
+      document.getElementById('musicaLuta').play();
+    });
+  }
 });
 
   </script>
-  </div> <!-- final do seu HTML -->
+   <!-- final do seu HTML -->
 <script src="classe.js"></script>
 <script src="ocript.js"></script>
 </body>

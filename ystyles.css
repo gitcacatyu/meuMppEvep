@@ -1,197 +1,178 @@
-body{
- background-color: rgb(255, 255, 255);
- background: linear-gradient(90deg, orange, blue);
+/* =========================
+   BASE E TEMA
+========================= */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(90deg, orange, blue);
+  color: #242424;
 }
 
- body.escuro {
-      background-color: #121212;
-      color: #f0f0f0;
-    }
-    body.verde {
-      background-color: #001f00;
-      color: #00ff00;
-    }
-    body.rosa {
-      background-color: #ffe6f0;
-      color: #cc0066;
-    }
+body.escuro {
+  background: #121212;
+  color: #f0f0f0;
+}
 
+body.verde {
+  background: #001f00;
+  color: #00ff00;
+}
+
+body.rosa {
+  background: #ffe6f0;
+  color: #cc0066;
+}
+
+/* =========================
+   ÁREA DE LUTA
+========================= */
 .fightarea {
   display: flex;
   gap: 20px;
-  font: normal 25px Arial;
-  
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  margin: 20px;
+  background-color: #ffffff00;
 }
 
-#char, 
+#char,
 #monster {
-  flex: 10;
-  width: 300px;
+  flex: 1;
+  max-width: 1000px;
   height: 300px;
-  border: 1px solid #000000;
+  border: 1px solid #000;
   border-radius: 10px;
-  background-color: #ffffff;
-  color: #242424;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.13), rgba(255, 174, 0, 0.548), rgba(0, 47, 255, 0.603));
+  background: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  overflow: hidden;
 }
 
+/* =========================
+   LIFE BAR
+========================= */
 .lifebar {
-  height: 10px;
-  border: 1px solid #000000;
+  width: 100%;
+  height: 12px;
+  border: 1px solid #000;
   border-radius: 5px;
-  font: normal 25px Arial;
+  margin: 10px 0;
+  overflow: hidden;
 }
 
 .lifebar .bar {
-  height: inherit;
-  background: linear-gradient(100deg, rgb(255, 0, 0), rgb(21, 255, 0));
   height: 100%;
   width: 100%; /* vida cheia */
-  background: linear-gradient(90deg, #ff0000, #00ff00); /* gradiente do vermelho para verde */
-  border-radius: 8px;
-  transition: width 0.4s ease-in-out; /* efeito suave ao perder vida */
+  background: linear-gradient(90deg, red, yellow, green);
+  border-radius: 5px;
+  transition: width 0.4s ease-in-out;
 }
 
+/* =========================
+   TÍTULOS E LOG
+========================= */
 h1 {
-  font: normal 40px Arial;
+  font-size: 40px;
+  text-align: center;
 }
 
 .selection-area {
-  margin: 50px;
+  margin: 30px;
+  padding: 50px;
   border: #333 solid 2px;
-  font: normal 15px Arial;
-  background: linear-gradient(90deg,  rgb(255, 136, 0), rgb(255, 255, 255));
+  background: linear-gradient(90deg, rgb(255, 255, 255), rgba(255, 255, 255, 0));
+  font-size: 20px;
 }
 
 .log {
-  border: 1px dotted #000000;
+  border: 1px dotted #000;
   height: 200px;
-  overflow-y: scroll;
-  font: normal 25px Arial;
-  background-color: #ffffff;
-  color: #242424;
-  background: linear-gradient(90deg, white, rgba(0, 0, 255, 0.726), rgba(255, 0, 0, 0.603));
+  overflow-y: auto;
+  font-size: 20px;
+  padding: 50px;
 }
 
+/* =========================
+   BOTÕES
+========================= */
 .startBtn {
-  font: normal 25px Arial;
+  font-size: 25px;
   border-radius: 25px;
   border: #999 solid 2px;
   margin: 20px;
- background: linear-gradient(90deg, rgba(0, 0, 255, 0.726), rgba(255, 0, 0, 0.603));
- 
+  padding: 10px 20px;
+  cursor: pointer;
 }
 
 .startBtn:hover {
-  border-radius: 25px;
   border: #333 solid 3px;
-  cursor: pointer;
-  background: linear-gradient(90deg, white, rgba(0, 0, 255, 0.726), rgba(255, 0, 0, 0.603));
 }
 
 .attackButton {
   border-radius: 50px;
-  background-color: #444444;
-  color: aliceblue;
-  font: normal 25px Arial;
+  background-color: #444;
+  color: #fff;
+  font-size: 25px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
 }
 
 .attackButton:hover {
-  color: rgb(0, 0, 0);
-  border: none;
-  font: normal 25px Arial;
-  background: linear-gradient(90deg, rgb(255, 152, 152), rgb(255, 255, 255));
-}
-#passe{
-  width: 100px;
-  border-radius: 20px;
+  background: linear-gradient(90deg, rgb(138, 138, 138), rgb(255, 255, 255));
+  color: #000;
 }
 
-#passe:hover{
-  background-color: #fbff00;
-  color: #ffc400;
+/* Botão especial */
+#passe {
+  width: 100px;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+#passe:hover {
+  background: linear-gradient(yellow, rgb(255, 175, 1));
+  color: #916f00;
   cursor: pointer;
 }
 
+/* =========================
+   INPUTS
+========================= */
+input {
+  background-color: rgb(16, 20, 240);
+  color: white;
+  border-radius: 35px;
+  padding: 10px;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  font-size: 18px;
+}
+
+input:hover {
+  background-color: rgb(0, 0, 68);
+  border-radius: 50%;
+}
+
+/* =========================
+   LISTAS
+========================= */
 li {
-   list-style: crosser;
-   font: normal 20px Arial;
+  list-style: square;
+  font-size: 20px;
 }
 
-
-@media (max-width: 768px) {
-  body {
-    padding: 10px;
-  }
-
-  .fightarea {
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-   
-  }
-
-  #char, #monster {
-    width: 100%;
-    flex: none;
-  }
-
-  .lifebar {
-    height: 15px;
-  }
-
-  .lifebar .bar {
-    height: 100%;
-  }
-
-  h1 {
-    font-size: 30px;
-    text-align: center;
-  }
-
-  .attackButton {
-    width: 100%;
-    font-size: 18px;
-    padding: 10px;
-  }
-
-  .log {
-    height: 150px;
-    font-size: 18px;
-  }
-
-  button#startBtn {
-    font-size: 20px;
-    padding: 10px 20px;
-    display: block;
-    margin: 20px auto;
-  }
-
-  #selection-area {
-    margin: 20px;
-    font-size: 14px;
-  }
-}
-
-input{
-    background-color: rgb(16, 20, 240);
-    color: white;
-    border-radius: 35px;
-    padding: 10px;
-    width: 40px;
-}
-
-input:hover{
-    border-radius: 50%;
-    background-color: rgb(0, 0, 68);
-}
+/* =========================
+   ANIMAÇÕES
+========================= */
 @keyframes flash {
   0% { background-color: transparent; }
-  50% { background-color: rgba(255, 255, 0, 0.5); }
+  50% { background-color: rgb(255, 76, 76); }
   100% { background-color: transparent; }
 }
 
@@ -206,4 +187,51 @@ input:hover{
 @keyframes piscar {
   from { background-color: black; }
   to { background-color: red; }
+}
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+@media (max-width: 768px) {
+  .fightarea {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+
+  #char, #monster {
+    width: 100%;
+    height: 250px;
+  }
+
+  .lifebar {
+    height: 15px;
+  }
+
+  h1 {
+    font-size: 30px;
+  }
+
+  .attackButton {
+    width: 100%;
+    font-size: 18px;
+    padding: 10px;
+  }
+
+  .log {
+    height: 150px;
+    font-size: 18px;
+  }
+
+  .startBtn {
+    font-size: 20px;
+    padding: 10px 20px;
+    display: block;
+    margin: 20px auto;
+  }
+
+  .selection-area {
+    margin: 20px;
+    font-size: 14px;
+  }
 }

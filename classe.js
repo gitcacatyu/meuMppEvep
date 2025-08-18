@@ -449,9 +449,11 @@ function preencherSelectComDragoes(idSelect) {
 }
 
 // Chamar isso assim que a página carregar
-window.onload = () => {
-  todosOsDragoes();
-}
+
+  window.onload = () => {
+  console.log(todosOsDragoes); // ✅ ok
+};
+
 preencherSelectComDragoes("player1-select");
 preencherSelectComDragoes("player2-select");
 
@@ -490,21 +492,45 @@ Log.innerHTML += `<li>💰 Você ganhou ${recompensa} moedas!</li>`;
 document.body.classList.add('fim-da-luta');
 setTimeout(() => document.body.classList.remove('fim-da-luta'), 2000);
 
-
 function pegarImagemDoDragao(nome) {
-  nome = nome.toLowerCase();
+  // Normaliza o texto: tudo minúsculo e sem acentos
+  nome = nome
+    .toLowerCase()
+    .normalize("NFD") // separa letras e acentos
+    .replace(/[\u0300-\u036f]/g, ""); // remove acentos
 
-  if (nome.includes('eletro') || nome.includes('l')) return 'eletro.png';
-  if (nome.includes('lendario') || nome.includes('n')) return 'lendariopasse.png'; 
-  if (nome.includes('xavier') || nome.includes('x')) return 'xavierpasse.png';
-  if (nome.includes('dark') || nome.includes('sombra')) return 'sombra.png';
-  if (nome.includes('agua') || nome.includes('g')) return 'agua.png';
-  if (nome.includes('light') || nome.includes('esplandecente')) return 'luz.png';
-  if (nome.includes('apelao') || nome.includes('a')) return 'apelaopasse.png';
-  if (nome.includes('fogo') || nome.includes('f')) return 'fogo.png';
+  // Mapeamento seguro
+  const imagens = {
+    eletro: 'eletro.png',
+    eletrico:'eletro.png', 
+    lendario: 'lendariopasse.png',
+    xavier: 'xavierpasse.png',
+    dark: 'sombra.png',
+    sombrio: 'sombra.png',
+    agua: 'agua.png',
+    light: 'luz.png',
+    esplandecente: 'luz.png',
+    apelao: 'apelaopasse.png',
+    fogo: 'fogo.png',
+    planta: 'planta.png',
+    metal: 'metal.png',
+    misto: 'misto.png',
+    forte: 'forte.png',
+    terra: 'terra.png',
+    cavaleiro: 'cava.html',
+    littlemonster: 'lmonster.png',
+    bigmonster: 'bmoster.png',
+    sorcerer: 'sor.png'
+  };
 
+  for (let chave in imagens) {
+    if (nome.includes(chave)) {
+      return imagens[chave];
+    }
+  }
 
-  throw new Error(`Imagem do dragão "${nome}" não encontrada!`);
+  // Se não encontrou nada, devolve uma imagem padrão
+  return 'erro.png';
 }
 
 function atualizarImagensDoCombate(nome1, nome2) {
@@ -515,6 +541,45 @@ function atualizarImagensDoCombate(nome1, nome2) {
   img2.src = pegarImagemDoDragao(nome2);
 }
 
+function getMultiplicador(atacante, defensor) {
+  // Exemplo de fraquezas e forças
+  const tipos = {
+     DragonFogo:     { forte: ["DragonPlanta"], fraco: ["DragonAgua"] },
+  DragonAgua:     { forte: ["DragonFogo"], fraco: ["DragonTerra"] },
+  DragonPlanta:   { forte: ["DragonAgua"], fraco: ["DragonFogo"] },
+  DragonTerra:    { forte: ["DragonFogo"], fraco: ["DragonAgua"] },
+  DragonEletro:   { forte: ["DragonAgua"], fraco: ["DragonTerra"] },
+  DragonVee:      { forte: ["DragonTerra"], fraco: ["DragonFogo"] },
+  DragonMisto:    { forte: ["DragonDark"], fraco: ["DragonLight"] },
+  DragonAtaqueForte: { forte: ["DragonPlanta"], fraco: ["DragonMetal"] },
+  DragonDefeseForte: { forte: ["DragonFogo"], fraco: ["DragonAtaqueForte"] },
+  DragonMetal:    { forte: ["DragonAtaqueForte"], fraco: ["DragonVee"] },
+  DragonApelaoJ:  { forte: ["DragonPlanta"], fraco: ["DragonDefeseForte"] },
+  DragonXavierJ:  { forte: ["DragonFogo"], fraco: ["DragonMisto"] },
+  DragonDark:     { forte: ["DragonLight"], fraco: ["DragonMisto"] },
+  DragonApelao:   { forte: ["DragonVee"], fraco: ["DragonMetal"] },
+  DragonFORTE:    { forte: ["DragonApelao"], fraco: ["DragonLendario"] },
+  DragonLendario: { forte: ["DragonFORTE"], fraco: ["DragonXavier"] },
+  DragonXavier:   { forte: ["DragonLendario"], fraco: ["DragonApelaoJ"] },
+  DragonLight:    { forte: ["DragonDark"], fraco: ["DragonMisto"] },
+  LittleMonster:  { forte: [], fraco: [] },
+  BigMonster:     { forte: [], fraco: [] },
+  King:           { forte: [], fraco: [] },
+  Queen:          { forte: [], fraco: [] },
+  Knight:         { forte: [], fraco: [] },
+  Sorcerer:       { forte: [], fraco: [] }
+  };
+
+  const atacanteNome = atacante.constructor.name;
+  const defensorNome = defensor.constructor.name;
+
+  if (!tipos[atacanteNome]) return 1;
+
+  if (tipos[atacanteNome].forte === defensorNome) return 15,5; // ataque forte
+  if (tipos[atacanteNome].fraco === defensorNome) return 7,25;  // fraqueza
+
+  return 1; // neutro
+}
 
 
 //

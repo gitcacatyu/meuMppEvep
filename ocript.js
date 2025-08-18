@@ -36,6 +36,10 @@ const createCharacter = (type, name = type) => {
   }
 };
 
+const logElement = document.querySelector('.log');
+if (!logElement) {
+  console.error("Elemento .log não encontrado no DOM!");
+}
 
 let char = createCharacter(player1Type, "Jogador 1");
 let monster = createCharacter(player2Type, "Jogador 2");

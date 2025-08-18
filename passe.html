@@ -27,28 +27,31 @@
 <body>
           <h1>Viva algo Premium!</h1>
           <h3>Seja FELIZ sem gastar nada!</h3><br>
+          <p>Viva uma esperiência do PASSE!</p>
 <h3>Moedas: <span id="moedasDisplay">0</span></h3><br>
 
      <h1>Passe Dragões Espertos</h1>
-     <h3>Preço 420 Moedas</h3>
-     <p>Viva Dragões Super Invesíveis!</p>
+     <h3>Preço 1500 Moedas</h3>
      <input type="button" value="Comprar Passe de Dragões" id="comprarPasse" onclick="comprarPasse()">
 
 
      <script>
  
  // Exemplo de código ao clicar no botão de compra
-const precoPasse = 420;
+const precoPasse = 1500;
 let moedas = parseInt(localStorage.getItem("moedas") || "0");
 
-if (moedas >= precoPasse) {
-  moedas -= precoPasse;
-  localStorage.setItem("moedas", moedas); // <- Aqui tava errado!
-  localStorage.setItem("passeAtivo", "true");
-  alert("Passe comprado com sucesso!");
-} else {
+document.getElementById('comprarPasse').addEventListener('click', () => {
+  if (moedas >= precoPasse) {
+    moedas -= precoPasse;
+    localStorage.setItem("moedas", moedas);
+    localStorage.setItem("passeAtivo", "true");
+    alert("Passe comprado com sucesso! 🚀🎉🎁");
+  } else {
+    alert("Moedas insuficientes! 😔");
+  }
+});
 
-}
 
 window.onload = () => {
   atualizarMoedas(); // <- Essa função tem que existir e atualizar a tela
