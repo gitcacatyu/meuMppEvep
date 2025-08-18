@@ -135,7 +135,7 @@ h1 {
 }
 
 #passe:hover {
-  background: linear-gradient(yellow, rgb(255, 175, 1));
+  background: linear-gradient(90deg, yellow, rgb(255, 175, 1));
   color: #916f00;
   cursor: pointer;
 }
