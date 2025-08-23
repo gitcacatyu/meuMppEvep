@@ -10,6 +10,70 @@
   <input type="button" value="?" onclick="location.href= 'ajujolu.html'">
   <h1>Escolha seus lutadores</h1>
 
+<div id="anuncio" style="width:300px;height:250px;border:2px solid #000;text-align:center;padding:10px;">
+    <a id="linkAnuncio" href="#" target="_blank">
+        <img id="imgAnuncio" src="" alt="Anúncio" style="width:50%;height:auto;">
+    </a>
+    <p id="tituloAnuncio"></p>
+    <p id="cliquesAnuncio" style="font-size:14px;color:gray;"></p>
+</div>
+<br><br><br><br><br>
+  <script>
+// Lista de anúncios
+const anuncios = [
+    {
+        id: "docenet",
+        titulo: "Promoção da DoceNet!",
+        img: "chatanun.png",
+        link: "anun.html"
+    },
+    {
+        id: "cupsGratis",
+        titulo: "Ganhe CUPS grátis!",
+        img: "hatanun.png",
+        link: "anun.html"
+    }
+  ]
+
+// Recupera os cliques do localStorage
+let cliques = JSON.parse(localStorage.getItem("cliquesAnuncios") || "{}");
+
+// Inicializa contagem se não existir
+anuncios.forEach(anuncio => {
+    if (!cliques[anuncio.id]) {
+        cliques[anuncio.id] = 0;
+    }
+});
+
+const imgEl = document.getElementById("imgAnuncio");
+const linkEl = document.getElementById("linkAnuncio");
+const tituloEl = document.getElementById("tituloAnuncio");
+const cliquesEl = document.getElementById("cliquesAnuncio");
+
+let index = 0;
+
+function mostrarAnuncio() {
+    const anuncio = anuncios[index];
+    imgEl.src = anuncio.img;
+    linkEl.href = anuncio.link;
+    tituloEl.innerText = anuncio.titulo;
+    cliquesEl.innerText = `Cliques: ${cliques[anuncio.id]}`;
+
+    // Quando clicar no link, conta clique e salva
+    linkEl.onclick = () => {
+        cliques[anuncio.id]++;
+        localStorage.setItem("cliquesAnuncios", JSON.stringify(cliques));
+        cliquesEl.innerText = `Cliques: ${cliques[anuncio.id]}`;
+    };
+
+    index = (index + 1) % anuncios.length; // Loop infinito
+}
+
+// Mostra o primeiro anúncio e troca a cada 10s
+mostrarAnuncio();
+setInterval(mostrarAnuncio, 10000);
+</script>
+
 
   <!-- Exibe as moedas -->
   <h3>🪙 M: <span id="moedasDisplay">0</span></h3>
