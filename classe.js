@@ -493,16 +493,15 @@ document.body.classList.add('fim-da-luta');
 setTimeout(() => document.body.classList.remove('fim-da-luta'), 2000);
 
 function pegarImagemDoDragao(nome) {
-  // Normaliza o texto: tudo minúsculo e sem acentos
   nome = nome
     .toLowerCase()
-    .normalize("NFD") // separa letras e acentos
-    .replace(/[\u0300-\u036f]/g, ""); // remove acentos
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, ""); // remove espaços
 
-  // Mapeamento seguro
   const imagens = {
     eletro: 'eletro.png',
-    eletrico:'eletro.png', 
+    eletrico: 'eletro.png',
     lendario: 'lendariopasse.png',
     xavier: 'xavierpasse.png',
     dark: 'sombra.png',
@@ -517,10 +516,15 @@ function pegarImagemDoDragao(nome) {
     misto: 'misto.png',
     forte: 'forte.png',
     terra: 'terra.png',
-    cavaleiro: 'cava.html',
+    cavaleiro: 'cava.png',
+    vento: 'vee.png',
     littlemonster: 'lmonster.png',
-    bigmonster: 'bmoster.png',
-    sorcerer: 'sor.png'
+    bigmonster: 'bmonster.png',
+    mago: 'sor.png',
+    rainha: 'q.png',
+    rei: 'rei.png',
+    dragondefese: 'def.png',
+     dragonataque: 'at.png'
   };
 
   for (let chave in imagens) {
@@ -528,10 +532,9 @@ function pegarImagemDoDragao(nome) {
       return imagens[chave];
     }
   }
-
-  // Se não encontrou nada, devolve uma imagem padrão
   return 'erro.png';
 }
+
 
 function atualizarImagensDoCombate(nome1, nome2) {
   const img1 = document.getElementById("imgChar");
