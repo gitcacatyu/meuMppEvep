@@ -24,16 +24,17 @@ class Character {
   class King extends Character {
       constructor() {
        super('Rei');
-       this.life = 500;
+       this.life = 5000;
        this.attack = 100;
        this.defense = 80;
        this.maxLife = this.life;
+       this.special = "Espadada de Ouro"; 
       }
     }
 class DragonGelo extends Character {
   constructor() {
     super('Dragon Gelo');
-    this.life = 330;
+    this.life = 3300;
     this.attack = 85;
     this.defense = 60;
     this.maxLife = this.life;
@@ -44,7 +45,7 @@ class DragonGelo extends Character {
 class DragonPrimitivo extends Character {
   constructor() {
     super('Dragon Primitivo');
-    this.life = 650;
+    this.life = 6500;
     this.attack = 125;
     this.defense = 60;
     this.maxLife = this.life;
@@ -54,26 +55,28 @@ class DragonPrimitivo extends Character {
    class Queen extends Character {
       constructor() {
        super('Rainha');
-       this.life = 490;
+       this.life = 4900;
        this.attack = 80;
        this.defense = 100;
        this.maxLife = this.life;
+       this.special = "Espadada de Ferro"; 
       }
     }
     class Knight extends Character {
       constructor() {
        super('Cavaleiro');
-       this.life = 230;
+       this.life = 2300;
        this.attack = 30;
        this.defense = 15;
        this.maxLife = this.life;
+       this.special = "Capacete"; 
       }
     }
 
      class DragonEletro extends Character {
       constructor() {
        super('Dragon Elétrico');
-       this.life = 360;
+       this.life = 3600;
        this.attack = 90;
        this.defense = 10;
        this.maxLife = this.life;
@@ -84,18 +87,18 @@ class DragonPrimitivo extends Character {
     class DragonAgua extends Character {
       constructor() {
        super('Dragon Água');
-       this.life = 390;
+       this.life = 3900;
        this.attack = 95;
        this.defense = 10;
        this.maxLife = this.life;
-      this.special = "Cura"; 
+      this.special = "Cura REVERSO"; 
       }
     }
   
          class DragonTerra extends Character {
       constructor() {
        super('Dragon Terra');
-       this.life = 320;
+       this.life = 3200;
        this.attack = 60;
        this.defense = 40;
        this.maxLife = this.life;
@@ -106,7 +109,7 @@ class DragonPrimitivo extends Character {
       class DragonPlanta extends Character {
       constructor() {
        super('Dragon Planta');
-       this.life = 310;
+       this.life = 3100;
        this.attack = 70;
        this.defense = 80;
        this.maxLife = this.life;
@@ -117,7 +120,7 @@ class DragonPrimitivo extends Character {
       class DragonFogo extends Character {
       constructor() {
        super('Dragon Fogo');
-       this.life = 370;
+       this.life = 3700;
        this.attack = 80;
        this.defense = 7;
        this.maxLife = this.life;
@@ -128,7 +131,7 @@ class DragonPrimitivo extends Character {
        class DragonVee extends Character {
       constructor() {
        super('Dragon Vento');
-       this.life =  320;
+       this.life =  3200;
        this.attack = 60;
        this.defense = 50;
        this.maxLife = this.life;
@@ -139,7 +142,7 @@ class DragonPrimitivo extends Character {
     class DragonMisto extends Character {
       constructor() {
        super('Dragon Misto');
-       this.life =  470;
+       this.life =  4700;
        this.attack = 90;
        this.defense = 50;
        this.maxLife = this.life;
@@ -150,7 +153,7 @@ class DragonPrimitivo extends Character {
     class DragonAtaqueForte extends Character {
       constructor() {
        super('Dragon Ataque');
-       this.life =  400;
+       this.life =  4000;
        this.attack = 115;
        this.defense = 10;
        this.maxLife = this.life;
@@ -160,7 +163,7 @@ class DragonPrimitivo extends Character {
     class DragonDefeseForte extends Character {
       constructor() {
        super('Dragon Defese');
-       this.life =  420;
+       this.life =  4200;
        this.attack = 75;
        this.defense = 115;
        this.maxLife = this.life;
@@ -170,7 +173,7 @@ class DragonPrimitivo extends Character {
           class DragonMetal extends Character {
       constructor() {
        super('Dragon Metal');
-       this.life =  490;
+       this.life =  4900;
        this.attack = 99;
        this.defense = 60;
        this.maxLife = this.life;
@@ -181,7 +184,7 @@ class DragonPrimitivo extends Character {
     class DragonApelaoJ extends Character {
       constructor() {
        super('Dragon Apelão Júnior');
-       this.life = 500;
+       this.life = 5000;
        this.attack = 118;
        this.defense = 99;
        this.maxLife = this.life;
@@ -190,7 +193,7 @@ class DragonPrimitivo extends Character {
     class DragonXavierJ extends Character {
       constructor() {
        super('Dragon Chave Xavier Júnior');
-       this.life = 550;
+       this.life = 5500;
        this.attack = 119;
        this.defense = 99;
        this.maxLife = this.life;
@@ -199,7 +202,7 @@ class DragonPrimitivo extends Character {
      class DragonDark extends Character {
       constructor() {
        super('Dragon Sombrio Sombras');
-       this.life = 320;
+       this.life = 3200;
        this.attack = 70;
        this.defense = 30;
        this.maxLife = this.life;
@@ -210,7 +213,7 @@ class DragonPrimitivo extends Character {
      class DragonApelao extends Character {
       constructor() {
        super('Dragon Apelão');
-       this.life = 600;
+       this.life = 6000;
        this.attack = 180;
        this.defense = 120;
        this.maxLife = this.life;
@@ -221,7 +224,7 @@ class DragonPrimitivo extends Character {
  class DragonFORTE extends Character {
       constructor() {
        super('Dragon FORTE');
-       this.life = 700;
+       this.life = 7000;
        this.attack = 190;
        this.defense = 130;
        this.maxLife = this.life;
@@ -232,7 +235,7 @@ class DragonPrimitivo extends Character {
      class DragonLendario extends Character {
       constructor() {
        super('Dragon Lendário');
-       this.life = 700;
+       this.life = 7000;
        this.attack = 200;
        this.defense = 100;
        this.maxLife = this.life;
@@ -242,7 +245,7 @@ class DragonPrimitivo extends Character {
   class DragonXavier extends Character {
       constructor() {
        super('Dragon Xavier');
-       this.life = 800;
+       this.life = 8000;
        this.attack = 199;
        this.defense = 99;
        this.maxLife = this.life;
@@ -252,17 +255,18 @@ class DragonPrimitivo extends Character {
       class Sorcerer extends Character {
         constructor() {
           super('Mago');
-          this.life = 120;
+          this.life = 1200;
           this.attack = 50;
           this.defense = 13;
           this.maxLife = this.life;
+          this.special = "Magia Pesada"; 
          }
       }
   
    class DragonLight extends Character {
       constructor() {
        super('Dragon Esplandecente Luz');
-       this.life = 320;
+       this.life = 3200;
        this.attack = 80;
        this.defense = 20;
        this.maxLife = this.life;
@@ -272,20 +276,22 @@ class DragonPrimitivo extends Character {
       class LittleMonster extends Character {
         constructor() {
             super('Little Monster');
-            this.life = 110;
+            this.life = 1100;
             this.attack = 35;
             this.defense = 17;
             this.maxLife = this.life;
+            this.special = "Amendrontação"; 
            }
       }
   
       class  BigMonster extends Character {
         constructor() {
             super('Big Monster');
-            this.life = 195;
+            this.life = 1950;
             this.attack = 40;
             this.defense = 20;
             this.maxLife = this.life;
+            this.special = " Golpe Atordoante"; 
            }
       }
 
@@ -569,7 +575,7 @@ preencherSelectComDragoes("player2-select");
     let moedas = parseInt(localStorage.getItem("moedas") || "0");
 
     // Função pra desabilitar opções de passe se moedas < 420
-    if (moedas < 420) {
+    if (moedas < 1500) {
       [ "player1-select", "player2-select" ].forEach(id => {
         const select = document.getElementById(id);
         Array.from(select.options).forEach(opt => {
@@ -589,7 +595,7 @@ preencherSelectComDragoes("player2-select");
 
 
 }
-const recompensa = Math.floor(Math.random() * 100) + 20;
+const recompensa = Math.floor(Math.random() * 100000) + 20;
 moedas += recompensa;
 Log.innerHTML += `<li>💰 Você ganhou ${recompensa} moedas!</li>`;
 
