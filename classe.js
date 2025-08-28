@@ -1,23 +1,25 @@
 class Character {
  
- 
-    _life = 1;
-    maxLife = 1;
-    attack = 0
-    defense = 0;
-  
-    constructor(name) {
-      this.name = name;
-    }
-  
-   get life() {
-     return this._life;
-   }
-  
-    set life(newLife) {
-     this._life = newLife < 0 ? 0 : newLife;
-     }
+  _life = 1;
+  maxLife = 1;
+  attack = 0;
+  defense = 0;
+  special = ""; // <-- Habilidade especial
+  specialUsed = false;
+
+  constructor(name) {
+    this.name = name;
   }
+
+  get life() {
+    return this._life;
+  }
+
+  set life(newLife) {
+    this._life = newLife < 0 ? 0 : newLife;
+  }
+}
+
   
   class King extends Character {
       constructor() {
@@ -28,7 +30,27 @@ class Character {
        this.maxLife = this.life;
       }
     }
+class DragonGelo extends Character {
+  constructor() {
+    super('Dragon Gelo');
+    this.life = 330;
+    this.attack = 85;
+    this.defense = 60;
+    this.maxLife = this.life;
+    this.special = "Sangue congelado"; // Especial único
+  }
+}
 
+class DragonPrimitivo extends Character {
+  constructor() {
+    super('Dragon Primitivo');
+    this.life = 650;
+    this.attack = 125;
+    this.defense = 60;
+    this.maxLife = this.life;
+    this.special = "Patada lendária"; // Especial único
+  }
+}
    class Queen extends Character {
       constructor() {
        super('Rainha');
@@ -55,6 +77,7 @@ class Character {
        this.attack = 90;
        this.defense = 10;
        this.maxLife = this.life;
+        this.special = "Eletricidade na lata"; 
       }
     }
   
@@ -65,6 +88,7 @@ class Character {
        this.attack = 95;
        this.defense = 10;
        this.maxLife = this.life;
+      this.special = "Cura"; 
       }
     }
   
@@ -75,6 +99,7 @@ class Character {
        this.attack = 60;
        this.defense = 40;
        this.maxLife = this.life;
+        this.special = "Escudo"; 
       }
     }
      
@@ -85,6 +110,7 @@ class Character {
        this.attack = 70;
        this.defense = 80;
        this.maxLife = this.life;
+        this.special = "Aveia cortada"; 
       }
     }
 
@@ -95,6 +121,7 @@ class Character {
        this.attack = 80;
        this.defense = 7;
        this.maxLife = this.life;
+       this.special = "Explosão de Chamas"; 
       }
     }
 
@@ -105,6 +132,7 @@ class Character {
        this.attack = 60;
        this.defense = 50;
        this.maxLife = this.life;
+       this.special = "Nuvem Preta"; 
       }
     }
 
@@ -115,6 +143,7 @@ class Character {
        this.attack = 90;
        this.defense = 50;
        this.maxLife = this.life;
+        this.special = "Portal de acabamento"; 
       }
     }
 
@@ -125,6 +154,7 @@ class Character {
        this.attack = 115;
        this.defense = 10;
        this.maxLife = this.life;
+        this.special = "Espada da fúria"; 
       }
     }
     class DragonDefeseForte extends Character {
@@ -134,6 +164,7 @@ class Character {
        this.attack = 75;
        this.defense = 115;
        this.maxLife = this.life;
+        this.special = "Escudo seguro"; 
       }
     }
           class DragonMetal extends Character {
@@ -143,6 +174,7 @@ class Character {
        this.attack = 99;
        this.defense = 60;
        this.maxLife = this.life;
+        this.special = "Explosão de aço"; 
       }
     }
 
@@ -171,6 +203,7 @@ class Character {
        this.attack = 70;
        this.defense = 30;
        this.maxLife = this.life;
+        this.special = "Espada da morte"; 
       }
     }
          
@@ -181,6 +214,7 @@ class Character {
        this.attack = 180;
        this.defense = 120;
        this.maxLife = this.life;
+      this.special = "Apelo destriuidor"; 
       }
     }
 
@@ -191,6 +225,7 @@ class Character {
        this.attack = 190;
        this.defense = 130;
        this.maxLife = this.life;
+        this.special = "Punhos indestrutivel"; 
       }
     }
 
@@ -201,6 +236,7 @@ class Character {
        this.attack = 200;
        this.defense = 100;
        this.maxLife = this.life;
+      this.special = "Pegar vida"; 
       }
     }
   class DragonXavier extends Character {
@@ -210,6 +246,7 @@ class Character {
        this.attack = 199;
        this.defense = 99;
        this.maxLife = this.life;
+        this.special = "Tranco eterno"; 
       }
     }
       class Sorcerer extends Character {
@@ -229,6 +266,7 @@ class Character {
        this.attack = 80;
        this.defense = 20;
        this.maxLife = this.life;
+      this.special = "Iluminação eterna"; 
       }
     }
       class LittleMonster extends Character {
@@ -251,89 +289,152 @@ class Character {
            }
       }
 
+class Stage {
+  constructor(fighter1, fighter2, fighter1El, fighter2El, logObject) {
+    this.fighter1 = fighter1;
+    this.fighter2 = fighter2;
+    this.fighter1El = fighter1El;
+    this.fighter2El = fighter2El;
+    this.log = logObject;
 
-      class Stage {
-       constructor(fighter1, fighter2,  fighter1El,  fighter2El, logObject)  {
-         this.fighter1 = fighter1;
-         this.fighter2 = fighter2;
-         this.fighter1El = fighter1El;
-         this.fighter2El = fighter2El;
-         this.log = logObject;
-       };
-     
-     start() {
-        this.update();
-         atualizarImagensDoCombate(this.fighter1.name, this.fighter2.name);
-        this.fighter1El.querySelector('.attackButton').addEventListener('click', () => this.doAttack(this.fighter1, this.fighter2) );
-        this.fighter2El.querySelector('.attackButton').addEventListener('click', () => this.doAttack(this.fighter2, this.fighter1) );
-     }
-       
-     update() {
-       this.fighter1El.querySelector('.name').innerHTML = `${this.fighter1.name} - ${this.fighter1.life.toFixed(1)}  HP`;
-       let f1Pct = Math.max(0, (this.fighter1.life / this.fighter1.maxLife) * 100);
-        this.fighter1El.querySelector('.bar').style.width = `${f1Pct}%`;
-
-       this.fighter2El.querySelector('.name').innerHTML = `${this.fighter2.name} - ${this.fighter2.life.toFixed(1)}  HP`;
-       let f2Pct = Math.max(0, (this.fighter2.life / this.fighter2.maxLife) * 100);
-       this.fighter2El.querySelector('.bar').style.width = `${f2Pct}%`;
-
-     }
-
-
-    doAttack(attacking, attacked) {
-  if (attacking.life <= 0 || attacked.life <= 0) {
-    this.log.addMessage("Alguém está morto.");
-    return;
+    this.specialBtn1 = null;
+    this.specialBtn2 = null;
   }
 
-  let attackFactor = (Math.random() * 2).toFixed(2);
-  let defenseFactor = (Math.random() * 2).toFixed(2);
+  start() {
+    this.update();
+    if (typeof atualizarImagensDoCombate === "function") {
+      atualizarImagensDoCombate(this.fighter1.name, this.fighter2.name);
+    }
 
-  let actualAttack = attacking.attack * attackFactor;
-  let actualDefense = attacked.defense * defenseFactor;
+    // Botões de ataque normal
+    this.fighter1El.querySelector('.attackButton')
+      .addEventListener('click', () => this.doAttack(this.fighter1, this.fighter2));
+    this.fighter2El.querySelector('.attackButton')
+      .addEventListener('click', () => this.doAttack(this.fighter2, this.fighter1));
 
-  const somAtaque = document.getElementById('somAtaque');
-  const somDefesa = document.getElementById('somDefesa');
-  const somMorte = document.getElementById('somMorte');
+    // Botões de ESPECIAL
+    this.specialBtn1 = document.createElement('button');
+    this.specialBtn1.className = 'specialButton';
+    this.specialBtn1.textContent = this.fighter1.special ? `Usar Especial: ${this.fighter1.special}` : 'Especial indisponível';
+    this.specialBtn1.disabled = !this.fighter1.special || this.fighter1.specialUsed;
+    this.specialBtn1.addEventListener('click', () => this.usarEspecial(this.fighter1, this.fighter2));
+    this.fighter1El.appendChild(this.specialBtn1);
 
-  if (actualAttack > actualDefense) {
-    attacked.life -= actualAttack;
-    this.log.addMessage(`${attacking.name} causou ${actualAttack.toFixed(2)} de dano em ${attacked.name}`);
-    somAtaque.currentTime = 0;
-    somAtaque.play();
-  } else {
-    this.log.addMessage(`${attacked.name} conseguiu defender...`);
-    somDefesa.currentTime = 0;
-    somDefesa.play();
+    this.specialBtn2 = document.createElement('button');
+    this.specialBtn2.className = 'specialButton';
+    this.specialBtn2.textContent = this.fighter2.special ? `Usar Especial: ${this.fighter2.special}` : 'Especial indisponível';
+    this.specialBtn2.disabled = !this.fighter2.special || this.fighter2.specialUsed;
+    this.specialBtn2.addEventListener('click', () => this.usarEspecial(this.fighter2, this.fighter1));
+    this.fighter2El.appendChild(this.specialBtn2);
   }
 
-  if (attacked.life <= 0) {
-  attacked.life = 0; // Garante que vai pra 0 certinho
-  this.log.addMessage(`${attacked.name} foi derrotado!`);
-  somMorte.currentTime = 0;
-  somMorte.play();
+  update() {
+    // Painel 1
+    this.fighter1El.querySelector('.name').innerHTML = `
+      ${this.fighter1.name} - ${this.fighter1.life.toFixed(1)} HP
+      <br><small>Especial: ${this.fighter1.special || 'Nenhum'} ${this.fighter1.special && this.fighter1.specialUsed ? '(usado)' : ''}</small>`;
+    const f1Pct = Math.max(0, (this.fighter1.life / this.fighter1.maxLife) * 100);
+    this.fighter1El.querySelector('.bar').style.width = `${f1Pct}%`;
 
-  // Atualiza as barras
-  this.update();
+    // Painel 2
+    this.fighter2El.querySelector('.name').innerHTML = `
+      ${this.fighter2.name} - ${this.fighter2.life.toFixed(1)} HP
+      <br><small>Especial: ${this.fighter2.special || 'Nenhum'} ${this.fighter2.special && this.fighter2.specialUsed ? '(usado)' : ''}</small>`;
+    const f2Pct = Math.max(0, (this.fighter2.life / this.fighter2.maxLife) * 100);
+    this.fighter2El.querySelector('.bar').style.width = `${f2Pct}%`;
 
-  // Desativa os botões
-  this.fighter1El.querySelector('.attackButton').disabled = true;
-  this.fighter2El.querySelector('.attackButton').disabled = true;
+    // Atualiza disponibilidade do botão especial
+    if (this.specialBtn1) this.specialBtn1.disabled = !this.fighter1.special || this.fighter1.specialUsed || this.fighter1.life <= 0;
+    if (this.specialBtn2) this.specialBtn2.disabled = !this.fighter2.special || this.fighter2.specialUsed || this.fighter2.life <= 0;
+  }
 
-  const vencedor = attacked === this.fighter1 ? "player2" : "player1";
-  fimDaLuta(vencedor);
- 
+  doAttack(attacking, attacked) {
+    if (attacking.life <= 0 || attacked.life <= 0) {
+      this.log.addMessage("A luta acabou!");
+      return;
+    }
+
+    const attackFactor = Number((Math.random() * 2).toFixed(2));   // 0.00–2.00
+    const defenseFactor = Number((Math.random() * 2).toFixed(2));  // 0.00–2.00
+    const tipo = getMultiplicador(attacking, attacked);
+
+    const actualAttack = attacking.attack * attackFactor * tipo;
+    const actualDefense = attacked.defense * defenseFactor;
+
+    const somAtaque = document.getElementById('somAtaque');
+    const somDefesa = document.getElementById('somDefesa');
+
+    if (actualAttack > actualDefense) {
+      attacked.life -= actualAttack;
+      this.log.addMessage(`${attacking.name} causou ${actualAttack.toFixed(2)} de dano em ${attacked.name}${tipo !== 1 ? ` (x${tipo})` : ''}.`);
+      if (somAtaque) { somAtaque.currentTime = 0; somAtaque.play(); }
+      this._flashAtacado(attacked);
+      this._checarMorte(attacked);
+    } else {
+      this.log.addMessage(`${attacked.name} conseguiu defender...`);
+      if (somDefesa) { somDefesa.currentTime = 0; somDefesa.play(); }
+    }
+
+    this.update();
+  }
+
+  usarEspecial(attacker, defender) {
+    if (attacker.life <= 0 || defender.life <= 0) return;
+    if (!attacker.special || attacker.specialUsed) return;
+
+    // dano especial BEM forte + tipo + variação
+    const rand = 1.2 + Math.random() * 0.8;            // 1.2–2.0
+    const tipo = getMultiplicador(attacker, defender);  // 0.75 / 1 / 1.5 ...
+    const danoEspecial = Math.round(attacker.attack * 2.5 * rand * tipo);
+
+    defender.life -= danoEspecial;
+    attacker.specialUsed = true;
+
+    const somAtaque = document.getElementById('somAtaque');
+    if (somAtaque) { somAtaque.currentTime = 0; somAtaque.play(); }
+
+    this.log.addMessage(`${attacker.name} usou **${attacker.special}** e causou ${danoEspecial} de dano${tipo !== 1 ? ` (x${tipo})` : ''}!`);
+
+    this._flashAtacado(defender);
+    this._checarMorte(defender);
+    this.update();
+  }
+
+  _flashAtacado(personagem) {
+    const el = (personagem === this.fighter1) ? this.fighter1El : this.fighter2El;
+    el.classList.add('fighterFlash');
+    setTimeout(() => el.classList.remove('fighterFlash'), 200);
+  }
+
+  _checarMorte(atacado) {
+    if (atacado.life > 0) return;
+
+    atacado.life = 0;
+    this.log.addMessage(`${atacado.name} foi derrotado!`);
+
+    const somMorte = document.getElementById('somMorte');
+    if (somMorte) { somMorte.currentTime = 0; somMorte.play(); }
+
+    // desativa botões
+    const btns = [
+      this.fighter1El.querySelector('.attackButton'),
+      this.fighter2El.querySelector('.attackButton'),
+      this.specialBtn1,
+      this.specialBtn2
+    ].filter(Boolean);
+    btns.forEach(b => b.disabled = true);
+
+    // chama fim de luta (se existir)
+    const vencedor = atacado === this.fighter1 ? "player2" : "player1";
+    if (typeof fimDaLuta === "function") {
+      fimDaLuta(vencedor);
+    }
+  }
 }
 
 
-  this.update();
 
-  const attackedEl = attacked === this.fighter1 ? this.fighter1El : this.fighter2El;
-  attackedEl.classList.add('fighterFlash');
-  setTimeout(() => attackedEl.classList.remove('fighterFlash'), 200);
-}
-
-}
 
 class Log {
   list = [];
@@ -427,6 +528,9 @@ const todosOsDragoes = [
                      { nome: "Dragão Defese Forte", value: "DragonDefeseForte", passe: false },
                      { nome: "Dragão Apelão J.", value: "DragonApelaoJ", passe: false },
                      { nome: "Dragão Xavier J.", value: "DragonXavierJ", passe: false },
+                     { nome: "Dragão Gelo", value: "DragonGelo", passe: false },
+                    { nome: "Dragão Primitivo", value: "DragonPrimitivo", passe: false },
+
 ];  
 
 // Função para preencher o <select> com os personagens
@@ -524,7 +628,9 @@ function pegarImagemDoDragao(nome) {
     rainha: 'q.png',
     rei: 'rei.png',
     dragondefese: 'def.png',
-     dragonataque: 'at.png'
+     dragonataque: 'at.png',
+     gelo: 'gelo.png',
+   primitivo: 'primitivo.png'
   };
 
   for (let chave in imagens) {
@@ -545,44 +651,45 @@ function atualizarImagensDoCombate(nome1, nome2) {
 }
 
 function getMultiplicador(atacante, defensor) {
-  // Exemplo de fraquezas e forças
   const tipos = {
-     DragonFogo:     { forte: ["DragonPlanta"], fraco: ["DragonAgua"] },
-  DragonAgua:     { forte: ["DragonFogo"], fraco: ["DragonTerra"] },
-  DragonPlanta:   { forte: ["DragonAgua"], fraco: ["DragonFogo"] },
-  DragonTerra:    { forte: ["DragonFogo"], fraco: ["DragonAgua"] },
-  DragonEletro:   { forte: ["DragonAgua"], fraco: ["DragonTerra"] },
-  DragonVee:      { forte: ["DragonTerra"], fraco: ["DragonFogo"] },
-  DragonMisto:    { forte: ["DragonDark"], fraco: ["DragonLight"] },
-  DragonAtaqueForte: { forte: ["DragonPlanta"], fraco: ["DragonMetal"] },
-  DragonDefeseForte: { forte: ["DragonFogo"], fraco: ["DragonAtaqueForte"] },
-  DragonMetal:    { forte: ["DragonAtaqueForte"], fraco: ["DragonVee"] },
-  DragonApelaoJ:  { forte: ["DragonPlanta"], fraco: ["DragonDefeseForte"] },
-  DragonXavierJ:  { forte: ["DragonFogo"], fraco: ["DragonMisto"] },
-  DragonDark:     { forte: ["DragonLight"], fraco: ["DragonMisto"] },
-  DragonApelao:   { forte: ["DragonVee"], fraco: ["DragonMetal"] },
-  DragonFORTE:    { forte: ["DragonApelao"], fraco: ["DragonLendario"] },
-  DragonLendario: { forte: ["DragonFORTE"], fraco: ["DragonXavier"] },
-  DragonXavier:   { forte: ["DragonLendario"], fraco: ["DragonApelaoJ"] },
-  DragonLight:    { forte: ["DragonDark"], fraco: ["DragonMisto"] },
-  LittleMonster:  { forte: [], fraco: [] },
-  BigMonster:     { forte: [], fraco: [] },
-  King:           { forte: [], fraco: [] },
-  Queen:          { forte: [], fraco: [] },
-  Knight:         { forte: [], fraco: [] },
-  Sorcerer:       { forte: [], fraco: [] }
+    DragonFogo:        { forte: ["DragonPlanta"],   fraco: ["DragonAgua"] },
+    DragonAgua:        { forte: ["DragonFogo"],     fraco: ["DragonTerra"] },
+    DragonPlanta:      { forte: ["DragonAgua"],     fraco: ["DragonFogo"] },
+    DragonTerra:       { forte: ["DragonFogo"],     fraco: ["DragonAgua"] },
+    DragonEletro:      { forte: ["DragonAgua"],     fraco: ["DragonTerra"] },
+    DragonVee:         { forte: ["DragonTerra"],    fraco: ["DragonFogo"] },
+    DragonMisto:       { forte: ["DragonDark"],     fraco: ["DragonLight"] },
+    DragonAtaqueForte: { forte: ["DragonPlanta"],   fraco: ["DragonMetal"] },
+    DragonDefeseForte: { forte: ["DragonFogo"],     fraco: ["DragonAtaqueForte"] },
+    DragonMetal:       { forte: ["DragonAtaqueForte"], fraco: ["DragonVee"] },
+    DragonApelaoJ:     { forte: ["DragonPlanta"],   fraco: ["DragonDefeseForte"] },
+    DragonXavierJ:     { forte: ["DragonFogo"],     fraco: ["DragonMisto"] },
+    DragonDark:        { forte: ["DragonLight"],    fraco: ["DragonMisto"] },
+    DragonApelao:      { forte: ["DragonVee"],      fraco: ["DragonMetal"] },
+    DragonFORTE:       { forte: ["DragonApelao"],   fraco: ["DragonLendario"] },
+    DragonLendario:    { forte: ["DragonFORTE"],    fraco: ["DragonXavier"] },
+    DragonXavier:      { forte: ["DragonLendario"], fraco: ["DragonApelaoJ"] },
+    DragonLight:       { forte: ["DragonDark"],     fraco: ["DragonMisto"] },
+    DragonGelo:        { forte: ["DragonFogo"],     fraco: ["DragonMetal"] },
+    DragonPrimitivo:   { forte: ["DragonMetal"],    fraco: ["DragonLight"] },
+    LittleMonster:     { forte: [], fraco: [] },
+    BigMonster:        { forte: [], fraco: [] },
+    King:              { forte: [], fraco: [] },
+    Queen:             { forte: [], fraco: [] },
+    Knight:            { forte: [], fraco: [] },
+    Sorcerer:          { forte: [], fraco: [] }
   };
 
-  const atacanteNome = atacante.constructor.name;
-  const defensorNome = defensor.constructor.name;
+  const a = atacante.constructor.name;
+  const d = defensor.constructor.name;
+  const info = tipos[a];
+  if (!info) return 1;
 
-  if (!tipos[atacanteNome]) return 1;
-
-  if (tipos[atacanteNome].forte === defensorNome) return 15,5; // ataque forte
-  if (tipos[atacanteNome].fraco === defensorNome) return 7,25;  // fraqueza
-
+  if (info.forte && info.forte.includes(d)) return 1.5;  // forte
+  if (info.fraco && info.fraco.includes(d)) return 0.75; // fraco
   return 1; // neutro
 }
+
 
 
 //
