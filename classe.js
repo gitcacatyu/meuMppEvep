@@ -528,7 +528,7 @@ let passeLiberado = moedas >= 1500;
 
 // Exibe no console (ou você pode exibir na tela)
 console.log("Moedas:", moedas);
-console.log("Passe Dragões Espertos:", passeLiberado);
+console.log("Passe Espertos:", passeLiberado);
 
 // Lista de dragões (coloque aqui todos os seus personagens)
 const todosOsDragoes = [
@@ -538,6 +538,7 @@ const todosOsDragoes = [
   { nome: "Dragon Lendário", value: "DragonLendario", passe: true },
   { nome: "Dragon Xavier", value: "DragonXavier", passe: true },
   { nome: "Humano", value: "Humano", passe: true },
+   { nome: "Dragão Astefato", value: "DragonAstefato", passe: true },
   //
   { nome: "Cavaleiro", value: "Knight", passe: false },
    { nome: "Mago", value: "Sorcerer", passe: false },
@@ -561,8 +562,8 @@ const todosOsDragoes = [
                      { nome: "Dragão Apelão J.", value: "DragonApelaoJ", passe: false },
                      { nome: "Dragão Xavier J.", value: "DragonXavierJ", passe: false },
                      { nome: "Dragão Gelo", value: "DragonGelo", passe: false },
-                    { nome: "Dragão Primitivo", value: "DragonPrimitivo", passe: false },
-                     { nome: "Dragão Astefato", value: "DragonAstefato", passe: false }
+                    { nome: "Dragão Primitivo", value: "DragonPrimitivo", passe: false }
+                    
                     
 
 ];  
