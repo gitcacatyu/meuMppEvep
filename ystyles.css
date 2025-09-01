@@ -9,7 +9,7 @@ body {
   padding: 0;
   background: url('https://cdn.pixabay.com/photo/2017/07/12/20/04/dragon-2499219_1280.jpg') no-repeat center center fixed;
   background-size: cover;
-  color: #fff;
+  color: #000000;
   text-align: center;
   min-height: 100vh;
   position: relative;
@@ -63,7 +63,7 @@ body.rosa {
   height: 300px;
   border: 2px solid #ffd700;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgb(255, 255, 255);
   display: flex;
   justify-content: center;
   align-items: center;

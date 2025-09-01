@@ -49,7 +49,7 @@ class DragonPrimitivo extends Character {
     this.attack = 125;
     this.defense = 60;
     this.maxLife = this.life;
-    this.special = "Golpe Único "; // Especial único
+    this.special = "Golpe Único + Mordida da morte"; // Especial único
   }
 }
    class Queen extends Character {
@@ -81,7 +81,7 @@ class DragonPrimitivo extends Character {
        this.attack = 120;
        this.defense = 80;
        this.maxLife = this.life;
-       this.special = "Volta no tempo"; 
+       this.special = "Volta no tempo + destruir passado"; 
       }
     }
 
@@ -151,6 +151,51 @@ class DragonPrimitivo extends Character {
       }
     }
 
+
+     class MPP extends Character {
+      constructor() {
+       super('MPP');
+       this.life = 9000;
+       this.attack = 180;
+       this.defense = 70;
+       this.maxLife = this.life;
+       this.special = "DOMAMENTO + Donaçação eterna"; 
+      }
+    }
+
+    class DragonElemental extends Character {
+      constructor() {
+       super('Dragon Elemento');
+       this.life = 10000;
+       this.attack = 150;
+       this.defense = 60;
+       this.maxLife = this.life;
+       this.special = "Furacão TUDO + Ondas tóxicas"; 
+      }
+    }
+       
+      class Kaka extends Character {
+      constructor() {
+       super('Kaká');
+       this.life = 10000;
+       this.attack = 200;
+       this.defense = 80;
+       this.maxLife = this.life;
+       this.special = "CONTROLE + INRESISTÍVEL"; 
+      }
+    }
+         class Dragon extends Character {
+      constructor() {
+       super('Dragon');
+       this.life = 1000;
+       this.attack = 190;
+       this.defense = 190;
+       this.maxLife = this.life;
+       this.special = "Clas + Fúria"; 
+      }
+    }
+       
+
        class DragonVee extends Character {
       constructor() {
        super('Dragon Vento');
@@ -158,7 +203,7 @@ class DragonPrimitivo extends Character {
        this.attack = 60;
        this.defense = 50;
        this.maxLife = this.life;
-       this.special = "Nuvem Preta"; 
+       this.special = "Nuvem Preta + Furacão"; 
       }
     }
 
@@ -169,7 +214,7 @@ class DragonPrimitivo extends Character {
        this.attack = 90;
        this.defense = 50;
        this.maxLife = this.life;
-        this.special = "Portal de acabamento"; 
+        this.special = "Portal de acabamento + Areia movediça"; 
       }
     }
 
@@ -242,7 +287,7 @@ class DragonPrimitivo extends Character {
        this.attack = 180;
        this.defense = 120;
        this.maxLife = this.life;
-      this.special = "Apelo destriuidor"; 
+      this.special = "Apelo destriuidor + PALANGO"; 
       }
     }
 
@@ -253,7 +298,7 @@ class DragonPrimitivo extends Character {
        this.attack = 190;
        this.defense = 130;
        this.maxLife = this.life;
-        this.special = "Punhos indestrutivel"; 
+        this.special = "Punhos indestrutivel + Infraco"; 
       }
     }
 
@@ -264,7 +309,7 @@ class DragonPrimitivo extends Character {
        this.attack = 200;
        this.defense = 100;
        this.maxLife = this.life;
-      this.special = "Pegar vida"; 
+      this.special = "Pegar vida + Morder FORTE";
       }
     }
   class DragonXavier extends Character {
@@ -274,7 +319,7 @@ class DragonPrimitivo extends Character {
        this.attack = 199;
        this.defense = 99;
        this.maxLife = this.life;
-        this.special = "Tranco eterno"; 
+        this.special = "Tranco eterno + chave do Buraco"; 
       }
     }
       class Sorcerer extends Character {
@@ -412,15 +457,14 @@ class Stage {
 
   usarEspecial(attacker, defender) {
     if (attacker.life <= 0 || defender.life <= 0) return;
-    if (!attacker.special || attacker.specialUsed) return;
+    if (!attacker.special) return; // só checa se tem especial, sem bloquear por uso
 
     // dano especial BEM forte + tipo + variação
-    const rand = 1.2 + Math.random() * 0.8;            // 1.2–2.0
+    const rand = 2.1 + Math.random() * 4.8;  // variação aleatória
     const tipo = getMultiplicador(attacker, defender);  // 0.75 / 1 / 1.5 ...
-    const danoEspecial = Math.round(attacker.attack * 2.5 * rand * tipo);
+    const danoEspecial = Math.round(attacker.attack * 2.9 * rand * tipo);
 
     defender.life -= danoEspecial;
-    attacker.specialUsed = true;
 
     const somAtaque = document.getElementById('somAtaque');
     if (somAtaque) { somAtaque.currentTime = 0; somAtaque.play(); }
@@ -430,7 +474,8 @@ class Stage {
     this._flashAtacado(defender);
     this._checarMorte(defender);
     this.update();
-  }
+}
+
 
   _flashAtacado(personagem) {
     const el = (personagem === this.fighter1) ? this.fighter1El : this.fighter2El;
@@ -539,7 +584,11 @@ const todosOsDragoes = [
   { nome: "Dragon Xavier", value: "DragonXavier", passe: true },
   { nome: "Humano", value: "Humano", passe: true },
    { nome: "Dragão Astefato", value: "DragonAstefato", passe: true },
-  //
+    { nome: "MPP", value: "MPP", passe: true },
+   { nome: "Dragão Elemental", value: "DragonElemental", passe: true },
+    { nome: "Kaká", value: "Kaka", passe: true },
+   { nome: "Dragão", value: "Dragon", passe: true },
+  //Sem passe
   { nome: "Cavaleiro", value: "Knight", passe: false },
    { nome: "Mago", value: "Sorcerer", passe: false },
     { nome: "Rei", value: "King", passe: false },
@@ -667,6 +716,10 @@ function pegarImagemDoDragao(nome) {
      gelo: 'gelo.png',
    primitivo: 'primitivo.png',
    astefato: 'as.png',
+   mpp: 'mpp.icon.png',
+    elemental: 'el.png',
+   kaka: 'kaka.png',
+    dragon: 'dragao.png',
    humano: 'hum.png'
   };
 
@@ -709,8 +762,12 @@ function getMultiplicador(atacante, defensor) {
     DragonLight:       { forte: ["DragonDark"],     fraco: ["DragonMisto"] },
     DragonGelo:        { forte: ["DragonFogo"],     fraco: ["DragonMetal"] },
     DragonPrimitivo:   { forte: ["DragonMetal"],    fraco: ["DragonLight"] },
-     DragonAstefato:    { forte: ["DragonHumano"],  fraco: ["DragonBlack"] },
-     Humano:     { forte: [],                   fraco: ["DragonFORTE"] },
+     DragonAstefato:    { forte: ["Humano"],  fraco: ["DragonBlack"] },
+    MPP:           { forte: [],     fraco: ["Kaka"] },
+    Kaka:        { forte: [],     fraco: ["Humano"] },
+    DragonElemental:   { forte: ["DragonXavier"],    fraco: ["DragonMisto"] },
+     Dragon:    { forte: ["Humano"],  fraco: ["MPP"] },
+    Humano:     { forte: [],                   fraco: ["DragonFORTE"] },
     LittleMonster:     { forte: [], fraco: [] },
     BigMonster:        { forte: [], fraco: [] },
     King:              { forte: [], fraco: [] },
@@ -724,8 +781,8 @@ function getMultiplicador(atacante, defensor) {
   const info = tipos[a];
   if (!info) return 1;
 
-  if (info.forte && info.forte.includes(d)) return 1.5;  // forte
-  if (info.fraco && info.fraco.includes(d)) return 0.75; // fraco
+  if (info.forte && info.forte.includes(d)) return 5.55;  // forte
+  if (info.fraco && info.fraco.includes(d)) return 2.75; // fraco
   return 1; // neutro
 }
 
