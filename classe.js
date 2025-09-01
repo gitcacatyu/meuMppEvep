@@ -49,7 +49,7 @@ class DragonPrimitivo extends Character {
     this.attack = 125;
     this.defense = 60;
     this.maxLife = this.life;
-    this.special = "Patada lendária"; // Especial único
+    this.special = "Golpe Único "; // Especial único
   }
 }
    class Queen extends Character {
@@ -62,6 +62,29 @@ class DragonPrimitivo extends Character {
        this.special = "Espadada de Ferro"; 
       }
     }
+
+      class Humano extends Character {
+      constructor() {
+       super('Humano');
+       this.life = 8000;
+       this.attack = 190;
+       this.defense = 100;
+       this.maxLife = this.life;
+       this.special = "Destruir + QI"; 
+      }
+    }
+
+     class DragonAstefato extends Character {
+      constructor() {
+       super('Dragão Astefato');
+       this.life = 7500;
+       this.attack = 120;
+       this.defense = 80;
+       this.maxLife = this.life;
+       this.special = "Volta no tempo"; 
+      }
+    }
+
     class Knight extends Character {
       constructor() {
        super('Cavaleiro');
@@ -69,7 +92,7 @@ class DragonPrimitivo extends Character {
        this.attack = 30;
        this.defense = 15;
        this.maxLife = this.life;
-       this.special = "Capacete"; 
+       this.special = "Capacete enspinhoso"; 
       }
     }
 
@@ -80,7 +103,7 @@ class DragonPrimitivo extends Character {
        this.attack = 90;
        this.defense = 10;
        this.maxLife = this.life;
-        this.special = "Eletricidade na lata"; 
+        this.special = "Eletrucação sem chance"; 
       }
     }
   
@@ -91,7 +114,7 @@ class DragonPrimitivo extends Character {
        this.attack = 95;
        this.defense = 10;
        this.maxLife = this.life;
-      this.special = "Cura REVERSO"; 
+      this.special = "Afogamento pesado"; 
       }
     }
   
@@ -188,6 +211,7 @@ class DragonPrimitivo extends Character {
        this.attack = 118;
        this.defense = 99;
        this.maxLife = this.life;
+       this.special = "Apelo forte"; 
       }
     }
     class DragonXavierJ extends Character {
@@ -197,6 +221,7 @@ class DragonPrimitivo extends Character {
        this.attack = 119;
        this.defense = 99;
        this.maxLife = this.life;
+       this.special = "Esperança de TRANCAR"; 
       }
     }
      class DragonDark extends Character {
@@ -499,7 +524,7 @@ function playSomMorte() {
 
 // Verifica ou inicia as moedas no localStorage
 let moedas = parseInt(localStorage.getItem("moedas")) || 0;
-let passeLiberado = moedas >= 420;
+let passeLiberado = moedas >= 1500;
 
 // Exibe no console (ou você pode exibir na tela)
 console.log("Moedas:", moedas);
@@ -512,7 +537,8 @@ const todosOsDragoes = [
   { nome: "Dragon FORTE", value: "DragonFORTE", passe: true },
   { nome: "Dragon Lendário", value: "DragonLendario", passe: true },
   { nome: "Dragon Xavier", value: "DragonXavier", passe: true },
-  // Adicione os outros 18 aqui, com passe: false
+  { nome: "Humano", value: "Humano", passe: true },
+  //
   { nome: "Cavaleiro", value: "Knight", passe: false },
    { nome: "Mago", value: "Sorcerer", passe: false },
     { nome: "Rei", value: "King", passe: false },
@@ -536,6 +562,8 @@ const todosOsDragoes = [
                      { nome: "Dragão Xavier J.", value: "DragonXavierJ", passe: false },
                      { nome: "Dragão Gelo", value: "DragonGelo", passe: false },
                     { nome: "Dragão Primitivo", value: "DragonPrimitivo", passe: false },
+                     { nome: "Dragão Astefato", value: "DragonAstefato", passe: false }
+                    
 
 ];  
 
@@ -636,7 +664,9 @@ function pegarImagemDoDragao(nome) {
     dragondefese: 'def.png',
      dragonataque: 'at.png',
      gelo: 'gelo.png',
-   primitivo: 'primitivo.png'
+   primitivo: 'primitivo.png',
+   astefato: 'as.png',
+   humano: 'hum.png'
   };
 
   for (let chave in imagens) {
@@ -678,6 +708,8 @@ function getMultiplicador(atacante, defensor) {
     DragonLight:       { forte: ["DragonDark"],     fraco: ["DragonMisto"] },
     DragonGelo:        { forte: ["DragonFogo"],     fraco: ["DragonMetal"] },
     DragonPrimitivo:   { forte: ["DragonMetal"],    fraco: ["DragonLight"] },
+     DragonAstefato:    { forte: ["DragonHumano"],  fraco: ["DragonBlack"] },
+     Humano:     { forte: [],                   fraco: ["DragonFORTE"] },
     LittleMonster:     { forte: [], fraco: [] },
     BigMonster:        { forte: [], fraco: [] },
     King:              { forte: [], fraco: [] },
