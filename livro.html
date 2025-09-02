@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livros MPP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fffde7;
+            color: #000000;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #000000;
+        }
+           
+        input[type="search"] {
+            padding: 10px;
+            width: 60%;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            outline: none;
+            font-size: 16px;
+            margin-left: 10px;
+            background: #fffbf4;
+            color: #000;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background: #effff8;
+            color: #121212;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            background: #797979;
+            padding: 10px;
+            margin: 8px auto;
+            width: 60%;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+        }
+
+        #conteudoLivro {
+            display: none;
+            margin-top: 20px;
+            background: #f0f0f0;
+            color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: justify;
+        }
+
+        #voltar {
+            display: none;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body> 
+    <h5>Novo!</h5>
+    <button onclick="location.href='ji.html'">Voltar</button>
+    <h1>Livros MPP!</h1>
+
+    <button onclick="pesquisar()">Pesquisa</button>
+    <input type="search" id="campoPesquisa" placeholder="Pesquise livros"> 
+
+    <ul id="listaLivros"></ul>
+
+    <div id="conteudoLivro"></div>
+    <button id="voltar" onclick="voltarLista()">Voltar para os Livros</button>
+
+    <script>
+        const livros = [
+            { titulo: "O MPP", historia: `Era uma vez um sistema chamado MPP, cheio de segredos e aventuras incríveis... Um dia o seu criador Kaká Albert, descidiu colocar ele no ar e ver o que aconteceria com as visualizações. Mas, sabendo que isso podia mudar a sua vida... Prt2` },
+            { titulo: "A NOITE", historia: "A noite caiu sobre a cidade, trazendo mistérios que ninguém ousava desvendar... Mas quatro amigos descidiu devendar... o primeiro Kaká, o segundo Pedro, a terceira Alice e a quarta Fernanda. Eles decidiram descobrir isso logo(não estavam aguentando mais), e quando chegarão em uma esquina... Prt2" },
+            { titulo: "A caixa d'água", historia: "No alto do velho prédio, a caixa d'água escondia algo além de água... Um segredo antigo, esquecido pelo tempo. Alguns moradores diziam ouvir barulhos à noite: um som de cordas sendo puxadas, rangendo no escuro. 'A corda, a corda, a corda...' repetia a voz rouca que ecoava do interior. Ninguém sabia de onde vinha. Davi tentou investigar, mas algo sussurrou para ele parar: 'Deixe-me em paz, Davi...'. Desde então, ninguém ousou subir lá em cima... Prt2" }
+        ];
+
+        const lista = document.getElementById("listaLivros");
+        const campoPesquisa = document.getElementById("campoPesquisa");
+        const conteudoLivro = document.getElementById("conteudoLivro");
+        const voltarBtn = document.getElementById("voltar");
+
+        function mostrarLivros(filtro = "") {
+            lista.innerHTML = "";
+            conteudoLivro.style.display = "none";
+            voltarBtn.style.display = "none";
+            lista.style.display = "block";
+
+            const filtrados = livros.filter(livro => 
+                livro.titulo.toLowerCase().includes(filtro.toLowerCase())
+            );
+
+            filtrados.forEach(livro => {
+                const li = document.createElement("li");
+                li.textContent = livro.titulo;
+                li.addEventListener("click", () => mostrarHistoria(livro));
+                lista.appendChild(li);
+            });
+        }
+
+        function mostrarHistoria(livro) {
+            lista.style.display = "none";
+            conteudoLivro.style.display = "block";
+            voltarBtn.style.display = "inline-block";
+            conteudoLivro.textContent = livro.historia;
+        }
+
+        function voltarLista() {
+            mostrarLivros(campoPesquisa.value);
+        }
+
+        function pesquisar() {
+            mostrarLivros(campoPesquisa.value);
+        }
+
+        campoPesquisa.addEventListener("input", () => pesquisar());
+
+        mostrarLivros();
+    </script>
+</body>
+</html>

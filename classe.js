@@ -594,7 +594,6 @@ const todosOsDragoes = [
     { nome: "Rei", value: "King", passe: false },
      { nome: "Rainha", value: "Queen", passe: false },
       { nome: "Montro Grande", value: "BigMonster", passe: false },
-       { nome: "", value: "Knight", passe: false },
         { nome: "Monstro Pequeno", value: "LittleMonster", passe: false },
          { nome: "Dragão Sombrio", value: "DragonDark", passe: false },
           { nome: "Dragão Esplandecente", value: "DragonLight", passe: false },
