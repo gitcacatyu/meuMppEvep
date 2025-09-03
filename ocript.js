@@ -33,13 +33,13 @@ const createCharacter = (type, name = type) => {
     case "DragonApelaoJ": return new DragonApelaoJ();
     case "DragonXavierJ": return new DragonXavierJ();
     case "DragonGelo": return new DragonGelo();
-    case "DragonPrimitivo": return new DragonPrimitivo();
+    case "DragonAncestral": return new DragonAncestral();
     case "Humano": return new Humano();
     case "DragonAstefato": return new DragonAstefato();
-     case "MPP": return new MPP();
+    case "MPP": return new MPP();
     case "DragonElemental": return new DragonElemental();
-     case "Kaka": return new Kaka();
-    case "Dragon": return new Dragon();
+    case "Kaka": return new Kaka();
+    case "DragonC": return new DragonC();
     default: return new Knight(name);
   }
 };

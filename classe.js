@@ -42,9 +42,9 @@ class DragonGelo extends Character {
   }
 }
 
-class DragonPrimitivo extends Character {
+class DragonAncestral extends Character {
   constructor() {
-    super('Dragon Primitivo');
+    super('Dragon Ancestral');
     this.life = 6500;
     this.attack = 125;
     this.defense = 60;
@@ -184,9 +184,9 @@ class DragonPrimitivo extends Character {
        this.special = "CONTROLE + INRESISTÍVEL"; 
       }
     }
-         class Dragon extends Character {
+         class DragonC extends Character {
       constructor() {
-       super('Dragon');
+       super('Dragon Comum');
        this.life = 1000;
        this.attack = 190;
        this.defense = 190;
@@ -587,7 +587,7 @@ const todosOsDragoes = [
     { nome: "MPP", value: "MPP", passe: true },
    { nome: "Dragão Elemental", value: "DragonElemental", passe: true },
     { nome: "Kaká", value: "Kaka", passe: true },
-   { nome: "Dragão", value: "Dragon", passe: true },
+   { nome: "Dragão", value: "DragonC", passe: true },
   //Sem passe
   { nome: "Cavaleiro", value: "Knight", passe: false },
    { nome: "Mago", value: "Sorcerer", passe: false },
@@ -610,7 +610,7 @@ const todosOsDragoes = [
                      { nome: "Dragão Apelão J.", value: "DragonApelaoJ", passe: false },
                      { nome: "Dragão Xavier J.", value: "DragonXavierJ", passe: false },
                      { nome: "Dragão Gelo", value: "DragonGelo", passe: false },
-                    { nome: "Dragão Primitivo", value: "DragonPrimitivo", passe: false }
+                    { nome: "Dragão Ancestral", value: "DragonAncestral", passe: false }
                     
                     
 
@@ -713,12 +713,13 @@ function pegarImagemDoDragao(nome) {
     dragondefese: 'def.png',
      dragonataque: 'at.png',
      gelo: 'gelo.png',
-   primitivo: 'primitivo.png',
+   ancestral: 'ancestral.png',
    astefato: 'as.png',
    mpp: 'mpp.icon.png',
-    elemental: 'el.png',
+    elemento: 'elemental.png',
    kaka: 'kaka.png',
-    dragon: 'dragao.png',
+    dragonc: 'dragao.png',
+    comum:'dragao',
    humano: 'hum.png'
   };
 
@@ -765,7 +766,7 @@ function getMultiplicador(atacante, defensor) {
     MPP:           { forte: [],     fraco: ["Kaka"] },
     Kaka:        { forte: [],     fraco: ["Humano"] },
     DragonElemental:   { forte: ["DragonXavier"],    fraco: ["DragonMisto"] },
-     Dragon:    { forte: ["Humano"],  fraco: ["MPP"] },
+     DragonC:    { forte: ["Humano"],  fraco: ["MPP"] },
     Humano:     { forte: [],                   fraco: ["DragonFORTE"] },
     LittleMonster:     { forte: [], fraco: [] },
     BigMonster:        { forte: [], fraco: [] },
