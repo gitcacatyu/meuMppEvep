@@ -179,7 +179,7 @@ class DragonAncestral extends Character {
        super('Kaká');
        this.life = 10000;
        this.attack = 200;
-       this.defense = 80;
+       this.defense = 100;
        this.maxLife = this.life;
        this.special = "CONTROLE + INRESISTÍVEL"; 
       }
@@ -187,7 +187,7 @@ class DragonAncestral extends Character {
          class DragonC extends Character {
       constructor() {
        super('Dragon Comum');
-       this.life = 1000;
+       this.life = 7000;
        this.attack = 190;
        this.defense = 190;
        this.maxLife = this.life;
