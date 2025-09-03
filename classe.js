@@ -462,7 +462,7 @@ class Stage {
     // dano especial BEM forte + tipo + variação
     const rand = 2.1 + Math.random() * 4.8;  // variação aleatória
     const tipo = getMultiplicador(attacker, defender);  // 0.75 / 1 / 1.5 ...
-    const danoEspecial = Math.round(attacker.attack * 2.9 * rand * tipo);
+    const danoEspecial = Math.round(attacker.attack * 3.0 * rand * tipo);
 
     defender.life -= danoEspecial;
 
@@ -583,12 +583,12 @@ const todosOsDragoes = [
   { nome: "Dragon Lendário", value: "DragonLendario", passe: true },
   { nome: "Dragon Xavier", value: "DragonXavier", passe: true },
   { nome: "Humano", value: "Humano", passe: true },
-   { nome: "Dragão Astefato", value: "DragonAstefato", passe: true },
-    { nome: "MPP", value: "MPP", passe: true },
-   { nome: "Dragão Elemental", value: "DragonElemental", passe: true },
-    { nome: "Kaká", value: "Kaka", passe: true },
-   { nome: "Dragão", value: "DragonC", passe: true },
-  //Sem passe
+  { nome: "Dragão Astefato", value: "DragonAstefato", passe: true },
+  { nome: "MPP", value: "MPP", passe: true },
+  { nome: "Dragão Elemental", value: "DragonElemental", passe: true },
+  { nome: "Kaká", value: "Kaka", passe: true },
+  { nome: "Dragão", value: "DragonC", passe: true },
+    //Sem passe
   { nome: "Cavaleiro", value: "Knight", passe: false },
    { nome: "Mago", value: "Sorcerer", passe: false },
     { nome: "Rei", value: "King", passe: false },
@@ -651,7 +651,7 @@ preencherSelectComDragoes("player2-select");
   const bloquearDragõesDoPasse = () => {
     let moedas = parseInt(localStorage.getItem("moedas") || "0");
 
-    // Função pra desabilitar opções de passe se moedas < 420
+    // Função pra desabilitar opções de passe se moedas < 1500
     if (moedas < 1500) {
       [ "player1-select", "player2-select" ].forEach(id => {
         const select = document.getElementById(id);
@@ -783,7 +783,7 @@ function getMultiplicador(atacante, defensor) {
 
   if (info.forte && info.forte.includes(d)) return 5.55;  // forte
   if (info.fraco && info.fraco.includes(d)) return 2.75; // fraco
-  return 1; // neutro
+  return 2; // neutro
 }
 
 
