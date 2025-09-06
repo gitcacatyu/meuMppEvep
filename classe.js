@@ -635,7 +635,7 @@ function preencherSelectComDragoes(idSelect) {
 
     if (dr.passe && !passeLiberado) {
       opt.disabled = true;
-      opt.textContent += " 🔒 (Passe Dragões Espertos)";
+      opt.textContent += " 🔒 (Passe Espertos)";
     }
 
     seletor.appendChild(opt);
@@ -660,7 +660,7 @@ preencherSelectComDragoes("player2-select");
 
     // Função pra desabilitar opções de passe se moedas < 1500
     if (moedas < 1500) {
-      [ "player1-select", "player2-select" ].forEach(id => {
+      [ "player1-select"].forEach(id => {
         const select = document.getElementById(id);
         Array.from(select.options).forEach(opt => {
           if (dragõesPasse.includes(opt.value)) {
