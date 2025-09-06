@@ -14,7 +14,38 @@ body {
   min-height: 100vh;
   position: relative;
 }
+.batalha {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 50px;
+}
 
+.player {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.player img {
+  width: 100%;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.espadada {
+  position: absolute;
+  top: 40px;
+  left: -60px;
+  font-size: 40px;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+.espadada.ativo {
+  left: 60px; /* vai em direção ao player */
+  opacity: 1;
+}
 /* Overlay para contraste */
 body::before {
   content: '';

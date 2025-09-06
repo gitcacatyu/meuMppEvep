@@ -16,7 +16,7 @@
             align-items: center;
         }
         #comprarPasse{
-        width: 200px;
+      
         border-radius: 20px;
         background-color: rgb(255, 255, 255);
         }
@@ -26,35 +26,80 @@
         color: #fdfdfd;
         cursor: pointer;
         }
+         #comprarPasse2{
+        
+        border-radius: 20px;
+        background-color: rgb(255, 255, 255);
+        }
+
+        #comprarPasse2:hover{
+        background-color: #c7c7c7;
+        color: #fdfdfd;
+        cursor: pointer;
+        }
+        div{
+          background-color: #ffff;
+          height: 300px;
+          width: 400px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          border-radius: 50px;
+        }
+        div:hover{
+          color: #ffff;
+          background-color: transparent;
+          border: #8d8d8d solid 2px;
+        }
     </style>
 </head>
-<body>
+<body>   
           <h1>Viva algo Premium!</h1><br>
           <p>Viva uma esperiência do PASSE!</p>
-<h3>Moedas: <span id="moedasDisplay">0</span></h3><br>
-
+    <h3>Moedas: <span id="moedasDisplay">0</span></h3><br>
+     <div>
      <h1>Passe Espertos</h1>
      <h3>Preço 1500 Moedas</h3>
      <input type="button" value="Comprar Passe" id="comprarPasse" onclick="comprarPasse()">
+     </div>
+ <br><br><br>
+           <h1>Em breve...</h1>
+          <h1>Personagens POSSES?! Já falam...</h1><br>
+          <p>É melhor quem competir com você, tomar cuidado...</p>
+<div>
+ <h1>Passe POSSES</h1>
+   <h3>Preço 4000 Moedas</h3>
+     <input type="button" value="Comprar Passe" id="" onclick="">
+    
 
-
+     <br><br><br>
+</div> <br><br><br>
      <script>
  
  // Exemplo de código ao clicar no botão de compra
-const precoPasse = 1500;
+const precoPasse1 = 1500;
+
 let moedas = parseInt(localStorage.getItem("moedas") || "0");
 
-document.getElementById('comprarPasse').addEventListener('click', () => {
-  if (moedas >= precoPasse) {
-    moedas -= precoPasse;
+document.getElementById('comprarPasse1').addEventListener('click', () => {
+  if (moedas >= precoPasse1) {
+    moedas -= precoPasse1;
     localStorage.setItem("moedas", moedas);
-    localStorage.setItem("passeAtivo", "true");
-    alert("Passe comprado com sucesso! 🚀🎉🎁");
+    localStorage.setItem("passeEspertos", "true");
+    alert("Passe Espertos comprado com sucesso! 🚀🎉🎁");
+    atualizarMoedas();
   } else {
     alert("Moedas insuficientes! 😔");
   }
 });
 
+
+function atualizarMoedas() {
+  moedas = parseInt(localStorage.getItem("moedas") || "0");
+  document.getElementById("moedasDisplay").innerText = moedas;
+}
+
+window.onload = atualizarMoedas;
 
 window.onload = () => {
   atualizarMoedas(); // <- Essa função tem que existir e atualizar a tela

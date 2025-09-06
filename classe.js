@@ -575,6 +575,12 @@ let passeLiberado = moedas >= 1500;
 console.log("Moedas:", moedas);
 console.log("Passe Espertos:", passeLiberado);
 
+// Inicializar passe2 no localStorage
+if (localStorage.getItem("passe2Comprado") === null) {
+  localStorage.setItem("passe2Comprado", "false");
+}
+let passe2Liberado = localStorage.getItem("passe2Comprado") === "true";
+
 // Lista de dragões (coloque aqui todos os seus personagens)
 const todosOsDragoes = [
   // Dragões do passe
@@ -582,11 +588,12 @@ const todosOsDragoes = [
   { nome: "Dragon FORTE", value: "DragonFORTE", passe: true },
   { nome: "Dragon Lendário", value: "DragonLendario", passe: true },
   { nome: "Dragon Xavier", value: "DragonXavier", passe: true },
-  { nome: "Humano", value: "Humano", passe: true },
-  { nome: "Dragão Astefato", value: "DragonAstefato", passe: true },
-  { nome: "MPP", value: "MPP", passe: true },
-  { nome: "Dragão Elemental", value: "DragonElemental", passe: true },
-  { nome: "Kaká", value: "Kaka", passe: true },
+ //Passe 2
+  { nome: "Humano", value: "Humano", passe2: true },
+  { nome: "Dragão Astefato", value: "DragonAstefato", passe2: true },
+  { nome: "MPP", value: "MPP", passe2: true },
+  { nome: "Dragão Elemental", value: "DragonElemental", passe2: true },
+  { nome: "Kaká", value: "Kaka", passe2: true },
   { nome: "Dragão", value: "DragonC", passe: true },
     //Sem passe
   { nome: "Cavaleiro", value: "Knight", passe: false },
