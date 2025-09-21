@@ -1,0 +1,36 @@
+Versões:
+
+
+1.0.1 -> Nasceu.
+
+1.0.2, 1.0.3, 1.0.4, 1.0.5, 1.0.6, 1.0.7, 1.0.8, 1.0.9 -> Foi adição de páginas.
+
+2.0.0 -> Foi a melhoria.
+
+2.0.1, até a 2.0.5 -> continuou o MPP 1 Antigo.
+
+2.0.6 -> pensamentos de MPP 1 NEW!
+
+2.0.7 até 3.0.0 -> Foi a add da MPP 2.
+
+3.0.1 até a 4.0.0 -> " MPP 3 ! MINI ! " Jogos!
+
+4.0.1 até 4.0.5 -> Foi teste de fazer um backend.("Não deu muito certo 😁")
+
+4.0.6 -> Foi criado o Legítimo Luta MPP.
+
+4.0.6 até 5.0.0 -> Foi e tá sendo a melhoria dele.
+
+5.0.1 -> Foi a add. do jogo dos Botões.
+
+5.0.2 até 5.0.5 -> Foi a adição dos jogos: Bateria, Jogo da velha e o APP Tarefas.
+
+5.0.6 -> Foi Desenhando no MPP que foi criado.
+
+5.0.7 -> É a versão corrigida de TUDO!
+
+5.0.8 -> É a versão atual
+
+
+
+
