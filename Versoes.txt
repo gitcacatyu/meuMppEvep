@@ -29,7 +29,10 @@ Versões:
 
 5.0.7 -> É a versão corrigida de TUDO!
 
-5.0.8 -> É a versão atual
+5.0.8 -> É a versão Do Livro MPP 
+
+NEXT
+5.0.9 ->  Onde o EVEP vai ficar Dentro do MPP.
 
 
 
