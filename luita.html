@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8"/>
+<title>Luta RPG — Labirinto Grandão</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  :root {
+  --bg: #000000;
+  --panel: #000000;
+  --player: #7a7a7a; /* verde pálido */
+  --enemy: #b3000010;  /* vermelho sangue */
+  --path: #000000;
+  --wall: #000000;
+  --hud: #aaa;
+}
+  html,body { height:100%; margin:0; background:var(--bg); color:var(--hud); font-family:Arial,Helvetica,sans-serif; }
+  header { padding:12px; text-align:center; }
+  #game-wrap { display:flex; gap:16px; padding:12px; box-sizing:border-box; }
+  #canvas-wrap { background:var(--panel); padding:8px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,.6); }
+  canvas { display:block; background: #111; border-radius:4px; }
+  #sidebar { min-width:260px; padding:8px; }
+  .group { margin-bottom:12px; background:#151515; padding:10px; border-radius:8px; }
+  label { display:block; font-size:13px; margin-bottom:6px; color:#ddd; }
+  input[type=range] { width:100%;}
+  button { background:#3498db; color:#fff; border:0; padding:8px 10px; border-radius:8px; cursor:pointer; }
+  .small { font-size:13px; color:#ccc; margin-top:6px; }
+  #score { font-size:20px; font-weight:bold; text-align:center; }
+  .hint { font-size:12px; color:#aaa; margin-top:6px; }
+  .controls { display:flex; gap:8px; justify-content:center; margin-top:8px; }
+  a { color:#a3d2ff; text-decoration:none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Luta RPG — Labirinto Grandão 🚧</h1>
+  <div class="hint">Use WASD ou setas pra mover. Sobrevive o máximo que conseguir.</div>
+</header>
+<audio id="sfx-scream" src="./sounds/keyz.mp3" preload="auto"></audio>
+<audio id="sfx-step" src="./sounds/keyw.mp3" preload="auto"></audio>
+<div id="game-wrap">
+  <div id="canvas-wrap">
+    <!-- Canvas vai ser dimensionado pelo script -->
+    <canvas id="gameCanvas" width="10000" height="900"></canvas>
+  </div>
+
+  <div id="sidebar">
+    <div class="group">
+      <div id="score">Pontuação: 0</div>
+      <div class="small">Tempo vivo em frames (aumenta rápido, vale sobrevida)</div>
+    </div>
+
+    <div class="group">
+      <label>Velocidade do Player: <span id="lblPlayerSpeed">3</span></label>
+      <input id="playerSpeedRange" type="range" min="1" max="8" step="0.2" value="3">
+      <div class="small">Ajusta a velocidade do player em pixels por frame.</div>
+    </div>
+
+    <div class="group">
+      <label>Velocidade base dos inimigos: <span id="lblEnemySpeed">1.2</span></label>
+      <input id="enemySpeedRange" type="range" min="0.4" max="3" step="0.1" value="1.2">
+      <div class="small">Inimigos usam pathfinding; velocidade controla passo entre células.</div>
+    </div>
+
+    <div class="group">
+      <label>Tamanho do labirinto (células): <span id="lblSize">41</span> × <span id="lblSizeY">33</span></label>
+      <input id="sizeRange" type="range" min="21" max="81" step="2" value="41">
+      <div class="small">Aumenta para um labirinto realmente grandão. Recomendo 41 ou 61 (pouca máquina).</div>
+    </div>
+
+    <div class="group">
+      <div class="controls">
+        <button id="regenBtn">Gerar novo labirinto</button>
+        <button id="resetBtn">Resetar Jogo</button>
+      </div>
+      <div class="small">Os inimigos usam A* baseado nas células do labirinto.</div>
+    </div>
+
+    <div class="group">
+      <div class="small">
+        Dicas: diminui a velocidade inimiga pra facilitar. Se o labirinto for muito grande, aumenta o canvas.
+      </div>
+      <div style="margin-top:8px;text-align:center"><a href="menuti.html" >Voltar ao Menu</a></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/*
+  luita_labirinto.html
+  - Labirinto gerado por recursive backtracker (grid de células)
+  - player movendo em pixels (colisão com walls)
+  - enemies usam A* no grid para ir ao cell do player; segue os nodes
+  - controles no sidebar para ajustar velocidade e tamanho
+*/
+//----------------------Saída escondida----------------------
+
+
+
+// ---------------------- Sons ----------------------
+document.getElementById('sfx-scream').play();
+if (Math.random() < 0.01) document.getElementById('sfx-step').play();
+// ---------------------- Config / Estados ----------------------
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+let cols = 41;           // largura em células (ímpar preferível)
+let rows = 33;           // altura em células
+let cellSize = 20;       // pixels por célula (ajustado dinamicamente)
+let maze = [];           // grid de células (0 = parede, 1 = caminho)
+let player = { x:0, y:0, px:0, py:0 }; // x,y em pixels; px,py cell index
+let enemies = [];
+
+let score = 0;
+let running = true;
+
+// Speeds
+let playerSpeed = parseFloat(document.getElementById('playerSpeedRange').value); // px/frame
+let enemyBaseSpeed = parseFloat(document.getElementById('enemySpeedRange').value); // cells per second-ish
+
+// Input
+const keys = {};
+
+// UI elements
+const scoreEl = document.getElementById('score');
+const lblPlayerSpeed = document.getElementById('lblPlayerSpeed');
+const playerSpeedRange = document.getElementById('playerSpeedRange');
+const enemySpeedRange = document.getElementById('enemySpeedRange');
+const regenBtn = document.getElementById('regenBtn');
+const resetBtn = document.getElementById('resetBtn');
+const backMenu = document.getElementById('backMenu');
+const sizeRange = document.getElementById('sizeRange');
+const lblSize = document.getElementById('lblSize');
+const lblSizeY = document.getElementById('lblSizeY');
+
+lblPlayerSpeed.innerText = playerSpeed;
+lblSize.innerText = cols;
+lblSizeY.innerText = rows;
+document.getElementById('lblEnemySpeed').innerText = enemyBaseSpeed;
+
+// ---------------------- Resize / Init ----------------------
+function resizeToMaze() {
+  // adjust cellSize to fit canvas nicely
+  // canvas will remain same size but cellSize depends on rows/cols
+  // we keep canvas size fixed for simplicity; allows "grandão" maze just more dense
+  const maxW = 900;
+  const maxH = 720;
+  canvas.width = maxW;
+  canvas.height = maxH;
+  cellSize = Math.floor(Math.min(canvas.width/cols, canvas.height/rows));
+  // ensure at least 6 px per cell
+  if (cellSize < 6) cellSize = 6;
+}
+
+function init() {
+  cols = parseInt(sizeRange.value);
+  rows = Math.max(21, Math.floor(cols * 0.8)); // proportion
+  lblSize.innerText = cols;
+  lblSizeY.innerText = rows;
+  resizeToMaze();
+  generateMaze();
+  placePlayerAndEnemies();
+  score = 0;
+  running = true;
+  lastAstarTick = 0;
+  lastFrame = performance.now();
+}
+
+// ---------------------- Maze Generator (recursive backtracker) ----------------------
+function createGrid(w,h) {
+  // grid of cells: we use a grid where every cell is either wall(0) or path(1)
+  // first build full walls
+  const g = new Array(h);
+  for (let y=0;y<h;y++) {
+    g[y] = new Array(w).fill(0);
+  }
+  return g;
+}
+
+// We'll generate a maze on a cell-grid where cells are odd indices (standard technique)
+function generateMaze() {
+  maze = createGrid(cols, rows);
+  // start at random odd cell
+  const startX = (Math.floor(Math.random()*((cols-1)/2))*2)+1;
+  const startY = (Math.floor(Math.random()*((rows-1)/2))*2)+1;
+
+  // carve function using iterative stack
+  const stack = [];
+  maze[startY][startX] = 1;
+  stack.push({x:startX,y:startY});
+
+  const dirs = [
+    {dx:0,dy:-2},
+    {dx:2,dy:0},
+    {dx:0,dy:2},
+    {dx:-2,dy:0}
+  ];
+
+  while (stack.length) {
+    const current = stack[stack.length-1];
+    const {x,y} = current;
+    // find neighbors with walls
+    const neighbors = [];
+    for (const d of dirs) {
+      const nx = x + d.dx;
+      const ny = y + d.dy;
+      if (nx > 0 && nx < cols-1 && ny > 0 && ny < rows-1 && maze[ny][nx] === 0) {
+        neighbors.push({nx,ny,dx:d.dx,dy:d.dy});
+      }
+    }
+    if (neighbors.length === 0) {
+      stack.pop();
+    } else {
+      const pick = neighbors[Math.floor(Math.random() * neighbors.length)];
+      // carve wall between
+      const betweenX = x + pick.dx/2;
+      const betweenY = y + pick.dy/2;
+      maze[betweenY][betweenX] = 1;
+      maze[pick.ny][pick.nx] = 1;
+      stack.push({x:pick.nx,y:pick.ny});
+    }
+  }
+
+  // Make sure border is wall (already is), but we can create an exit optionally
+  // optional exit top-left open
+  maze[1][0] = 0; // keep left border closed for now
+}
+
+// ---------------------- Place player & enemies ----------------------
+function findOpenCellNear(startFromCorner) {
+  // search for a path cell nearest to corner
+  const corners = [
+    {x:1,y:1},
+    {x:cols-2,y:1},
+    {x:1,y:rows-2},
+    {x:cols-2,y:rows-2}
+  ];
+  const c = corners[startFromCorner % corners.length];
+  // BFS search outward until a path cell found
+  const q = [c];
+  const seen = new Set();
+  while (q.length) {
+    const p = q.shift();
+    const key = p.x+','+p.y;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    if (p.x >=0 && p.x < cols && p.y >=0 && p.y < rows && maze[p.y][p.x] === 1) {
+      return p;
+    }
+    q.push({x:p.x+1,y:p.y}); q.push({x:p.x-1,y:p.y});
+    q.push({x:p.x,y:p.y+1}); q.push({x:p.x,y:p.y-1});
+  }
+  return {x:1,y:1};
+}
+
+function placePlayerAndEnemies() {
+  // place player roughly center
+  // find a path cell near center
+  const center = { x: Math.floor(cols/2), y: Math.floor(rows/2) };
+  let found = null;
+  // radius search
+  for (let r=0; r<Math.max(cols,rows); r++) {
+    for (let dx=-r; dx<=r; dx++) {
+      for (let dy=-r; dy<=r; dy++) {
+        const x = center.x + dx; const y = center.y + dy;
+        if (x>=0 && x<cols && y>=0 && y<rows && maze[y][x] === 1) {
+          found = {x,y}; break;
+        }
+      }
+      if (found) break;
+    }
+    if (found) break;
+  }
+  if (!found) found = {x:1,y:1};
+  // set player pos in pixels to center of that cell
+  player.px = found.x; player.py = found.y;
+  player.x = found.x * cellSize + cellSize/2;
+  player.y = found.y * cellSize + cellSize/2;
+
+  // enemies: place 3 enemies in corners
+  enemies = [];
+  for (let i=0;i<3;i++) {
+    const cell = findOpenCellNear(i);
+    const ex = cell.x * cellSize + cellSize/2;
+    const ey = cell.y * cellSize + cellSize/2;
+    enemies.push({
+      px: cell.x, py: cell.y,
+      x: ex, y: ey,
+      path: [],         // nodes from A*
+      pathIndex: 0,
+      wait: Math.random()*30
+    });
+  }
+}
+
+// ---------------------- Basic utilities ----------------------
+function cellAtPixel(px, py) {
+  const cx = Math.floor(px / cellSize);
+  const cy = Math.floor(py / cellSize);
+  return {cx, cy};
+}
+
+function isWalkableCell(x,y) {
+  if (x < 0 || x >= cols || y < 0 || y >= rows) return false;
+  return maze[y][x] === 1;
+}
+
+function clampPlayerToBounds() {
+  // prevent player leaving canvas bounds
+  if (player.x < cellSize/2) player.x = cellSize/2;
+  if (player.y < cellSize/2) player.y = cellSize/2;
+  if (player.x > canvas.width - cellSize/2) player.x = canvas.width - cellSize/2;
+  if (player.y > canvas.height - cellSize/2) player.y = canvas.height - cellSize/2;
+}
+
+// check if pixel position is inside a wall (use player's bounding box)
+function collidesWallAt(px,py,size=14) {
+  const half = size/2;
+  const corners = [
+    {x:px-half, y:py-half},
+    {x:px+half, y:py-half},
+    {x:px-half, y:py+half},
+    {x:px+half, y:py+half}
+  ];
+  for (const c of corners) {
+    const cell = cellAtPixel(c.x, c.y);
+    if (!isWalkableCell(cell.cx, cell.cy)) return true;
+  }
+  return false;
+}
+
+// ---------------------- Input ----------------------
+window.addEventListener('keydown', (e) => { keys[e.key] = true; });
+window.addEventListener('keyup', (e) => { keys[e.key] = false; });
+
+playerSpeedRange.addEventListener('input', (e) => {
+  playerSpeed = parseFloat(e.target.value);
+  lblPlayerSpeed.innerText = playerSpeed;
+});
+
+enemySpeedRange.addEventListener('input', (e) => {
+  enemyBaseSpeed = parseFloat(e.target.value);
+  document.getElementById('lblEnemySpeed').innerText = enemyBaseSpeed;
+});
+
+sizeRange.addEventListener('input', (e) => {
+  const v = parseInt(e.target.value);
+  lblSize.innerText = v; lblSizeY.innerText = Math.max(21, Math.floor(v*0.8));
+});
+
+regenBtn.addEventListener('click', () => init());
+resetBtn.addEventListener('click', () => {
+  score = 0;
+  placePlayerAndEnemies();
+});
+
+// back to menu placeholder
+
+
+// ---------------------- A* Pathfinding ----------------------
+// grid-based A* (4-neighbors)
+function findPathAstar(start, goal) {
+  // start and goal as {x,y} grid cells
+  if (!isWalkableCell(goal.x, goal.y)) return [];
+  const key = (c)=> c.x+','+c.y;
+  const open = new Map(); // key -> node {x,y,g,h,f,parentKey}
+  const closed = new Set();
+
+  function heuristic(a,b) {
+    return Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
+  }
+
+  const startNode = {x:start.x,y:start.y,g:0,h:heuristic(start,goal)};
+  startNode.f = startNode.g + startNode.h;
+  open.set(key(startNode), startNode);
+
+  const neighbors = [{dx:1,dy:0},{dx:-1,dy:0},{dx:0,dy:1},{dx:0,dy:-1}];
+
+  while (open.size) {
+    // find lowest f
+    let bestKey = null;
+    let bestNode = null;
+    for (const [k,node] of open) {
+      if (!bestNode || node.f < bestNode.f) { bestNode = node; bestKey = k; }
+    }
+    open.delete(bestKey);
+    closed.add(bestKey);
+
+    if (bestNode.x === goal.x && bestNode.y === goal.y) {
+      // reconstruct path
+      const path = [];
+      let cur = bestNode;
+      while (cur) {
+        path.unshift({x:cur.x,y:cur.y});
+        cur = cur.parent;
+      }
+      return path;
+    }
+
+    for (const n of neighbors) {
+      const nx = bestNode.x + n.dx;
+      const ny = bestNode.y + n.dy;
+      const nkey = nx+','+ny;
+      if (!isWalkableCell(nx,ny) || closed.has(nkey)) continue;
+      const gScore = bestNode.g + 1;
+      const hScore = heuristic({x:nx,y:ny}, goal);
+      const fScore = gScore + hScore;
+      const existing = open.get(nkey);
+      if (!existing || gScore < existing.g) {
+        open.set(nkey, {x:nx,y:ny,g:gScore,h:hScore,f:fScore,parent:bestNode});
+      }
+    }
+  }
+
+  return []; // no path
+}
+// ---------------------- Jumpscare ----------------------
+function triggerJumpscare() {
+  // Som assustador
+  const scream = new Audio('scream.mp3');
+  scream.play();
+
+  // Overlay rápido
+  const overlay = document.createElement('div');
+  overlay.style.position = 'fixed';
+  overlay.style.top = 0;
+  overlay.style.left = 0;
+  overlay.style.width = '100%';
+  overlay.style.height = '100%';
+  overlay.style.background = 'rgba(0,0,0,0.95)';
+  overlay.style.display = 'flex';
+  overlay.style.alignItems = 'center';
+  overlay.style.justifyContent = 'center';
+  overlay.style.zIndex = 9999;
+
+  const img = new Image();
+  img.src = 'ghost.png'; // usa sua imagem fantasma
+  img.style.maxWidth = '70%';
+  overlay.appendChild(img);
+
+  document.body.appendChild(overlay);
+
+  // Remove o overlay depois de meio segundo
+  setTimeout(() => {
+    if (document.body.contains(overlay)) {
+      document.body.removeChild(overlay);
+    }
+  }, 500);
+}
+
+
+// ---------------------- Update Loop ----------------------
+let lastFrame = performance.now();
+let lastAstarTick = 0;
+
+function update(delta) {
+  if (!running) return;
+
+  // handle player input: WASD or arrows
+  let moveX = 0, moveY = 0;
+  if (keys['ArrowUp'] || keys['w']) moveY -= 1;
+  if (keys['ArrowDown'] || keys['s']) moveY += 1;
+  if (keys['ArrowLeft'] || keys['a']) moveX -= 1;
+  if (keys['ArrowRight'] || keys['d']) moveX += 1;
+  // normalize to avoid faster diagonal
+  if (moveX !== 0 && moveY !== 0) {
+    moveX *= Math.SQRT1_2; moveY *= Math.SQRT1_2;
+  }
+  // compute tentative move in pixels
+  const nx = player.x + moveX * playerSpeed;
+  const ny = player.y + moveY * playerSpeed;
+  // test collisions with walls using bounding box
+  if (!collidesWallAt(nx, player.y)) player.x = nx;
+  if (!collidesWallAt(player.x, ny)) player.y = ny;
+
+  clampPlayerToBounds();
+  // update player's cell
+  player.px = Math.floor(player.x / cellSize);
+  player.py = Math.floor(player.y / cellSize);
+
+  // every ~300ms recalc paths for enemies
+  lastAstarTick += delta;
+  if (lastAstarTick > 200) {
+    enemies.forEach(e => {
+      const start = {x: Math.floor(e.x / cellSize), y: Math.floor(e.y / cellSize)};
+      const goal = {x: player.px, y: player.py};
+      e.path = findPathAstar(start, goal);
+      e.pathIndex = 0;
+    });
+    lastAstarTick = 0;
+  }
+}
+
+
+  // update enemies along their path
+  enemies.forEach(e => {
+    // if no path, do small random wander until path found
+    if (!e.path || e.path.length === 0) {
+      // small jitter away from walls
+      e.x += (Math.random()-0.5) * 0.6;
+      e.y += (Math.random()-0.5) * 0.6;
+      return;
+    }
+    // target cell node
+    const node = e.path[Math.min(e.pathIndex, e.path.length-1)];
+    // target pixel center of that cell
+    const tx = node.x * cellSize + cellSize/2;
+    const ty = node.y * cellSize + cellSize/2;
+    const dx = tx - e.x;
+    const dy = ty - e.y;
+    const dist = Math.sqrt(dx*dx+dy*dy) || 1;
+    // enemy speed in pixels/frame (convert base cell speed to px/frame roughly)
+    const speedPx = (enemyBaseSpeed * cellSize) / 20; // tuned divisor for feel
+    e.x += (dx/dist) * speedPx;
+    e.y += (dy/dist) * speedPx;
+    // if reached node center, advance index
+    if (Math.abs(e.x - tx) < 3 && Math.abs(e.y - ty) < 3) {
+      e.pathIndex++;
+      if (e.pathIndex >= e.path.length) {
+        // recompute next tick
+        e.pathIndex = e.path.length-1;
+      }
+    }
+  });
+
+  // collision detection between player and enemies (pixel distance)
+  for (const e of enemies) {
+    const dx = e.x - player.x;
+    const dy = e.y - player.y;
+    const d = Math.sqrt(dx*dx+dy*dy);
+    if (d < (cellSize*0.45)) {
+      // hit!
+      if (d < (cellSize*0.45)) {
+  // Em vez de perder, ativa o jumpscare
+  triggerJumpscare();
+
+  // Dá um empurrãozinho no player pra longe do inimigo
+  const push = 30;
+  player.x -= (dx / d) * push;
+  player.y -= (dy / d) * push;
+
+  // Continua rodando o jogo (não chama init nem running=false)
+  break;
+}
+  }
+
+  // scoring
+  score += delta * 0.06; // scale so it grows reasonably with time
+  scoreEl.innerText = 'Pontuação: ' + Math.floor(score);
+}
+
+// ---------------------- Draw ----------------------
+function draw() {
+  // clear
+  ctx.fillStyle = '#111';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // draw maze: for performance, draw walls as rectangles
+  for (let y=0;y<rows;y++) {
+    for (let x=0;x<cols;x++) {
+      const px = x * cellSize;
+      const py = y * cellSize;
+      if (maze[y][x] === 0) {
+        ctx.fillStyle = '#121214';
+        ctx.fillRect(px, py, cellSize, cellSize);
+      } else {
+        ctx.fillStyle = '#222';
+        ctx.fillRect(px, py, cellSize, cellSize);
+      }
+    }
+  }
+ctx.save();
+// tudo fica mais escuro
+ctx.fillStyle = 'rgba(0,0,0,0.85)';
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+// cria um círculo claro ao redor do player (lanterna)
+const grad = ctx.createRadialGradient(player.x, player.y, 20, player.x, player.y, 150);
+grad.addColorStop(0,'rgba(0,0,0,0)');
+grad.addColorStop(1,'rgba(0,0,0,1)');
+ctx.globalCompositeOperation = 'destination-out';
+ctx.fillStyle = grad;
+ctx.beginPath();
+ctx.arc(player.x, player.y, 150, 0, Math.PI*2);
+ctx.fill();
+ctx.restore();
+ctx.globalCompositeOperation = 'source-over';
+
+  // draw grid optional (comment if heavy)
+  // ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 0.5;
+  // for (let x=0;x<=cols;x++) ctx.strokeRect(x*cellSize,0,0,rows*cellSize);
+
+  // draw player
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--player') || '#2ecc71';
+  const pw = cellSize * 0.7;
+  ctx.beginPath();
+  ctx.roundRect(player.x - pw/2, player.y - pw/2, pw, pw, 6);
+  ctx.fill();
+
+  // draw enemies
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--enemy') || '#e74c3c';
+  const ew = cellSize * 0.7;
+  enemies.forEach(e => {
+    ctx.beginPath();
+    ctx.roundRect(e.x - ew/2, e.y - ew/2, ew, ew, 6);
+    ctx.fill();
+  });
+
+  // optional: draw enemy paths lightly
+  ctx.strokeStyle = 'rgba(200,200,200,0.08)';
+  ctx.lineWidth = 2;
+  enemies.forEach(e => {
+    if (!e.path) return;
+    ctx.beginPath();
+    for (let i=0;i<e.path.length;i++) {
+      const n = e.path[i];
+      const cx = n.x*cellSize + cellSize/2;
+      const cy = n.y*cellSize + cellSize/2;
+      if (i===0) ctx.moveTo(cx,cy); else ctx.lineTo(cx,cy);
+    }
+    ctx.stroke();
+  });
+}
+
+// polyfill for roundRect
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r) {
+    if (typeof r === 'undefined') r = 6;
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    this.beginPath();
+    this.moveTo(x + r, y);
+    this.arcTo(x + w, y, x + w, y + h, r);
+    this.arcTo(x + w, y + h, x, y + h, r);
+    this.arcTo(x, y + h, x, y, r);
+    this.arcTo(x, y, x + w, y, r);
+    this.closePath();
+    return this;
+  };
+}
+
+// ---------------------- Main loop ----------------------
+function loop(now) {
+  const delta = now - lastFrame;
+  lastFrame = now;
+  update(delta);
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// ---------------------- Start ----------------------
+init();
+requestAnimationFrame(loop);
+
+// === PORTAIS ===
+let portals = [];
+function spawnPortals() {
+    portals = [];
+    for(let i=0;i<2;i++){
+        let px, py;
+        do {
+            px = Math.floor(Math.random() * cols);
+py = Math.floor(Math.random() * rows);
+        } while(map[py][px] === 1); // não spawna em parede
+        portals.push({x:px, y:py});
+    }
+}
+
+// === ESPADA ===
+let sword = null;
+function spawnSword() {
+    let sx, sy;
+    do {
+        sx = Math.floor(Math.random() * c);
+        sy = Math.floor(Math.random() * ROWS);
+    } while(map[sy][sx] === 1);
+    sword = {x: sx, y: sy, timer: 60000}; // dura 1 minuto
+}
+
+// Call no início do jogo
+spawnPortals();
+spawnSword();
+
+// === CHECAGEM DE COLISÃO ===
+function checkCollisions() {
+    // Espada
+    if(sword && player.x === sword.x && player.y === sword.y) {
+        player.hasSword = true;
+        setTimeout(() => {
+            player.hasSword = false;
+            sword = null;
+            spawnSword();
+        }, sword.timer);
+        sword = null;
+    }
+
+    // Portais
+    portals.forEach(p => {
+        if(player.x === p.x && player.y === p.y) {
+            let other = portals.find(op => op !== p);
+            player.x = other.x;
+            player.y = other.y;
+        }
+    });
+
+    // Inimigos
+    enemies.forEach((e,i)=>{
+        if(player.x === e.x && player.y === e.y){
+            if(player.hasSword){
+                enemies.splice(i,1);
+                score += 100;
+            } else {
+                alert("Game Over!");
+                location.reload();
+            }
+        }
+    });
+}
+
+// No seu loop principal, chame:
+checkCollisions();
+
+</script>
+</body>
+</html>

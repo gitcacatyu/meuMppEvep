@@ -1,0 +1,77 @@
+<!-- Novo arquivo: loja.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Loja de Bonecos</title>
+    <style>
+        body { background: #222; color: #fff; font-family: Arial, sans-serif; }
+        .boneco-card {
+            background: #333;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px auto;
+            width: 320px;
+            text-align: center;
+        }
+        .boneco-nome { font-size: 1.4em; margin-bottom: 8px; }
+        .poder { margin-bottom: 10px; }
+        .comprar-btn {
+            margin: 8px 0;
+            padding: 8px 18px;
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .comprar-btn:disabled { background: #555; cursor: not-allowed; }
+        #moedas { font-size: 1.2em; margin: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Loja de Bonecos</h1>
+    <div id="moedas">Moedas: <span id="qtdMoedas">500</span></div>
+    <div id="bonecos"></div>
+    <script>
+        let moedas = 500;
+        const bonecos = [
+            { nome: "Leo", poder: 10, preco: 200, comprado: false },
+            { nome: "Maya", poder: 12, preco: 250, comprado: false },
+            { nome: "Bolt", poder: 15, preco: 300, comprado: false }
+        ];
+
+        function renderBonecos() {
+            const div = document.getElementById('bonecos');
+            div.innerHTML = '';
+            bonecos.forEach((b, idx) => {
+                div.innerHTML += `<div class="boneco-card">
+                    <div class="boneco-nome">${b.nome}</div>
+                    <div class="poder">Poder: ${b.poder}</div>
+                    <button class="comprar-btn" onclick="comprar(${idx})" ${b.comprado ? 'disabled' : ''}>
+                        ${b.comprado ? 'Comprado' : 'Comprar por ' + b.preco + ' moedas'}
+                    </button>
+                </div>`;
+            });
+        }
+
+        function comprar(idx) {
+            const boneco = bonecos[idx];
+            if (moedas < boneco.preco) {
+                alert('Moedas insuficientes!');
+                return;
+            }
+            moedas -= boneco.preco;
+            boneco.comprado = true;
+            document.getElementById('qtdMoedas').innerText = moedas;
+            renderBonecos();
+        }
+
+        renderBonecos();
+    </script>
+</body>
+</html>
+
+
+
+

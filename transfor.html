@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Transformações</title>
+    <style>
+        body { background: #222; color: #fff; font-family: Arial, sans-serif; }
+        .boneco-card {
+            background: #333;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px auto;
+            width: 320px;
+            text-align: center;
+        }
+        .boneco-nome { font-size: 1.4em; margin-bottom: 8px; }
+        .poder { margin-bottom: 10px; }
+        .transform-btn {
+            margin: 8px 0;
+            padding: 8px 18px;
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .transform-btn:disabled { background: #555; cursor: not-allowed; }
+        #moedas { font-size: 1.2em; margin: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Transformações</h1>
+    <div id="moedas">Moedas: <span id="qtdMoedas">500</span></div>
+    <div id="bonecos"></div>
+    <script>
+        let moedas = 500;
+        const bonecos = [
+            {
+                nome: "Leo",
+                poder: 10,
+                nivel: 0,
+                transformacoes: [
+                    { nome: "Super Leo", preco: 100, poder: 25 },
+                    { nome: "Mega Leo", preco: 200, poder: 40 }
+                ]
+            },
+            {
+                nome: "Maya",
+                poder: 12,
+                nivel: 0,
+                transformacoes: [
+                    { nome: "Maya Fera", preco: 120, poder: 28 },
+                    { nome: "Maya Suprema", preco: 250, poder: 45 }
+                ]
+            },
+            {
+                nome: "Bolt",
+                poder: 15,
+                nivel: 0,
+                transformacoes: [
+                    { nome: "Bolt Turbo", preco: 150, poder: 32 },
+                    { nome: "Bolt Relâmpago", preco: 300, poder: 50 }
+                ]
+            }
+        ];
+
+        function salvarDados() {
+            localStorage.setItem('moedas', moedas);
+            localStorage.setItem('bonecos', JSON.stringify(bonecos.map(b => ({nivel: b.nivel}))));
+        }
+
+        function carregarDados() {
+            const moedasSalvas = localStorage.getItem('moedas');
+            const bonecosSalvos = localStorage.getItem('bonecos');
+            if (moedasSalvas) moedas = parseInt(moedasSalvas);
+            if (bonecosSalvos) {
+                const bonecosCarregados = JSON.parse(bonecosSalvos);
+                bonecosCarregados.forEach((b, i) => {
+                    if (bonecos[i]) bonecos[i].nivel = b.nivel;
+                });
+            }
+        }
+
+        carregarDados();
+
+        function renderBonecos() {
+            document.getElementById('qtdMoedas').innerText = moedas;
+            const div = document.getElementById('bonecos');
+            div.innerHTML = '';
+            bonecos.forEach((b, idx) => {
+                let html = `<div class="boneco-card">
+                    <div class="boneco-nome">${b.nivel === 0 ? b.nome : b.transformacoes[b.nivel-1].nome}</div>
+                    <div class="poder">Poder: ${b.nivel === 0 ? b.poder : b.transformacoes[b.nivel-1].poder}</div>`;
+                b.transformacoes.forEach((t, i) => {
+                    html += `<button class="transform-btn" onclick="transformar(${idx},${i})" ${b.nivel > i || b.nivel < i ? 'disabled' : ''}>
+                        Transformar para ${t.nome} (Poder: ${t.poder}) - ${t.preco} moedas
+                    </button><br>`;
+                });
+                html += `</div>`;
+                div.innerHTML += html;
+            });
+        }
+
+        function transformar(idx, nivel) {
+            const boneco = bonecos[idx];
+            const t = boneco.transformacoes[nivel];
+            if (moedas < t.preco) {
+                alert('Moedas insuficientes!');
+                return;
+            }
+            moedas -= t.preco;
+            boneco.nivel = nivel + 1;
+            salvarDados();
+            renderBonecos();
+        }
+
+        renderBonecos();
+    </script>
+</body>
+</html>

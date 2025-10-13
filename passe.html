@@ -60,16 +60,18 @@
      <div>
      <h1>Passe Espertos</h1>
      <h3>Preço 1500 Moedas</h3>
+     <h4>D. Xavier, D. Lendário, D. FORTE e D. Apelão.</h4>
      <input type="button" value="Comprar Passe" id="comprarPasse" onclick="comprarPasse()">
      </div>
  <br><br><br>
-           <h1>Em breve...</h1>
+
           <h1>Personagens POSSES?! Já falam...</h1><br>
           <p>É melhor quem competir com você, tomar cuidado...</p>
 <div>
  <h1>Passe POSSES</h1>
    <h3>Preço 4000 Moedas</h3>
-     <input type="button" value="Comprar Passe" id="" onclick="">
+    <h4>MPP, D. Elemental, Kaká, Dragão, D. Astefato e Humano.</h4>
+     <input type="button" value="Comprar Passe" id="comprar2" onclick="comprar2()" style=" margin-top: 20px;  border-radius: 20px; background-color: rgb(255, 255, 255);">
     
 
      <br><br><br>
@@ -78,15 +80,27 @@
  
  // Exemplo de código ao clicar no botão de compra
 const precoPasse1 = 1500;
-
+const precoPasse2 = 5000;
 let moedas = parseInt(localStorage.getItem("moedas") || "0");
 
-document.getElementById('comprarPasse1').addEventListener('click', () => {
+document.getElementById('comprarPasse').addEventListener('click', () => {
   if (moedas >= precoPasse1) {
     moedas -= precoPasse1;
     localStorage.setItem("moedas", moedas);
     localStorage.setItem("passeEspertos", "true");
     alert("Passe Espertos comprado com sucesso! 🚀🎉🎁");
+    atualizarMoedas();
+  } else {
+    alert("Moedas insuficientes! 😔");
+  }
+});
+
+document.getElementById('comprar2').addEventListener('click', () => {
+  if (moedas >= precoPasse2) {
+    moedas -= precoPasse2;
+    localStorage.setItem("moedas", moedas);
+    localStorage.setItem("passePosses", "true");
+    alert("Passe Posses comprado com sucesso! 🚀🎉🎁");
     atualizarMoedas();
   } else {
     alert("Moedas insuficientes! 😔");
