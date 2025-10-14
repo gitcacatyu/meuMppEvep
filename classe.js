@@ -181,7 +181,7 @@ class DragonAncestral extends Character {
        this.attack = 200;
        this.defense = 100;
        this.maxLife = this.life;
-       this.special = "CONTROLE + INRESISTÍVEL"; 
+       this.special = "FORTE + Incrível + Dominação + Poder + Velocidade + Inteligência"; 
       }
     }
          class DragonC extends Character {
@@ -238,6 +238,8 @@ class DragonAncestral extends Character {
         this.special = "Escudo seguro"; 
       }
     }
+
+
           class DragonMetal extends Character {
       constructor() {
        super('Dragon Metal');
@@ -246,6 +248,17 @@ class DragonAncestral extends Character {
        this.defense = 60;
        this.maxLife = this.life;
         this.special = "Explosão de aço"; 
+      }
+    }
+
+        class Rebeca extends Character {
+      constructor() {
+       super('Irmã Rebeca');
+       this.life =  9500;
+       this.attack = 150;
+       this.defense = 90;
+       this.maxLife = this.life;
+        this.special = "Cura + Pirraça + Ânimo + Gracinha"; 
       }
     }
 
@@ -593,6 +606,7 @@ const todosOsDragoes = [
   { nome: "Dragão Elemental", value: "DragonElemental", passe2: true },
   { nome: "Kaká", value: "Kaka", passe2: true },
   { nome: "Dragão", value: "DragonC", passe2: true },
+  { nome: "Irmã Rebeca", value: "Rebeca", passe2: true },
 
   // Dragões sem passe
   { nome: "Cavaleiro", value: "Knight" },
@@ -722,7 +736,8 @@ function pegarImagemDoDragao(nome) {
    kaka: 'kaka.png',
     dragonc: 'dragao.png',
     comum:'dragao',
-   humano: 'hum.png'
+   humano: 'hum.png',
+    rebeca: 'rebeca.png'
   };
 
   for (let chave in imagens) {
@@ -767,6 +782,7 @@ function getMultiplicador(atacante, defensor) {
      DragonAstefato:    { forte: ["Humano"],  fraco: ["DragonBlack"] },
     MPP:           { forte: [],     fraco: ["Kaka"] },
     Kaka:        { forte: [],     fraco: ["Humano"] },
+    Rebeca:        { forte: ["Humano"],     fraco: ["Kaka"] },
     DragonElemental:   { forte: ["DragonXavier"],    fraco: ["DragonMisto"] },
      DragonC:    { forte: ["Humano"],  fraco: ["MPP"] },
     Humano:     { forte: [],                   fraco: ["DragonFORTE"] },

@@ -39,6 +39,7 @@ const createCharacter = (type, name = type) => {
     case "MPP": return new MPP();
     case "DragonElemental": return new DragonElemental();
     case "Kaka": return new Kaka();
+    case "Rebeca": return new Rebeca();
     case "DragonC": return new DragonC();
     default: return new Knight(name);
   }
