@@ -47,6 +47,7 @@
       font-weight: bold;
     }
   </style>
+  <link rel="stylesheet" href="common.css">
 </head>
 <body>
   <h1>Cadastro</h1>
@@ -78,7 +79,16 @@
       if (nome === "" || senha === "" || nascimento === "") {
         document.getElementById("mensagem").style.color = "red";
         document.getElementById("mensagem").textContent = "Por favor, preencha todos os campos!";
+      } else if (senha.length < 6) {
+        document.getElementById("mensagem").style.color = "red";
+        document.getElementById("mensagem").textContent = "A senha deve ter pelo menos 6 caracteres!";
       } else {
+        // Salvar dados no localStorage
+        localStorage.setItem('usuarioNome', nome);
+        localStorage.setItem('usuarioSenha', senha);
+        localStorage.setItem('usuarioNascimento', nascimento);
+        localStorage.setItem('usuarioCadastrado', 'true');
+
         document.getElementById("mensagem").style.color = "green";
         document.getElementById("mensagem").textContent = `Cadastro enviado com sucesso! 🥳 Bem-vindo, ${nome}!`;
         

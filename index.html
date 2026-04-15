@@ -7,102 +7,136 @@
   <title>Welcome Mpp</title>
   <style>
     :root {
-      --bg: rgba(22, 135, 234, 0.397);
-      --text: #000;
-      --button-bg: rgb(135, 141, 147);
-      --button-text: white;
-      --shadow: rgba(21, 20, 20, 0.45);
+      --bg: radial-gradient(circle at top left, #07111f 0%, #0d1d3d 40%, #050c18 100%);
+      --surface: rgba(255, 255, 255, 0.08);
+      --text: #eef4ff;
+      --muted: #94a8c5;
+      --button: linear-gradient(135deg, #5dd7ff, #747bff);
+      --button-text: #07111f;
+      --shadow: 0 26px 60px rgba(0, 0, 0, 0.28);
+      --radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
+      margin: 0;
+      min-height: 100vh;
       background: var(--bg);
       color: var(--text);
-      font: 15pt Arial, sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+    }
+
+    .page-shell {
+      width: min(100%, 760px);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius);
+      padding: 38px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
       text-align: center;
-      padding: 40px;
-      transition: all 0.3s ease;
     }
 
     .icon {
-      width: 100px;
-      height: 100px;
-      margin-bottom: 20px;
-      border: #000 2px solid;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 24px;
       border-radius: 50%;
-      box-shadow: 5px 5px 10px var(--shadow);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.18);
     }
 
-    h2 {
-      margin-bottom: 30px;
+    h2,
+    h4 {
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    h2 + h4 {
+      margin-top: 8px;
+      opacity: 0.86;
+    }
+
+    .hero-text {
+      margin-bottom: 28px;
+      color: var(--text);
     }
 
     input[type="button"], button {
-      background-color: var(--button-bg);
-      border: 2px solid black;
+      border: none;
+      border-radius: 999px;
+      background: var(--button);
       color: var(--button-text);
       font-size: 1rem;
-      padding: 10px 20px;
-      margin: 10px;
-      border-radius: 5px;
-      box-shadow: 5px 5px 10px var(--shadow);
-      transition: transform 0.5s, background-color 0.3s, color 0.3s;
+      padding: 14px 24px;
+      margin: 10px 8px;
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.18);
+      transition: transform 0.25s ease, filter 0.25s ease;
       cursor: pointer;
     }
 
-    input[type="button"]:hover, button:hover {
-      background-color: white;
-      color: black;
-      transform: scale(1.1);
-      border-radius: 10%;
-      box-shadow: 5px 5px 10px rgba(25, 4, 146, 0.45);
+    input[type="button"]:hover,
+    button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.06);
+    }
+
+    .action-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 18px;
     }
 
     h6 {
-      margin-top: 40px;
+      margin-top: 28px;
       font-style: italic;
-      opacity: 0.6;
+      color: var(--muted);
+    }
+
+    footer {
+      margin-top: 24px;
+      color: rgba(238, 242, 255, 0.72);
+      font-size: 0.95rem;
     }
 
     .dark-mode {
-      --bg: #121212;
-      --text: #eee;
-      --button-bg: #333;
-      --button-text: #fff;
-      --shadow: rgba(255, 255, 255, 0.2);
-    }
-      .img{
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        box-shadow: 5px 5px 10px var(--shadow);
-        transition: transform 0.9s ease-in-out;
-      }
-    img:hover{
-      max-width: 100%;
-      max-height: 100%;
-      transform: scale(1.2);  
-      border: 1px solid black;
-      background-color: ghostwhite; 
+      --bg: radial-gradient(circle at top left, #02060f 0%, #060d1c 45%, #02070f 100%);
+      --text: #eef4ff;
+      --button: linear-gradient(135deg, #2f3fff, #48e4ff);
+      --shadow: 0 26px 60px rgba(255, 255, 255, 0.06);
     }
   </style>
+  <link rel="stylesheet" href="common.css">
+  <script src="config.js"></script>
 </head>
 <body>
 
-  <div>
+  <div class="page-shell">
                       
     <img src="./Mpp.Icon.png" alt="Mpp Icon" class="icon">
-    <h2>MPP <h4>EVEP</h4></h2>
-    <h2>Bem-vindo(a)!<br><br>Aqui tem tudo... menos você! 😜</h2>
+    <h2 class="hero-text">MPP <span class="subtitle">EVEP</span></h2>
+    <h2 class="hero-text">Bem-vindo(a)!<br><br>Aqui tem tudo... menos você! 😜</h2>
 
     <h4>Venha cadastrar-se ou entrar:</h4>
 
-    <input type="button" onclick="cadras()" value="Cadastrar-se / Entrar">
-    <input type="button" onclick="voltar()" value="Sair / Deslogar">
+    <div class="action-group">
+      <input type="button" onclick="cadras()" value="Cadastrar-se / Entrar">
+      <input type="button" onclick="voltar()" value="Sair / Deslogar">
+    </div>
     <br>
     <button id="toggleBtn" onclick="toggleDark()">🌙 Modo Escuro</button>
 
     <h6>Em desenvolvimento...</h6>
-    <h6>Version 5.0.8</h6>
+    <h6>Version 6.0.0</h6>
     <footer><h5>@EVEP MPP da EVEP</h5></footer>
   </div>
 

@@ -1,122 +1,121 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root {
+  --bg: radial-gradient(circle at top left, #07111f 0%, #0e203e 40%, #050d18 100%);
+  --surface: rgba(255, 255, 255, 0.08);
+  --text: #eef4ff;
+  --accent: #5dd7ff;
+  --radius: 24px;
+  --shadow: 0 26px 60px rgba(0, 0, 0, 0.32);
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-    display: flex;
-    min-height: 100vh;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background-color: #333;
-    font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px;
+  text-align: center;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 h1 {
-    color: #FFF;
-    margin-bottom: 20px;
+  margin-bottom: 12px;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: 0.04em;
 }
+
 .keys {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(80px, 120px));
+  gap: 14px;
+  width: min(100%, 420px);
 }
+
 .key {
-    width: 80px;
-    height: 80px;
-    border: 2px solid #FFF;
-    color: #FFF;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 30px;
-    font-weight: bold;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--text);
+  font-size: 1.8rem;
+  font-weight: 700;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
+
 .key.active {
-    border: 2px solid #FF0;
-    color: #FF0;
+  border-color: #ffd600;
+  color: #ffd600;
+}
+
+.key:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .composer {
-    width: 260px;
-    margin-top: 20px;
+  width: min(100%, 420px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
-.composer #input {
-    width: 100%;
-    outline: none;
-    font-size: 17px;
-    padding: 10px 15px;
+
+.composer #input,
+input {
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
 }
+
 .composer button {
-    width: 100%;
-    height: 40px;
-    background: none;
-    border: 2px solid #FFF;
-    color: #FFF;
-    font-size: 16px;
-    margin-top: 10px;
-    cursor: pointer;
+  width: 100%;
+  height: 48px;
+  background: linear-gradient(135deg, var(--accent), #2f7cff);
+  border: none;
+  border-radius: 999px;
+  font-size: 1rem;
+  color: #07111f;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
+
 .composer button:hover {
-    background-color: rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  filter: brightness(1.05);
 }
 
 footer {
-    margin-top: 20px;
-    color: #FFF;
-    font-size: 13px;
-}
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #222;
-    font-family: Arial, Helvetica, sans-serif;
-    padding: 20px;
-    text-align: center;
-}
-
-.keys {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    max-width: 300px;
-    margin: 0 auto;
-}
-.key {
-    width: 80px;
-    height: 80px;
-    font-size: 24px;
+  margin-top: 20px;
+  color: rgba(238, 242, 255, 0.76);
+  font-size: 0.95rem;
 }
 
 @media (max-width: 500px) {
-    .key {
-        width: 60px;
-        height: 60px;
-        font-size: 18px;
-    }
-
-    .composer {
-        width: 100%;
-    }
-
-    input {
-        font-size: 14px;
-    }
-    .key {
-    width: 22vw;
-    height: 22vw;
-    max-width: 90px;
-    max-height: 90px;
-    font-size: 6vw;
-}
+  .key {
+    font-size: 1.2rem;
+  }
 }
 

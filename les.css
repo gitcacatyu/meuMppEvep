@@ -1,258 +1,85 @@
-/* estilos mantidos do jogo original */
-   body
-    {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-#botao {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-
-  #oi {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-#tao {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+:root {
+  --bg: radial-gradient(circle at top left, #07111f 0%, #0b1834 45%, #051020 100%);
+  --surface: rgba(255, 255, 255, 0.08);
+  --surface-strong: rgba(255, 255, 255, 0.12);
+  --text: #eef2ff;
+  --accent: #5dd7ff;
+  --radius: 26px;
+  --shadow: 0 26px 60px rgba(0, 0, 0, 0.28);
 }
 
-#po {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-
-#ta {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+html {
+  scroll-behavior: smooth;
 }
 
-#bo  {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 32px 20px 40px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
-#otao {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  text-align: center;
 }
 
-#t {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+button {
+  width: min(100%, 260px);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 24px;
+  border-radius: 22px;
+  border: none;
+  background: linear-gradient(135deg, #5dd7ff, #4c8cff);
+  color: #07111f;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-#a {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
 }
 
-
-    
-#p {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+button[id] {
+  width: min(100%, 260px);
 }
 
-#e {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+button + button {
+  margin-top: 12px;
 }
 
-#o {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+p {
+  max-width: 720px;
+  color: rgba(238, 242, 255, 0.82);
+  text-align: center;
 }
 
-
-#d {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+a {
+  color: var(--accent);
 }
 
-#n {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+h2 {
+  margin-top: 24px;
 }
 
-#r {
-    border: solid 3px rgb(0, 0, 0);
-    background: rgba(255, 255, 255, 0.625);
-    padding: 6px;
-    border-radius: 10%;
-    margin: 14px;
-    gap: 8px;
-    display: flex;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+h6 {
+  color: rgba(238, 242, 255, 0.7);
 }

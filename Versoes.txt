@@ -31,9 +31,8 @@ Versões:
 
 5.0.8 -> É a versão Do Livro MPP 
 
-NEXT
-5.0.9 ->  Onde o EVEP vai ficar Dentro do MPP.
+5.0.9 ->  MPP vai ficar com cara de moderno.
 
-
+6.0.0 -> CONFIGURAÇÃO FUNCIONAL BETA
 
 

@@ -63,11 +63,12 @@
     }
 
     img {
-      height: 60px;
+      width: 300px;
+      height: 200px;
       border-radius: 10px;
       margin: 0 auto 30px;
       display: block;
-      max-width: 90%;
+      object-fit: cover;
       box-shadow: 5px 5px 10px var(--shadow-light);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
@@ -83,12 +84,15 @@
     }
 
      img.dark-mode {
+      width: 300px;
+      height: 200px;
       filter: brightness(0.8);  
       transition: filter 0.3s ease;
       transform: scale(1);
       border: 2px solid white;      
       background-color: rgba(255, 255, 255, 0.1);
       box-shadow: 5px 5px 10px var(--shadow-dark);
+      object-fit: cover;
     }
     img:hover.dark-mode {
       filter: brightness(1);
@@ -193,6 +197,8 @@
   100% { transform: scale(1); }
 }
   </style>
+  <link rel="stylesheet" href="common.css">
+  <script src="config.js"></script>
 </head><i class="si-home"></i>
 <body>
 
@@ -210,6 +216,7 @@
   <input type="button" onclick="location.href='index2.html'" value="MPP 3" />
   <input type="button"  value="Deus seja louvado." id="nomeD" onclick="nomeD()"  >
  <input type="button" value="Instalar MPP" onclick="instalar()"  />
+  <input type="button" value="Versões" onclick="location.href='versoes.html'">
  <input type="button" value="Fale conosco" onclick="window.location.href='falecon.html'">
  <input type="button" value="Ajuda" onclick="location.href='ajuda.html'">
  <input type="button" value="Jogo Luta" onclick="alert('Abrindo Jogo Luta... O jogo está em atualização'); location.href='extrajogo.html'" >
@@ -249,7 +256,7 @@
     🌙 Modo Escuro
   </button>
   <br>
-    <h6>Version 5.0.8</h6>
+    <h6>Version 6.0.0</h6>
     <h6>Desenvolvido por EVEP</h6>
   <script>
     window.onload = () => {

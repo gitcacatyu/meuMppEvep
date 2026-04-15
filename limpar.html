@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpar Dados - MPP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        button {
+            padding: 15px 30px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        button:hover {
+            background: #ff3742;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ferramenta de Limpeza - MPP</h1>
+    <p>Use este botão para limpar todos os dados de cadastro salvos (para testes)</p>
+    <button onclick="limparDados()">Limpar Dados de Cadastro</button>
+    <button onclick="location.href='cadras.html'">Ir para Cadastro</button>
+    <button onclick="location.href='login.html'">Ir para Login</button>
+
+    <script>
+        function limparDados() {
+            localStorage.removeItem('usuarioNome');
+            localStorage.removeItem('usuarioSenha');
+            localStorage.removeItem('usuarioNascimento');
+            localStorage.removeItem('usuarioCadastrado');
+            localStorage.removeItem('usuarioSalvo');
+            alert('Dados de cadastro limpos! ✅');
+        }
+    </script>
+</body>
+</html>

@@ -1,30 +1,109 @@
-iframe {
-  width: 50%;
-  height: 100vh;
-  border: none;
+:root {
+  --bg: radial-gradient(circle at top left, #07111f 0%, #091a2e 40%, #050d1e 100%);
+  --surface: rgba(255, 255, 255, 0.10);
+  --surface-strong: rgba(255, 255, 255, 0.16);
+  --text: #e8edf8;
+  --muted: #9ab2d0;
+  --accent: #70d1ff;
+  --radius: 24px;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
 }
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button.home-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  color: var(--text);
+  padding: 12px 18px;
+  backdrop-filter: blur(14px);
+  cursor: pointer;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+button.home-button:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.app-shell {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 100vh;
+}
+
 .editor-container {
-  width: 50%;
+  width: min(100%, 520px);
+  height: auto;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  gap: 16px;
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin: 20px;
 }
+
+.label {
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
 textarea {
-  flex-grow: 1;
-  font-family: monospace;
+  flex: 1;
+  min-height: 160px;
+  font-family: 'Fira Code', monospace, monospace;
   font-size: 14px;
-  padding: 10px;
-  resize: none;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(12, 18, 38, 0.9);
+  color: #f3f7ff;
+  resize: vertical;
 }
-#cssCode{
-    background-color: rgba(54, 54, 54, 0.671);
-    color: lightblue;
+
+textarea:focus {
+  outline: 2px solid rgba(112, 209, 255, 0.4);
 }
-#jsCode{
-    background-color: rgba(54, 54, 54, 0.671);
-    color: yellow;
+
+#preview {
+  width: min(100%, 560px);
+  min-height: 100vh;
+  border: none;
+  background: #0c1522;
+  margin: 20px;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
 }
-#htmlCode{
-    background-color: rgba(54, 54, 54, 0.671);
-    color: orangered;
+@media (max-width: 1024px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  #preview {
+    min-height: 520px;
+    width: calc(100% - 40px);
+  }
 }

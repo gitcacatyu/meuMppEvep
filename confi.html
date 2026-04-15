@@ -61,6 +61,7 @@
       background-color: #0056b3;
     }
   </style>
+  <link rel="stylesheet" href="common.css">
 </head>
 <body>
   <h1>Configurações Gerais do MPP</h1>
@@ -103,47 +104,316 @@
   </div>
 
   <script>
-    function mudarTema(tema) {
-      localStorage.setItem("tema", tema);
-      document.body.className = tema;
-    }
-    function mudarIdioma(idioma) {
-      localStorage.setItem("idioma", idioma);
-    }
-    function toggleSom() {
-      localStorage.setItem("som", event.target.checked);
-    }
-    function toggleNotif() {
-      localStorage.setItem("notificacao", event.target.checked);
-    }
-    function toggleAnimacoes() {
-      localStorage.setItem("animacoes", event.target.checked);
-    }
-    function toggleModoDev() {
-      localStorage.setItem("modoDev", event.target.checked);
-    }
-    function setTelaInicial(tela) {
-      localStorage.setItem("telaInicial", tela);
-    }
-    function salvarConfigs() {
-      alert("Configurações salvas com sucesso!");
-    }
-    function resetarConfigs() {
-      localStorage.clear();
-      alert("Configurações resetadas!");
-      location.reload();
+    // Configurações globais
+    let configs = {
+      tema: 'claro',
+      idioma: 'pt',
+      som: false,
+      notificacao: false,
+      animacoes: true,
+      modoDev: false,
+      telaInicial: 'ji.html'
+    };
+
+    // Carregar configurações salvas
+    function carregarConfigs() {
+      configs.tema = localStorage.getItem('tema') || 'claro';
+      configs.idioma = localStorage.getItem('idioma') || 'pt';
+      configs.som = localStorage.getItem('som') === 'true';
+      configs.notificacao = localStorage.getItem('notificacao') === 'true';
+      configs.animacoes = localStorage.getItem('animacoes') !== 'false'; // true por padrão
+      configs.modoDev = localStorage.getItem('modoDev') === 'true';
+      configs.telaInicial = localStorage.getItem('telaInicial') || 'ji.html';
     }
 
-    // Aplicar tema salvo ao carregar
-    window.onload = () => {
-      let tema = localStorage.getItem("tema");
-      if (!tema) {
-        tema = "claro";
-        localStorage.setItem("tema", tema);
+    // Aplicar configurações
+    function aplicarConfigs() {
+      // Aplicar tema
+      document.body.className = configs.tema;
+      document.getElementById('temaSelect').value = configs.tema;
+
+      // Aplicar idioma
+      aplicarIdioma();
+
+      // Aplicar outras configurações
+      document.querySelector('input[onchange*="toggleSom"]').checked = configs.som;
+      document.querySelector('input[onchange*="toggleNotif"]').checked = configs.notificacao;
+      document.querySelector('input[onchange*="toggleAnimacoes"]').checked = configs.animacoes;
+      document.querySelector('input[onchange*="toggleModoDev"]').checked = configs.modoDev;
+      document.querySelector('select[onchange*="setTelaInicial"]').value = configs.telaInicial;
+
+      // Aplicar modo dev
+      if (configs.modoDev) {
+        document.body.style.border = '3px solid red';
+        console.log('🛠️ Modo Desenvolvedor ativado!');
+        console.log('Configurações atuais:', configs);
+      } else {
+        document.body.style.border = 'none';
       }
-      document.body.className = tema;
-      document.getElementById("temaSelect").value = tema;
+
+      // Aplicar animações
+      if (!configs.animacoes) {
+        document.body.style.transition = 'none';
+        document.querySelectorAll('*').forEach(el => {
+          el.style.transition = 'none';
+        });
+      }
     }
+
+    // Funções de mudança
+    function mudarTema(tema) {
+      configs.tema = tema;
+      localStorage.setItem('tema', tema);
+      document.body.className = tema;
+      mostrarNotificacao('Tema alterado!', 'success');
+    }
+
+    function mudarIdioma(idioma) {
+      configs.idioma = idioma;
+      localStorage.setItem('idioma', idioma);
+      aplicarIdioma();
+      mostrarNotificacao('Idioma alterado!', 'success');
+    }
+
+    function aplicarIdioma() {
+      const textos = {
+        pt: {
+          title: 'Configurações Gerais do MPP',
+          theme: 'Tema do site:',
+          language: 'Idioma:',
+          sound: 'Ativar som',
+          notifications: 'Ativar notificações',
+          animations: 'Usar animações',
+          devMode: 'Modo Desenvolvedor',
+          homeScreen: 'Tela inicial padrão:',
+          save: 'Salvar',
+          reset: 'Resetar'
+        },
+        en: {
+          title: 'MPP General Settings',
+          theme: 'Site theme:',
+          language: 'Language:',
+          sound: 'Enable sound',
+          notifications: 'Enable notifications',
+          animations: 'Use animations',
+          devMode: 'Developer Mode',
+          homeScreen: 'Default home screen:',
+          save: 'Save',
+          reset: 'Reset'
+        },
+        es: {
+          title: 'Configuraciones Generales de MPP',
+          theme: 'Tema del sitio:',
+          language: 'Idioma:',
+          sound: 'Activar sonido',
+          notifications: 'Activar notificaciones',
+          animations: 'Usar animaciones',
+          devMode: 'Modo Desarrollador',
+          homeScreen: 'Pantalla inicial predeterminada:',
+          save: 'Guardar',
+          reset: 'Restablecer'
+        }
+      };
+
+      const t = textos[configs.idioma] || textos.pt;
+      document.title = t.title;
+      document.querySelector('h1').textContent = t.title;
+
+      // Atualizar labels
+      const labels = document.querySelectorAll('label');
+      labels[0].childNodes[0].textContent = t.theme;
+      labels[1].childNodes[0].textContent = t.language;
+      labels[2].childNodes[1].textContent = t.sound;
+      labels[3].childNodes[1].textContent = t.notifications;
+      labels[4].childNodes[1].textContent = t.animations;
+      labels[5].childNodes[1].textContent = t.devMode;
+      labels[6].childNodes[0].textContent = t.homeScreen;
+
+      // Atualizar botões
+      const buttons = document.querySelectorAll('button');
+      buttons[0].textContent = t.save;
+      buttons[1].textContent = t.reset;
+    }
+
+    function toggleSom() {
+      configs.som = event.target.checked;
+      localStorage.setItem('som', configs.som);
+      if (configs.som) {
+        tocarSomTeste();
+        mostrarNotificacao('Som ativado!', 'success');
+      } else {
+        mostrarNotificacao('Som desativado!', 'info');
+      }
+    }
+
+    function toggleNotif() {
+      configs.notificacao = event.target.checked;
+      localStorage.setItem('notificacao', configs.notificacao);
+      if (configs.notificacao) {
+        if ('Notification' in window) {
+          Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              mostrarNotificacao('Notificações ativadas!', 'success');
+              testarNotificacao();
+            } else {
+              mostrarNotificacao('Permissão de notificação negada', 'error');
+              configs.notificacao = false;
+              event.target.checked = false;
+              localStorage.setItem('notificacao', false);
+            }
+          });
+        } else {
+          mostrarNotificacao('Navegador não suporta notificações', 'error');
+          configs.notificacao = false;
+          event.target.checked = false;
+          localStorage.setItem('notificacao', false);
+        }
+      } else {
+        mostrarNotificacao('Notificações desativadas!', 'info');
+      }
+    }
+
+    function toggleAnimacoes() {
+      configs.animacoes = event.target.checked;
+      localStorage.setItem('animacoes', configs.animacoes);
+      if (configs.animacoes) {
+        document.body.style.transition = '';
+        document.querySelectorAll('*').forEach(el => {
+          el.style.transition = '';
+        });
+        mostrarNotificacao('Animações ativadas!', 'success');
+      } else {
+        document.body.style.transition = 'none';
+        document.querySelectorAll('*').forEach(el => {
+          el.style.transition = 'none';
+        });
+        mostrarNotificacao('Animações desativadas!', 'info');
+      }
+    }
+
+    function toggleModoDev() {
+      configs.modoDev = event.target.checked;
+      localStorage.setItem('modoDev', configs.modoDev);
+      if (configs.modoDev) {
+        document.body.style.border = '3px solid red';
+        console.log('🛠️ Modo Desenvolvedor ativado!');
+        console.log('Configurações atuais:', configs);
+        mostrarNotificacao('Modo Dev ativado!', 'warning');
+      } else {
+        document.body.style.border = 'none';
+        mostrarNotificacao('Modo Dev desativado!', 'info');
+      }
+    }
+
+    function setTelaInicial(tela) {
+      configs.telaInicial = tela;
+      localStorage.setItem('telaInicial', tela);
+      mostrarNotificacao('Tela inicial alterada!', 'success');
+    }
+
+    function salvarConfigs() {
+      // Salvar todas as configurações
+      Object.keys(configs).forEach(key => {
+        localStorage.setItem(key, configs[key]);
+      });
+      mostrarNotificacao('Todas as configurações foram salvas!', 'success');
+    }
+
+    function resetarConfigs() {
+      if (confirm('Tem certeza que deseja resetar todas as configurações?')) {
+        localStorage.clear();
+        location.reload();
+      }
+    }
+
+    // Funções auxiliares
+    function mostrarNotificacao(mensagem, tipo = 'info') {
+      if (!configs.notificacao && tipo !== 'success' && tipo !== 'error') return;
+
+      // Criar elemento de notificação
+      const notification = document.createElement('div');
+      notification.className = `notification ${tipo}`;
+      notification.textContent = mensagem;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 10px;
+        color: white;
+        font-weight: bold;
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      `;
+
+      // Cores por tipo
+      const cores = {
+        success: '#4CAF50',
+        error: '#f44336',
+        warning: '#ff9800',
+        info: '#2196F3'
+      };
+      notification.style.backgroundColor = cores[tipo] || cores.info;
+
+      document.body.appendChild(notification);
+
+      // Remover após 3 segundos
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    function tocarSomTeste() {
+      if (configs.som) {
+        // Criar um beep simples
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+        oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.1);
+
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.2);
+      }
+    }
+
+    function testarNotificacao() {
+      if (configs.notificacao && 'Notification' in window && Notification.permission === 'granted') {
+        new Notification('MPP - Teste de Notificação', {
+          body: 'Notificações funcionando! 🎉',
+          icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiM2NjdlZWEiLz4KPHBhdGggZD0iTTggMTJMMjQgMTJMMjQgMjBMMCAyMFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg=='
+        });
+      }
+    }
+
+    // Inicialização
+    window.onload = () => {
+      carregarConfigs();
+      aplicarConfigs();
+    };
+
+    // Adicionar estilos para notificações
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>

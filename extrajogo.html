@@ -3,7 +3,32 @@
   <meta charset="UTF-8" />
   <title>Escolha seu Lutador</title>
   <link rel="stylesheet" href="ystyles.css" />
-</head>
+  <link rel="stylesheet" href="common.css">
+  <style>
+    body {
+      text-align: center;
+      padding: 20px;
+    }
+    input[type="button"] {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    input[type="button"]:hover {
+      transform: scale(1.05);
+    }
+    #anuncio {
+      margin: 20px auto;
+    }
+  </style>
+
 
 <body>
   <input type="button" value="PASSE" id="passe" onclick="location.href= 'passe.html'">

@@ -5,74 +5,119 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login</title>
   <style>
+    :root {
+      --bg: radial-gradient(circle at top left, #07111f 0%, #0b2038 42%, #050b18 100%);
+      --surface: rgba(255, 255, 255, 0.1);
+      --text: #eef4ff;
+      --muted: #9ab1d2;
+      --accent: #5dd7ff;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      padding: 20px;
-      text-align: center;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
     }
 
     .form-container {
-      background-color: #ffffff;
-      padding: 20px;
-      border-radius: 12px;
-      max-width: 400px;
-      margin: auto;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: min(100%, 420px);
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 32px;
+      padding: 32px;
+      box-shadow: var(--shadow);
     }
 
-    input, button {
-      padding: 10px;
-      width: 90%;
-      margin-top: 5px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
+    h1,
+    h3 {
+      margin: 0 0 16px;
+      text-align: center;
+      color: #fff;
     }
 
-    label.checkbox {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      width: 90%;
-      margin: 10px auto 0;
+    label {
+      display: block;
+      text-align: left;
+      margin-top: 18px;
+      color: var(--muted);
       font-size: 0.95rem;
     }
 
+    input,
     button {
-      background-color: #28a745;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+      width: 100%;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 14px 16px;
+      font-size: 1rem;
+      margin-top: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      outline: none;
     }
 
-    button:hover {
-      background-color: #218838;
+    input:focus {
+      border-color: rgba(93, 215, 255, 0.6);
+      box-shadow: 0 0 24px rgba(93, 215, 255, 0.16);
+    }
+
+    .form-container button {
+      margin-top: 22px;
+      background: linear-gradient(135deg, #5dd7ff, #4b80ff);
+      color: #07111f;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .form-container button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      color: var(--text);
+      font-size: 0.95rem;
     }
 
     #mensagem {
-      margin-top: 15px;
-      font-weight: bold;
-      padding: 10px;
-      border-radius: 8px;
-      width: 90%;
-      margin-left: auto;
-      margin-right: auto;
+      margin-top: 18px;
+      font-weight: 700;
+      padding: 14px 16px;
+      border-radius: 18px;
       display: none;
+      width: 100%;
     }
 
     .sucesso {
-      background-color: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
+      background-color: rgba(89, 214, 119, 0.16);
+      color: #d4ffdc;
+      border: 1px solid rgba(89, 214, 119, 0.35);
     }
 
     .erro {
-      background-color: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
+      background-color: rgba(255, 57, 72, 0.16);
+      color: #ffd6dc;
+      border: 1px solid rgba(255, 57, 72, 0.35);
     }
   </style>
+  <link rel="stylesheet" href="common.css">
 </head>
 <body>
   <h1>Login</h1>
@@ -93,6 +138,10 @@
 
     <button onclick="fazerLogin()">Entrar</button>
 
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="cadras.html" style="color: var(--accent); text-decoration: none;">Não tem conta? Cadastre-se aqui</a>
+    </div>
+
     <div id="mensagem"></div>
   </div>
 
@@ -112,8 +161,10 @@ function fazerLogin() {
 
   msg.classList.remove("sucesso", "erro");
 
-  const usuarioCorreto = "usuario@gmail.com";
-  const senhaCorreta = "123456";
+  // Verificar se há usuário cadastrado
+  const usuarioCadastrado = localStorage.getItem('usuarioCadastrado');
+  const senhaCadastrada = localStorage.getItem('usuarioSenha');
+  const nomeCadastrado = localStorage.getItem('usuarioNome');
 
   // Verifica se o email é válido (simples, mas funcional)
   const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(usuario);
@@ -126,16 +177,28 @@ function fazerLogin() {
     msg.textContent = "❌ O e-mail digitado não é válido.";
     msg.className = "erro";
     msg.style.display = "block";
-  } else if (usuario === usuarioCorreto && senha === senhaCorreta) {
-    msg.textContent = `✅ Login bem-sucedido! Bem-vindo, ${usuario}!`;
+  } else if (!usuarioCadastrado) {
+    msg.textContent = "❌ Nenhum usuário cadastrado. Faça seu cadastro primeiro.";
+    msg.className = "erro";
+    msg.style.display = "block";
+  } else if (senha === senhaCadastrada) {
+    // Login bem-sucedido com qualquer email válido e a senha cadastrada
+    msg.textContent = `✅ Login bem-sucedido! Bem-vindo, ${nomeCadastrado}!`;
     msg.className = "sucesso";
     msg.style.display = "block";
+
+    // Salvar usuário no localStorage se "lembrar-me" estiver marcado
+    if (document.getElementById("lembrar").checked) {
+      localStorage.setItem("usuarioSalvo", usuario);
+    } else {
+      localStorage.removeItem("usuarioSalvo");
+    }
 
     setTimeout(() => {
       location.href = "ji.html";
     }, 2000);
   } else {
-    msg.textContent = "❌ Usuário ou senha incorretos.";
+    msg.textContent = "❌ Senha incorreta.";
     msg.className = "erro";
     msg.style.display = "block";
   }

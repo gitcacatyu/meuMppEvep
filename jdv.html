@@ -5,7 +5,75 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogo da velha MPP</title>
-    <link rel="stylesheet" href="u.css" />
+    <link rel="stylesheet" href="common.css">
+  <style>
+    body {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      min-height: 100vh !important;
+      padding: 20px !important;
+      background: radial-gradient(circle at top left, #07111f 0%, #0d1b36 42%, #081223 100%) !important;
+      color: #eef2ff !important;
+      font-family: 'Inter', system-ui, sans-serif !important;
+    }
+    h1 {
+      color: #fff !important;
+      margin-bottom: 20px !important;
+      font-size: clamp(2rem, 4vw, 3rem) !important;
+      letter-spacing: 0.04em !important;
+    }
+    .area {
+      display: grid !important;
+      grid-template-columns: repeat(3, 100px) !important;
+      gap: 10px !important;
+      margin: 20px auto !important;
+    }
+    .area .item {
+      min-width: 90px !important;
+      min-height: 90px !important;
+      display: grid !important;
+      place-items: center !important;
+      font-size: 2.4rem !important;
+      font-weight: 700 !important;
+      color: #eef2ff !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      border: 1px solid rgba(255, 255, 255, 0.16) !important;
+      border-radius: 20px !important;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35) !important;
+      cursor: pointer !important;
+      transition: transform 0.2s ease, background 0.2s ease !important;
+    }
+    .area .item:hover {
+      transform: translateY(-3px) !important;
+      background: rgba(255, 255, 255, 0.14) !important;
+    }
+    .info {
+      width: min(100%, 340px) !important;
+      display: flex !important;
+      margin-top: 30px !important;
+      gap: 16px !important;
+      padding: 18px !important;
+      border-radius: 24px !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.14) !important;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35) !important;
+    }
+    .reset {
+      margin-top: 20px !important;
+      padding: 10px 20px !important;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+      color: white !important;
+      border: none !important;
+      border-radius: 10px !important;
+      cursor: pointer !important;
+      transition: transform 0.2s !important;
+    }
+    .reset:hover {
+      transform: scale(1.05) !important;
+    }
+  </style>
 </head>
 <body>
     <h1>Jogo da velha</h1>

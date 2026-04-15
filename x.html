@@ -5,8 +5,53 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bateria</title>
-    <link rel="stylesheet" href="tre.css" />
-</head>
+  <link rel="stylesheet" href="tre.css" />
+  <link rel="stylesheet" href="common.css">
+  <style>
+    body {
+      text-align: center;
+      padding: 20px;
+    }
+    .keys {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px auto;
+      max-width: 400px;
+    }
+    .key {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .key:hover {
+      transform: scale(1.05);
+    }
+    .composer {
+      margin: 20px auto;
+      max-width: 300px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 10px;
+      border: none;
+    }
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+
 <body>
     <h1>Bateria</h1>
 

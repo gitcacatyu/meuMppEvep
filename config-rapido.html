@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações Rápidas - MPP</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="config.js"></script>
+    <style>
+        .config-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: transform 0.2s;
+        }
+        .config-float:hover {
+            transform: scale(1.1);
+        }
+        .config-float::before {
+            content: "⚙️";
+            font-size: 24px;
+        }
+        .config-panel {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 15px;
+            width: 250px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 1000;
+        }
+        .config-panel.show {
+            display: block;
+        }
+        .config-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+        }
+        .config-option label {
+            margin: 0;
+            font-size: 14px;
+        }
+        .config-option select,
+        .config-option input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 5px;
+            color: white;
+            padding: 4px 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Configurações Rápidas do MPP</h1>
+    <p>Este é um painel flutuante de configurações que pode ser adicionado a qualquer página.</p>
+
+    <!-- Painel de configurações flutuante -->
+    <div class="config-float" onclick="toggleConfigPanel()" title="Configurações"></div>
+
+    <div class="config-panel" id="configPanel">
+        <div class="config-option">
+            <label>Tema:</label>
+            <select onchange="mudarTemaRapido(this.value)">
+                <option value="claro">Claro</option>
+                <option value="escuro">Escuro</option>
+                <option value="verde">Verde</option>
+                <option value="rosa">Rosa</option>
+            </select>
+        </div>
+
+        <div class="config-option">
+            <label>Som:</label>
+            <input type="checkbox" onchange="toggleSomRapido(this.checked)">
+        </div>
+
+        <div class="config-option">
+            <label>Notificações:</label>
+            <input type="checkbox" onchange="toggleNotifRapido(this.checked)">
+        </div>
+
+        <div class="config-option">
+            <label>Animações:</label>
+            <input type="checkbox" onchange="toggleAnimRapido(this.checked)" checked>
+        </div>
+
+        <div style="text-align: center; margin-top: 10px;">
+            <button onclick="window.location.href='confi.html'" style="padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                Configurações Completas
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let configPanelVisible = false;
+
+        function toggleConfigPanel() {
+            const panel = document.getElementById('configPanel');
+            configPanelVisible = !configPanelVisible;
+            panel.classList.toggle('show', configPanelVisible);
+        }
+
+        function mudarTemaRapido(tema) {
+            if (window.mppConfig) {
+                window.mppConfig.setConfig('tema', tema);
+                document.body.className = tema;
+                window.mppConfig.mostrarNotificacao('Tema alterado!', 'success');
+            }
+        }
+
+        function toggleSomRapido(ativo) {
+            if (window.mppConfig) {
+                window.mppConfig.setConfig('som', ativo);
+                window.mppConfig.mostrarNotificacao(ativo ? 'Som ativado!' : 'Som desativado!', 'info');
+            }
+        }
+
+        function toggleNotifRapido(ativo) {
+            if (window.mppConfig) {
+                window.mppConfig.setConfig('notificacao', ativo);
+                window.mppConfig.mostrarNotificacao(ativo ? 'Notificações ativadas!' : 'Notificações desativadas!', 'info');
+            }
+        }
+
+        function toggleAnimRapido(ativo) {
+            if (window.mppConfig) {
+                window.mppConfig.setConfig('animacoes', ativo);
+                window.mppConfig.mostrarNotificacao(ativo ? 'Animações ativadas!' : 'Animações desativadas!', 'info');
+            }
+        }
+
+        // Fechar painel ao clicar fora
+        document.addEventListener('click', (e) => {
+            const panel = document.getElementById('configPanel');
+            const button = document.querySelector('.config-float');
+            if (!panel.contains(e.target) && !button.contains(e.target) && configPanelVisible) {
+                toggleConfigPanel();
+            }
+        });
+
+        // Carregar valores iniciais
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (window.mppConfig) {
+                    document.querySelector('select').value = window.mppConfig.getConfig('tema');
+                    document.querySelector('input[onchange*="toggleSomRapido"]').checked = window.mppConfig.getConfig('som');
+                    document.querySelector('input[onchange*="toggleNotifRapido"]').checked = window.mppConfig.getConfig('notificacao');
+                    document.querySelector('input[onchange*="toggleAnimRapido"]').checked = window.mppConfig.getConfig('animacoes');
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>
