@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Configurações Gerais do MPP</title>
+  <link rel="shortcut icon" href="Mpp.Icon.png" type="image/png" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -29,7 +30,7 @@
     }
     .config-box {
       background-color: white;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 20px;
       max-width: 600px;
       margin: auto;
@@ -37,6 +38,53 @@
     }
     body.escuro .config-box {
       background-color: #1e1e1e;
+    }
+    .config-box label {
+      display: block;
+      margin: 12px 0;
+      padding: 12px 14px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #fafafa;
+      cursor: pointer;
+    }
+    body.escuro .config-box label {
+      background-color: #1a1a1a;
+      border-color: #444;
+    }
+    .config-box input[type="checkbox"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #333;
+      border-radius: 5px;
+      margin-right: 10px;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #fff;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 12px 12px;
+      transition: all 0.15s ease;
+    }
+    .config-box input[type="checkbox"]:checked {
+      border-color: #007bff;
+      background-color: #007bff;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M6 10.5L3.5 8 2.5 9 6 12.5 14 4.5 13 3.5Z'/%3E%3C/svg%3E");
+    }
+    .config-box select {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      background-color: white;
+      box-sizing: border-box;
+    }
+    body.escuro .config-box select {
+      background-color: #222;
+      border-color: #444;
+      color: #f0f0f0;
     }
     body.verde .config-box {
       background-color: #002200;
@@ -90,14 +138,7 @@
     <label><input type="checkbox" onchange="toggleAnimacoes()"> Usar animações</label>
     <label><input type="checkbox" onchange="toggleModoDev()"> Modo Desenvolvedor</label>
 
-    <label>
-      Tela inicial padrão:
-      <select onchange="setTelaInicial(this.value)">
-        <option value="ji.html">Home</option>
-        <option value="evep.html">EVEP</option>
-        <option value="extrajogo.html">Joguinho</option>
-      </select>
-    </label>
+   
 
     <button onclick="salvarConfigs()">Salvar</button>
     <button onclick="resetarConfigs()">Resetar</button>

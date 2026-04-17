@@ -101,6 +101,10 @@
       font-style: italic;
       color: var(--muted);
     }
+    h5 {
+      margin: 8px 0;
+      color: var(--muted);
+    }
 
     footer {
       margin-top: 24px;
@@ -134,30 +138,14 @@
     </div>
     <br>
     <button id="toggleBtn" onclick="toggleDark()">🌙 Modo Escuro</button>
+    <button id="notifyBtn" onclick="pedirNotificacao()" style="display:none;">🔔 Ativar Notificações</button>
 
     <h6>Em desenvolvimento...</h6>
-    <h6>Version 6.0.0</h6>
+    <h5>Version 6.0.1</h5>
     <footer><h5>@EVEP MPP da EVEP</h5></footer>
   </div>
 
   <script>
-    // Quando a página carregar
-    window.onload = () => {
-      const modoSalvo = localStorage.getItem('modo');
-      const logado = localStorage.getItem('logado');
-
-      // Aplica modo escuro salvo
-      if (modoSalvo === 'dark') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('toggleBtn').textContent = '☀️ Modo Claro';
-      }
-
-      // Redireciona se estiver logado
-      if (logado === 'true') {
-        window.location.href = 'ji.html';
-      }
-    };
-
     function cadras() {
       // Simula login
       localStorage.setItem('logado', 'true');
@@ -186,6 +174,71 @@
         localStorage.setItem('modo', 'light');
       }
     }
+
+    function pedirNotificacao() {
+      if (!('Notification' in window)) {
+        alert('Seu navegador não suporta notificações.');
+        return;
+      }
+
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          localStorage.setItem('notificacao', 'true');
+          if (window.mppConfig) {
+            window.mppConfig.setConfig('notificacao', true);
+            window.mppConfig.mostrarNotificacao('Notificações ativadas! Lembretes habilitados.');
+          } else {
+            alert('Notificações ativadas!');
+          }
+        } else {
+          alert('Permissão negada. Para receber notificações, permita no navegador.');
+        }
+      });
+    }
+
+    function mostrarLembreteNotificacao() {
+      if (!('Notification' in window)) return;
+      if (Notification.permission !== 'granted') return;
+      if (window.mppConfig && window.mppConfig.getConfig('notificacao')) {
+        window.mppConfig.mostrarNotificacao('Entre no site e mexa nele!');
+      }
+    }
+
+    function atualizarBotaoNotificacao() {
+      const btn = document.getElementById('notifyBtn');
+      if (!btn) return;
+      if (!('Notification' in window)) {
+        btn.style.display = 'none';
+        return;
+      }
+      btn.style.display = 'inline-block';
+      if (Notification.permission === 'granted') {
+        btn.textContent = '🔔 Notificações Ativadas';
+        btn.disabled = true;
+      } else {
+        btn.textContent = '🔔 Ativar Notificações';
+        btn.disabled = false;
+      }
+    }
+
+    window.onload = () => {
+      const modoSalvo = localStorage.getItem('modo');
+      const logado = localStorage.getItem('logado');
+
+      // Aplica modo escuro salvo
+      if (modoSalvo === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('toggleBtn').textContent = '☀️ Modo Claro';
+      }
+
+      // Redireciona se estiver logado
+      if (logado === 'true') {
+        window.location.href = 'ji.html';
+      }
+
+      atualizarBotaoNotificacao();
+      setTimeout(mostrarLembreteNotificacao, 3000);
+    };
 
      // Cria uma barreira no histórico
   history.pushState(null, null, location.href);

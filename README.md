@@ -12,12 +12,6 @@ This is a system site built to study and test **JavaScript**!
 
 ---
 
-## 🔐 Dados de Teste / Test Credentials
-
-- **Email**: usuario@gmail.com  
-- **Senha / Password**: 123456
-
----
 
 ## 📝 Descrição / Description
 

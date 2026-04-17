@@ -112,7 +112,7 @@ class MPPConfig {
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification('MPP', {
         body: mensagem,
-        icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiM2NjdlZWEiLz4KPHBhdGggZD0iTTggMTJMMjQgMTJMMjQgMjBMMCAyMFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg=='
+        icon: 'Mpp.Icon.png'
       });
     }
 
@@ -129,7 +129,7 @@ class MPPConfig {
       top: 20px;
       right: 20px;
       padding: 15px 20px;
-      border-radius: 10px;
+      border-radius: 4px;
       color: white;
       font-weight: bold;
       z-index: 10000;
