@@ -35,4 +35,7 @@ Versões:
 
 6.0.0 -> CONFIGURAÇÃO FUNCIONAL BETA
 
+6.0.1 -> Limpa Dados
+
+7.0.0 - > AI Musthag
 
