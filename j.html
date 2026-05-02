@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogar</title>
+    <style>
+        body{
+            background-color: rgb(119, 119, 119);
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 4px solid black;
+            display: block;
+            margin: 20px auto;
+            background: #b6b6b6;
+        }
+        button{
+            background-color: black;
+            color: rgb(255, 102, 0);
+            border: 2px solid rgb(255, 38, 0);
+            padding: 10px 20px;
+            font: bold 20px Arial, sans-serif;
+            cursor: pointer;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            margin: 10px auto;
+            border-radius: 20px;
+        }
+        button:hover {
+            background-color: rgb(255, 174, 0);
+            color: black;
+            border-radius: 15px;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.65);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .overlay.hidden {
+            display: none;
+        }
+        .overlay h1 {
+            margin: 0 0 10px;
+            font-size: 2rem;
+        }
+        .overlay p {
+            margin: 5px 0;
+        }
+        .info-content {
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: left;
+            background: rgba(0,0,0,0.8);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+        }
+        .info-content h2 {
+            margin-top: 15px;
+            margin-bottom: 10px;
+            color: rgb(255, 174, 0);
+            text-align: center;
+        }
+        .info-content p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid rgb(255, 174, 0);
+            border-radius: 5px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            font-size: 14px;
+            width: 300px;
+            max-width: 80vw;
+        }
+        input[type="text"]::placeholder, input[type="email"]::placeholder, input[type="password"]::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+        .character-select {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .character-btn {
+            padding: 15px 20px;
+            background: rgba(255, 102, 0, 0.5);
+            border: 3px solid rgb(255, 102, 0);
+            color: white;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .character-btn:hover, .character-btn.selected {
+            background: rgb(255, 102, 0);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="menu" class="overlay">
+        <h1>Espaduarys</h1>
+        <p>Use as setas para mover.</p>
+        <p>Espaço: ataque corpo a corpo.</p>
+        <p>E: tiro à distância (consome energia).</p>
+        <p>'Q' para trocar de arma</p>
+        <p>'Shift' para correr</p>
+        <p>Pressione <strong>P</strong> para pausar e <strong>R</strong> para reiniciar.</p>
+        <p><strong>M</strong> para ligar/desligar som.</p>
+        <p><strong>I</strong> para informações.</p>
+        <button onclick="startGame()">Começar</button>
+        <button onclick="abrirInformacoes()">Informações</button>
+        <button onclick="irPerfil()">Meu Perfil</button>
+    </div>
+
+    <div id="pauseMenu" class="overlay hidden">
+        <h1>PAUSADO</h1>
+        <button onclick="continuarJogo()">Continuar</button>
+        <button onclick="reiniciarJogo()">Reiniciar</button>
+        <button onclick="voltarMenu()">Menu</button>
+    </div>
+
+    <div id="gameOver" class="overlay hidden">
+        <h1 id="gameOverTitle">Game Over</h1>
+        <p id="gameOverText"></p>
+        <button onclick="resetGame()">Jogar novamente</button>
+    </div>
+
+    <div id="infoScreen" class="overlay hidden">
+        <div class="info-content">
+            <h1>Informações do Jogo</h1>
+            
+            <h2>Objetivo</h2>
+            <p>Derrote os inimigos em cada sala acumulando pontos. Colete a chave para abrir a porta e avançar para a próxima sala.</p>
+            
+            <h2>Controles</h2>
+            <p><strong>Setas</strong>: Mover</p>
+            <p><strong>Espaço</strong>: Ataque corpo a corpo (Espada)</p>
+            <p><strong>E</strong>: Tiro à distância (Pistola - consome energia)</p>
+            <p><strong>Q</strong>: Trocar de arma</p>
+            <p><strong>Shift</strong>: Correr (mais rápido)</p>
+            <p><strong>P</strong>: Pausar/Continuar</p>
+            <p><strong>R</strong>: Reiniciar jogo</p>
+            <p><strong>M</strong>: Ligar/Desligar som</p>
+            <p><strong>I</strong>: Informações</p>
+            
+            <h2>Armas</h2>
+            <p><strong>Espada</strong>: Ataque corpo a corpo. Dano 25, Alcance curto.</p>
+            <p><strong>Pistola</strong>: Tiro à distância. Dano 35, Alcance longo, consome 15 de energia.</p>
+            
+            <h2>Tipos de Inimigos</h2>
+            <p><strong>Soldado (Vermelho)</strong>: Inimigo básico. Fraco e rápido.</p>
+            <p><strong>Archer (Laranja)</strong>: Atira flechas vermelhas. Médio, inteligente.</p>
+            <p><strong>Tank (Vermelho Escuro)</strong>: Forte e resistente. Lento.</p>
+            <p><strong>Cavaleiro (Cinza)</strong>: Inimigo equilibrado. Resistente e rápido.</p>
+            <p><strong>Boss (Roxo)</strong>: Chefe poderoso. Atira projéteis e é muito forte. Abate múltiplos inimigos!</p>
+            
+            <h2>Dicas</h2>
+            <p>• Regenere energia pausando ou evitando combate.</p>
+            <p>• Use a Pistola contra inimigos à distância.</p>
+            <p>• Corra com Shift para escapar mais rápido.</p>
+            <p>• Destrua os Archers primeiro - eles disparam!</p>
+            <p>• Colete a chave para desbloquear a porta.</p>
+        </div>
+        <button onclick="fecharInformacoes()">Voltar</button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+    <script>
+    var canvas = document.getElementById('gameCanvas');
+    var ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth - 40;
+        canvas.height = window.innerHeight - 40;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    var menuOverlay = document.getElementById('menu');
+    var pauseMenuOverlay = document.getElementById('pauseMenu');
+    var gameOverOverlay = document.getElementById('gameOver');
+    var gameOverTitle = document.getElementById('gameOverTitle');
+    var gameOverText = document.getElementById('gameOverText');
+    var infoScreen = document.getElementById('infoScreen');
+
+    var player = {
+        x: 100,
+        y: 100,
+        width: 50,
+        height: 50,
+        color: 'blue',
+        speed: 5,
+        velocityX: 1,
+        velocityY: 0,
+        character: 'guerreiro',
+        email: '',
+        maxHealth: 600
+    };
+    var sword = {
+        x: 200,
+        y: 200,
+        width: 30,
+        height: 10,
+        color: 'gray'
+    };
+    var enemies = [];
+    var obstacles = [];
+    var doors = [];
+    var keyItem = null;
+    var bullets = [];
+    var enemyBullets = [];
+    var effects = [];
+    var points = 0;
+    var pointGoal = 100;
+    var playerHealth = 100;
+    var energy = 100;
+    var maxEnergy = 100;
+    var gameRunning = false;
+    var paused = false;
+    var attackCooldown = 0;
+    var bulletCooldown = 0;
+    var gamePhase = 0;
+    var soundOn = true;
+    var audioContext;
+    var facing = { x: 1, y: 0 };
+    var currentWeapon = 'sword'; // 'sword' ou 'gun'
+    var isShiftPressed = false;
+    var runSpeedMultiplier = 1.5; // Velocidade de corrida 50% mais rápido
+    var playerEse = 0; // Moeda ESE
+    var weapons = {
+        sword: { name: 'Espada', damage: 25, range: 60, cooldown: 30 },
+        gun: { name: 'Pistola', damage: 35, range: 200, cooldown: 15, energyCost: 15 }
+    };
+
+    var phases = [
+        {
+            title: 'Sala 1',
+            enemyTypes: [
+                { type: 'soldier', count: 2 },
+                { type: 'archer', count: 3 }
+            ],
+            pointGoal: 80,
+            key: { x: 100, y: 100, r: 10 },
+            door: { x: 760, y: 250, width: 20, height: 100, locked: true },
+            obstacles: [
+                { x: 200, y: 150, width: 400, height: 20 },
+                { x: 200, y: 430, width: 400, height: 20 }
+            ]
+        },
+        {
+            title: 'Sala Atiradores',
+            enemyTypes: [
+                { type: 'soldier', count: 2 },
+                { type: 'tank', count: 6 },
+                { type: 'archer', count: 10},
+                { type: 'boss', count: 7 }
+            ],
+            pointGoal: 150,
+            key: { x: 100, y: 500, r: 10 },
+            door: { x: 760, y: 250, width: 20, height: 100, locked: true },
+            obstacles: [
+                { x: 120, y: 120, width: 20, height: 360 },
+                { x: 660, y: 120, width: 20, height: 360 },
+                { x: 240, y: 260, width: 320, height: 20 }
+            ]
+        },
+        {
+            title: 'Sala Final',
+            enemyTypes: [
+                { type: 'tank', count: 5 },
+                { type: 'boss', count: 7 },
+                { type: 'archer', count: 10 },
+                { type: 'knight', count: 3 }
+            ],
+            pointGoal: 250,
+            key: { x: 400, y: 100, r: 10 },
+            door: { x: 760, y: 250, width: 20, height: 100, locked: true },
+            obstacles: [
+                { x: 0, y: 240, width: 260, height: 20 },
+                { x: 540, y: 240, width: 260, height: 20 },
+                { x: 320, y: 100, width: 20, height: 240 },
+                { x: 320, y: 360, width: 20, height: 160 }
+            ]
+        },
+        {
+            title: 'Sala 4 - Fortaleza',
+            enemyTypes: [
+                { type: 'tank', count: 2 },
+                { type: 'knight', count: 3 },
+                { type: 'boss', count: 1 }
+            ],
+            pointGoal: 300,
+            key: { x: 200, y: 50, r: 10 },
+            door: { x: 760, y: 250, width: 20, height: 100, locked: true },
+            obstacles: [
+                { x: 100, y: 200, width: 300, height: 40 },
+                { x: 500, y: 150, width: 200, height: 30 },
+                { x: 300, y: 400, width: 250, height: 30 }
+            ]
+        },
+        {
+            title: 'Sala 5 - Câmara do Chefe',
+            enemyTypes: [
+                { type: 'boss', count: 2 },
+                { type: 'tank', count: 1 },
+                { type: 'knight', count: 2 }
+            ],
+            pointGoal: 400,
+            key: { x: 400, y: 450, r: 10 },
+            door: { x: 760, y: 250, width: 20, height: 100, locked: true },
+            obstacles: [
+                { x: 150, y: 100, width: 40, height: 400 },
+                { x: 650, y: 100, width: 40, height: 400 },
+                { x: 250, y: 250, width: 300, height: 30 }
+            ]
+        }
+    ];
+
+    function getPhase() {
+        return phases[Math.min(gamePhase, phases.length - 1)];
+    }
+
+    function initAudio() {
+        if (audioContext) return;
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    function playTone(freq, duration, volume) {
+        if (!soundOn) return;
+        initAudio();
+        var osc = audioContext.createOscillator();
+        var gain = audioContext.createGain();
+        osc.type = 'square';
+        osc.frequency.value = freq;
+        gain.gain.value = volume;
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        osc.start();
+        osc.stop(audioContext.currentTime + duration);
+    }
+
+    function playHitSound() {
+        playTone(400, 0.08, 0.15);
+    }
+
+    function playShootSound() {
+        playTone(800, 0.05, 0.2);
+        playTone(600, 0.05, 0.15);
+    }
+
+    function playKeySound() {
+        playTone(900, 0.06, 0.2);
+        playTone(1100, 0.06, 0.15);
+    }
+
+    function playDoorSound() {
+        playTone(250, 0.1, 0.2);
+        playTone(300, 0.1, 0.18);
+    }
+
+    function playGameOverSound() {
+        playTone(120, 0.2, 0.3);
+        playTone(90, 0.3, 0.25);
+    }
+
+    function playVictorySound() {
+        playTone(600, 0.1, 0.15);
+        playTone(700, 0.12, 0.18);
+        playTone(800, 0.15, 0.2);
+    }
+
+    function isColliding(a, b) {
+        return a.x < b.x + b.width && a.x + a.width > b.x &&
+               a.y < b.y + b.height && a.y + a.height > b.y;
+    }
+
+    function addEffect(x, y) {
+        effects.push({ x: x, y: y, r: 10, life: 20 });
+    }
+
+    var enemyTemplates = {
+        soldier: { color: 'red', speed: 2.5, health: 140, width: 40, height: 40, points: 20 },
+        tank: { color: 'darkred', speed: 2.0, health: 190, width: 55, height: 55, points: 40 },
+        boss: { color: 'purple', speed: 1.8, health: 280, width: 70, height: 70, points: 80 },
+        archer: { color: 'orange', speed: 2.2, health: 150, width: 45, height: 45, points: 25 },
+        knight: { color: 'gray', speed: 2.0, health: 200, width: 60, height: 60, points: 50 }
+    };
+
+    function createEnemy(typeName) {
+        var phase = getPhase();
+        var type = enemyTemplates[typeName] || {};
+
+        // Gera posição aleatória, mas não muito perto do jogador no início
+        var x, y;
+        var minDistance = 220;
+        do {
+            x = Math.random() * (canvas.width - 50);
+            y = Math.random() * (canvas.height - 50);
+            var dx = x - player.x;
+            var dy = y - player.y;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+        } while (dist < minDistance);
+
+        // Patrulha simples: escolhe um ponto de patrulha aleatório
+        var patrolTarget = {
+            x: Math.random() * (canvas.width - (type.width || 50)),
+            y: Math.random() * (canvas.height - (type.height || 50))
+        };
+
+        return {
+            x: x,
+            y: y,
+            width: type.width || 50,
+            height: type.height || 50,
+            color: type.color || 'red',
+            speed: type.speed || phase.enemySpeed,
+            health: type.health || phase.enemyHealth,
+            maxHealth: type.health || phase.enemyHealth,
+            points: type.points || 20,
+            state: 'patrol',
+            patrolTarget: patrolTarget,
+            viewRadius: 180,
+            groupRadius: 140,
+            type: typeName
+        };
+    }
+
+    function spawnEnemies() {
+        var phase = getPhase();
+        enemies = [];
+        phase.enemyTypes.forEach(function(entry) {
+            for (var i = 0; i < entry.count; i++) {
+                enemies.push(createEnemy(entry.type));
+            }
+        });
+    }
+
+    function setupPhase() {
+        var phase = getPhase();
+        pointGoal = phase.pointGoal;
+        energy = maxEnergy;
+
+        // Obstáculos fixos
+        obstacles = phase.obstacles.map(function(o) {
+            return { x: o.x, y: o.y, width: o.width, height: o.height, color: '#5a3' };
+        });
+
+        // Porta e chave (fases estilo sala)
+        doors = [];
+        if (phase.door) {
+            doors.push({
+                x: phase.door.x,
+                y: phase.door.y,
+                width: phase.door.width,
+                height: phase.door.height,
+                locked: phase.door.locked,
+                color: phase.door.locked ? 'brown' : 'green'
+            });
+        }
+
+        if (phase.key) {
+            keyItem = {
+                x: phase.key.x,
+                y: phase.key.y,
+                r: phase.key.r,
+                collected: false
+            };
+        } else {
+            keyItem = null;
+        }
+
+        // Posicionar o jogador no início da sala
+        player.x = 60;
+        player.y = canvas.height / 2;
+    }
+
+    function nextPhase() {
+        gamePhase++;
+        if (gamePhase >= phases.length) {
+            setGameOver('Você venceu!');
+            playVictorySound();
+            return;
+        }
+        setupPhase();
+        spawnEnemies();
+    }
+
+    function getWeaponTipPosition() {
+        var centerX = player.x + player.width / 2;
+        var centerY = player.y + player.height / 2;
+        var weaponLength = 40;
+        var tipX = centerX + facing.x * weaponLength;
+        var tipY = centerY + facing.y * weaponLength;
+        return { x: tipX, y: tipY, centerX: centerX, centerY: centerY };
+    }
+
+    function drawWeapon() {
+        var weaponPos = getWeaponTipPosition();
+        var baseColor = currentWeapon === 'sword' ? 'gray' : 'orange';
+        
+        ctx.save();
+        ctx.strokeStyle = attackCooldown > 0 ? 'yellow' : baseColor;
+        ctx.lineWidth = currentWeapon === 'sword' ? 8 : 5;
+        ctx.lineCap = 'round';
+        
+        // Desenhar arma como linha rotacionada
+        ctx.beginPath();
+        ctx.moveTo(weaponPos.centerX, weaponPos.centerY);
+        ctx.lineTo(weaponPos.x, weaponPos.y);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Desenhar obstáculos
+        for (var i = 0; i < obstacles.length; i++) {
+            ctx.fillStyle = obstacles[i].color;
+            ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].width, obstacles[i].height);
+        }
+
+        // Desenhar jogador
+        ctx.fillStyle = player.color;
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+        
+        // Desenhar arma rotacionada baseado na direção
+        drawWeapon();
+
+        // Desenhar inimigos
+        for (var i = 0; i < enemies.length; i++) {
+            var enemy = enemies[i];
+            ctx.fillStyle = enemy.dying ? 'darkred' : enemy.color; // Vermelho escuro se morrendo
+            ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+
+            // Barra de vida acima do inimigo
+            var barWidth = enemy.width;
+            var barHeight = 5;
+            var barX = enemy.x;
+            var barY = enemy.y - 10;
+            ctx.fillStyle = 'red';
+            ctx.fillRect(barX, barY, barWidth, barHeight);
+            ctx.fillStyle = 'green';
+            ctx.fillRect(barX, barY, (enemy.health / enemy.maxHealth) * barWidth, barHeight);
+        }
+        // Desenhar projéteis (balas do jogador)
+        for (var i = 0; i < bullets.length; i++) {
+            var bullet = bullets[i];
+            ctx.fillStyle = 'yellow';
+            ctx.beginPath();
+            ctx.arc(bullet.x, bullet.y, 4, 0, Math.PI * 2);
+            ctx.fill();
+            // Desenhar rastro da bala
+            ctx.strokeStyle = 'rgba(255,255,0,0.5)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(bullet.x, bullet.y);
+            ctx.lineTo(bullet.x - bullet.dx, bullet.y - bullet.dy);
+            ctx.stroke();
+        }
+        
+        // Desenhar projéteis dos inimigos
+        for (var i = 0; i < enemyBullets.length; i++) {
+            var bullet = enemyBullets[i];
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(bullet.x, bullet.y, 3, 0, Math.PI * 2);
+            ctx.fill();
+            // Desenhar rastro vermelho
+            ctx.strokeStyle = 'rgba(255,0,0,0.5)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(bullet.x, bullet.y);
+            ctx.lineTo(bullet.x - bullet.dx, bullet.y - bullet.dy);
+            ctx.stroke();
+        }
+
+        // Desenhar mira da arma (apontador luminoso)
+        if (currentWeapon === 'gun') {
+            var centerX = player.x + player.width / 2;
+            var centerY = player.y + player.height / 2;
+            var miraDistance = 150;
+            var miraX = centerX + facing.x * miraDistance;
+            var miraY = centerY + facing.y * miraDistance;
+            
+            // Laser apontando
+            ctx.strokeStyle = 'rgba(255,0,0,0.7)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(miraX, miraY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Ponto de mira no final
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(miraX, miraY, 6, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        // Desenhar efeitos (sangue / impacto)
+        for (var i = 0; i < effects.length; i++) {
+            var fx = effects[i];
+            ctx.fillStyle = 'rgba(200,0,0,' + (fx.life / 20) + ')';
+            ctx.beginPath();
+            ctx.arc(fx.x, fx.y, fx.r, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // HUD
+        ctx.fillStyle = 'black';
+        ctx.font = '20px Arial';
+        ctx.fillText('Fase: ' + (gamePhase + 1) + ' / ' + phases.length, 10, 30);
+        ctx.fillText('Pontos: ' + points + ' / ' + pointGoal, 10, 55);
+        ctx.fillText('Arma: ' + weapons[currentWeapon].name, 10, 80);
+        ctx.fillText('Vida:', 10, 105);
+        ctx.fillStyle = 'red';
+        ctx.fillRect(70, 90, 100, 15);
+        ctx.fillStyle = 'green';
+        ctx.fillRect(70, 90, (playerHealth / 100) * 100, 15);
+        ctx.fillStyle = 'black';
+        ctx.fillText('Energia: ' + Math.floor(energy) + ' / ' + maxEnergy, 10, 130);
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(90, 115, 100, 15);
+        ctx.fillStyle = 'cyan';
+        ctx.fillRect(90, 115, (energy / maxEnergy) * 100, 15);
+        ctx.fillStyle = 'black';
+        ctx.fillText('Som: ' + (soundOn ? 'ON' : 'OFF') + ' (M)', 10, 155);
+        ctx.fillText('ESE: ' + playerEse + ' 💰', 10, 175);
+
+        if (paused && gameRunning) {
+            return;
+        }
+
+        if (points >= pointGoal) {
+            ctx.fillStyle = 'green';
+            ctx.font = '40px Arial';
+            ctx.fillText('Meta alcançada! Avançando...', canvas.width / 2 - 220, canvas.height / 2);
+        } else if (playerHealth <= 0) {
+            ctx.fillStyle = 'red';
+            ctx.font = '40px Arial';
+            ctx.fillText('Game Over!', canvas.width / 2 - 100, canvas.height / 2);
+        }
+    }
+
+    function resolveCollision(obj, dx, dy) {
+        var prevX = obj.x;
+        var prevY = obj.y;
+        obj.x += dx;
+        obj.y += dy;
+        for (var i = 0; i < obstacles.length; i++) {
+            if (isColliding(obj, obstacles[i])) {
+                obj.x = prevX;
+                obj.y = prevY;
+                break;
+            }
+        }
+
+        // Portas trancadas atuam como obstáculos
+        for (var i = 0; i < doors.length; i++) {
+            if (doors[i].locked && isColliding(obj, doors[i])) {
+                obj.x = prevX;
+                obj.y = prevY;
+                break;
+            }
+        }
+        // Limites da tela
+        if (obj.x < 0) obj.x = 0;
+        if (obj.x + obj.width > canvas.width) obj.x = canvas.width - obj.width;
+        if (obj.y < 0) obj.y = 0;
+        if (obj.y + obj.height > canvas.height) obj.y = canvas.height - obj.height;
+    }
+
+    function updateEnemyAI(enemy) {
+        if (enemy.dying) return; // Não mover se morrendo
+
+        var dx = player.x - enemy.x;
+        var dy = player.y - enemy.y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var phase = getPhase();
+        
+        // Cooldown de tiro do inimigo
+        if (!enemy.shootCooldown) enemy.shootCooldown = 0;
+        if (enemy.shootCooldown > 0) enemy.shootCooldown--;
+
+        // Se estiver perto, perseguir
+        if (dist < enemy.viewRadius) {
+            enemy.state = 'chase';
+        } else if (enemy.state === 'chase') {
+            enemy.state = 'patrol';
+        }
+
+        if (enemy.state === 'patrol') {
+            // Mover em direção ao ponto de patrulha
+            if (Math.abs(enemy.x - enemy.patrolTarget.x) < 5 && Math.abs(enemy.y - enemy.patrolTarget.y) < 5) {
+                enemy.patrolTarget = {
+                    x: Math.random() * (canvas.width - enemy.width),
+                    y: Math.random() * (canvas.height - enemy.height)
+                };
+            }
+            var angle = Math.atan2(enemy.patrolTarget.y - enemy.y, enemy.patrolTarget.x - enemy.x);
+            resolveCollision(enemy, Math.cos(angle) * enemy.speed, Math.sin(angle) * enemy.speed);
+        } else {
+            // Perseguir o jogador
+            var angle = Math.atan2(dy, dx);
+            resolveCollision(enemy, Math.cos(angle) * enemy.speed, Math.sin(angle) * enemy.speed);
+
+            // Se um inimigo estiver perseguindo, outros próximos também perseguem
+            for (var j = 0; j < enemies.length; j++) {
+                if (enemies[j] === enemy || enemies[j].dying) continue;
+                var dx2 = enemies[j].x - enemy.x;
+                var dy2 = enemies[j].y - enemy.y;
+                if (Math.sqrt(dx2 * dx2 + dy2 * dy2) < enemy.groupRadius) {
+                    enemies[j].state = 'chase';
+                }
+            }
+            
+            // Inimigos tipo 'archer' e 'boss' atiram
+            if ((enemy.type === 'archer' || enemy.type === 'boss') && dist < 300 && enemy.shootCooldown <= 0) {
+                enemy.shootCooldown = enemy.type === 'archer' ? 60 : 40;
+                var bulletAngle = Math.atan2(dy, dx);
+                enemyBullets.push({
+                    x: enemy.x + enemy.width / 2,
+                    y: enemy.y + enemy.height / 2,
+                    width: 6,
+                    height: 6,
+                    dx: Math.cos(bulletAngle) * 7,
+                    dy: Math.sin(bulletAngle) * 7,
+                    life: 50,
+                    damage: 15
+                });
+            }
+        }
+
+        // Garantir que ele não fique preso em obstáculo
+        resolveCollision(enemy, 0, 0);
+    }
+
+    function update() {
+        if (!gameRunning || paused) return;
+
+        player.velocityX = 0;
+        player.velocityY = 0;
+        var currentSpeed = isShiftPressed ? player.speed * runSpeedMultiplier : player.speed;
+        if (keys['ArrowUp']) player.velocityY -= currentSpeed;
+        if (keys['ArrowDown']) player.velocityY += currentSpeed;
+        if (keys['ArrowLeft']) player.velocityX -= currentSpeed;
+        if (keys['ArrowRight']) player.velocityX += currentSpeed;
+        
+        player.x += player.velocityX;
+        player.y += player.velocityY;
+        resolveCollision(player, 0, 0);
+
+        // Mover inimigos com AI
+        for (var i = 0; i < enemies.length; i++) {
+            updateEnemyAI(enemies[i]);
+        }
+
+        // Ataque do jogador (espaço = corpo a corpo se espada, E = tiro se pistola)
+        var isAttacking = keys[' '] || keys['Spacebar'];
+        var isShooting = keys['e'] || keys['E'];
+
+        if (player.velocityX !== 0 || player.velocityY !== 0) {
+            var len = Math.sqrt(player.velocityX * player.velocityX + player.velocityY * player.velocityY);
+            facing = { x: player.velocityX / len, y: player.velocityY / len };
+        }
+
+        if (currentWeapon === 'sword' && isAttacking && attackCooldown <= 0) {
+            attackCooldown = weapons.sword.cooldown;
+            for (var i = 0; i < enemies.length; i++) {
+                var enemy = enemies[i];
+                var dx = (player.x + player.width / 2) - (enemy.x + enemy.width / 2);
+                var dy = (player.y + player.height / 2) - (enemy.y + enemy.height / 2);
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < weapons.sword.range && enemy.x > player.x + player.width / 2) {
+                    enemy.health -= weapons.sword.damage;
+                    addEffect(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
+                    playHitSound();
+                    if (enemy.health <= 0) {
+                        enemy.dying = true;
+                        enemy.deathTimer = 30;
+                    }
+                }
+            }
+        }
+
+        // Ataque à distância (tiro)
+        if (currentWeapon === 'gun' && isShooting && bulletCooldown <= 0 && energy >= weapons.gun.energyCost) {
+            bulletCooldown = weapons.gun.cooldown;
+            energy -= weapons.gun.energyCost;
+            var weaponTip = getWeaponTipPosition();
+            bullets.push({
+                x: weaponTip.x,
+                y: weaponTip.y,
+                width: 8,
+                height: 8,
+                dx: facing.x * 10,
+                dy: facing.y * 10,
+                life: 40,
+                damage: weapons.gun.damage
+            });
+            playShootSound();
+        }
+
+        // Atualizar projéteis do jogador
+        for (var i = bullets.length - 1; i >= 0; i--) {
+            var b = bullets[i];
+            b.x += b.dx;
+            b.y += b.dy;
+            b.life -= 1;
+            var removed = false;
+
+            // Colisão com inimigos
+            for (var j = 0; j < enemies.length; j++) {
+                var enemy = enemies[j];
+                if (isColliding(b, enemy)) {
+                    enemy.health -= b.damage;
+                    addEffect(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
+                    playHitSound();
+                    bullets.splice(i, 1);
+                    removed = true;
+                    if (enemy.health <= 0) {
+                        enemy.dying = true;
+                        enemy.deathTimer = 30;
+                    }
+                    break;
+                }
+            }
+
+            if (removed) continue;
+
+            // Colisão com parede/porta trancada
+            if (b.x < 0 || b.x > canvas.width || b.y < 0 || b.y > canvas.height) {
+                bullets.splice(i, 1);
+                continue;
+            }
+
+            for (var k = 0; k < obstacles.length; k++) {
+                if (isColliding(b, obstacles[k])) {
+                    bullets.splice(i, 1);
+                    removed = true;
+                    break;
+                }
+            }
+            if (removed) continue;
+
+            for (var k = 0; k < doors.length; k++) {
+                if (doors[k].locked && isColliding(b, doors[k])) {
+                    bullets.splice(i, 1);
+                    break;
+                }
+            }
+            if (b.life <= 0) bullets.splice(i, 1);
+        }
+        
+        // Atualizar projéteis dos inimigos
+        for (var i = enemyBullets.length - 1; i >= 0; i--) {
+            var b = enemyBullets[i];
+            b.x += b.dx;
+            b.y += b.dy;
+            b.life -= 1;
+            var removed = false;
+            
+            // Colisão com o jogador
+            if (isColliding(b, player)) {
+                playerHealth -= b.damage;
+                addEffect(player.x + player.width / 2, player.y + player.height / 2);
+                playHitSound();
+                enemyBullets.splice(i, 1);
+                removed = true;
+            }
+            
+            if (removed) continue;
+            
+            // Colisão com paredes
+            if (b.x < 0 || b.x > canvas.width || b.y < 0 || b.y > canvas.height) {
+                enemyBullets.splice(i, 1);
+                continue;
+            }
+            
+            // Colisão com obstáculos
+            for (var k = 0; k < obstacles.length; k++) {
+                if (isColliding(b, obstacles[k])) {
+                    enemyBullets.splice(i, 1);
+                    removed = true;
+                    break;
+                }
+            }
+            if (removed) continue;
+            
+            if (b.life <= 0) enemyBullets.splice(i, 1);
+        }
+
+        // Coleta de chave
+        if (keyItem && !keyItem.collected) {
+            var dx = (player.x + player.width / 2) - keyItem.x;
+            var dy = (player.y + player.height / 2) - keyItem.y;
+            if (Math.sqrt(dx * dx + dy * dy) < keyItem.r + player.width / 2) {
+                keyItem.collected = true;
+                playKeySound();
+                // Destranca portas
+                doors.forEach(function(d) {
+                    d.locked = false;
+                    d.color = 'green';
+                });
+            }
+        }
+
+        // Interação com portas
+        for (var i = 0; i < doors.length; i++) {
+            var door = doors[i];
+            if (!door.locked && isColliding(player, door)) {
+                playDoorSound();
+                nextPhase();
+                return;
+            }
+        }
+
+        // Ataque dos inimigos
+        for (var i = 0; i < enemies.length; i++) {
+            var enemy = enemies[i];
+            if (isColliding(player, enemy)) {
+                playerHealth -= 10; // Dano do inimigo
+                points -= 5; // Perder pontos
+                if (points < 0) points = 0;
+                addEffect(player.x + player.width / 2, player.y + player.height / 2);
+            }
+        }
+
+        // Energia se regenerando
+        energy = Math.min(maxEnergy, energy + 0.5);
+
+        // Atualizar inimigos morrendo
+        for (var i = enemies.length - 1; i >= 0; i--) {
+            var enemy = enemies[i];
+            if (enemy.dying) {
+                enemy.deathTimer--;
+                if (enemy.deathTimer <= 0) {
+                    enemies.splice(i, 1);
+                    points += enemy.points || 20;
+                    playerEse += Math.floor((enemy.points || 20) * 0.5); // Ganhar ESE (50% dos pontos)
+                }
+            }
+        }
+
+        // Cooldown do ataque
+        if (attackCooldown > 0) attackCooldown--;
+        if (bulletCooldown > 0) bulletCooldown--;
+
+        // Avançar de fase quando não houver inimigos
+        if (enemies.length === 0) {
+            if (points >= pointGoal) {
+                nextPhase();
+                return;
+            } else {
+                spawnEnemies();
+            }
+        }
+
+        // Checar condição de fim de jogo
+        if (playerHealth <= 0) {
+            setGameOver('Game Over');
+            return;
+        }
+    }
+    var keys = {};
+    window.addEventListener('keydown', function(e) {
+        keys[e.key] = true;
+        keys[e.key.toLowerCase()] = true;
+        if (e.key === ' ') e.preventDefault();
+
+        if (e.key === 'Shift') {
+            isShiftPressed = true;
+        }
+
+        var key = e.key.toLowerCase();
+        if (key === 'p' && gameRunning && gameOverOverlay.classList.contains('hidden')) {
+            paused = !paused;
+            if (paused) {
+                pauseMenuOverlay.classList.remove('hidden');
+            } else {
+                pauseMenuOverlay.classList.add('hidden');
+            }
+        }
+        if (key === 'r' && !gameRunning) {
+            startGame();
+        }
+        if (key === 'm') {
+            soundOn = !soundOn;
+        }
+        if (key === 'q') {
+            currentWeapon = currentWeapon === 'sword' ? 'gun' : 'sword';
+        }
+        if (key === 'i') {
+            if (gameRunning && !gameOverOverlay.classList.contains('hidden')) return;
+            if (!infoScreen.classList.contains('hidden')) {
+                fecharInformacoes();
+            } else if (gameRunning) {
+                abrirInformacoes();
+            }
+        }
+    });
+    window.addEventListener('keyup', function(e) {
+        keys[e.key] = false;
+        keys[e.key.toLowerCase()] = false;
+        if (e.key === 'Shift') {
+            isShiftPressed = false;
+        }
+    });
+    function gameLoop() {
+        update();
+        draw();
+        requestAnimationFrame(gameLoop);
+    }
+    gameLoop();
+    function resetGame(showMenu = true) {
+        gamePhase = 0;
+        enemies = [];
+        obstacles = [];
+        effects = [];
+        bullets = [];
+        enemyBullets = [];
+        points = 0;
+        playerHealth = player.maxHealth;
+        paused = false;
+        gameRunning = false;
+        attackCooldown = 0;
+        player.x = canvas.width / 2 - player.width / 2;
+        player.y = canvas.height / 2 - player.height / 2;
+        if (showMenu) menuOverlay.classList.remove('hidden');
+        gameOverOverlay.classList.add('hidden');
+        setupPhase();
+    }
+
+    function startGame() {
+        resetGame(false);
+        atualizarStatsPersonagem();
+        gameRunning = true;
+        menuOverlay.classList.add('hidden');
+        pauseMenuOverlay.classList.add('hidden');
+        spawnEnemies();
+    }
+
+    function continuarJogo() {
+        paused = false;
+        pauseMenuOverlay.classList.add('hidden');
+    }
+
+    function reiniciarJogo() {
+        resetGame(false);
+        gameRunning = true;
+        pauseMenuOverlay.classList.add('hidden');
+        spawnEnemies();
+    }
+
+    function voltarMenu() {
+        resetGame(true);
+        pauseMenuOverlay.classList.add('hidden');
+    }
+
+    function setGameOver(title) {
+        gameRunning = false;
+        paused = false;
+        salvarEseJogador();
+        gameOverTitle.textContent = title;
+        gameOverText.textContent = 'Pressione "Jogar novamente" ou R para tentar de novo. ESE Ganho: ' + playerEse;
+        gameOverOverlay.classList.remove('hidden');
+    }
+    
+    function abrirInformacoes() {
+        if (gameRunning) {
+            paused = true;
+            pauseMenuOverlay.classList.add('hidden');
+        }
+        infoScreen.classList.remove('hidden');
+    }
+    
+    function fecharInformacoes() {
+        infoScreen.classList.add('hidden');
+        if (gameRunning && paused) {
+            paused = false;
+        }
+    }
+    
+    function irPerfil() {
+        window.location.href = "perfil.html";
+    }
+    
+    function atualizarStatsPersonagem() {
+        var chars = {
+            'guerreiro': { 
+                color: 'darkblue', 
+                speed: 4, 
+                maxHealth: 150
+            },
+            'arqueiro': { 
+                color: 'orange', 
+                speed: 7, 
+                maxHealth: 80
+            },
+            'mago': { 
+                color: 'purple', 
+                speed: 5, 
+                maxHealth: 90,
+                energyMult: 1.5
+            },
+            'ninja': { 
+                color: 'black', 
+                speed: 8, 
+                maxHealth: 70
+            }
+        };
+        
+        var char = chars[player.character] || chars['guerreiro'];
+        player.color = char.color;
+        player.speed = char.speed;
+        player.maxHealth = char.maxHealth;
+        playerHealth = char.maxHealth;
+        
+        if (char.energyMult) {
+            maxEnergy = 100 * char.energyMult;
+            energy = maxEnergy;
+        } else {
+            maxEnergy = 100;
+            energy = 100;
+        }
+    }
+    
+    function salvarEseJogador() {
+        if (!player.email) return;
+        var users = JSON.parse(localStorage.getItem('users') || '{}');
+        if (users[player.email]) {
+            users[player.email].ese = playerEse;
+            users[player.email].character = player.character;
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+    }
+    
+    // Carregar dados do usuário logado ao iniciar
+    window.addEventListener('load', function() {
+        var email = localStorage.getItem('usuarioLogado');
+        if (email) {
+            var users = JSON.parse(localStorage.getItem('users') || '{}');
+            var user = users[email];
+            if (user) {
+                player.email = email;
+                player.character = user.character || 'guerreiro';
+                playerEse = user.ese || 0;
+                atualizarStatsPersonagem();
+            }
+        }
+    });
+    // Jogo implementado: inimigos, combate, pontos e objetivo de 100 pontos para vencer!
+
+   </script>
+</body>
+</html>

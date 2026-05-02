@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - Espaduarys</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            border: 3px solid rgb(255, 174, 0);
+        }
+        h1, h2 {
+            text-align: center;
+            color: rgb(255, 174, 0);
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid rgb(255, 174, 0);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: rgb(255, 174, 0);
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: rgb(255, 102, 0);
+            transform: scale(1.02);
+        }
+        .profile-section {
+            display: none;
+            text-align: center;
+        }
+        .profile-section.active {
+            display: block;
+        }
+        .profile-info {
+            background: rgba(255, 174, 0, 0.1);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid rgb(255, 174, 0);
+        }
+        .profile-info p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        .profile-info strong {
+            color: rgb(255, 174, 0);
+        }
+        .login-section, .register-section {
+            display: none;
+        }
+        .login-section.active, .register-section.active {
+            display: block;
+        }
+        .toggle-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .toggle-buttons button {
+            flex: 1;
+            padding: 10px;
+            margin: 0;
+            background: rgba(255, 174, 0, 0.3);
+            border: 2px solid rgb(255, 174, 0);
+        }
+        .toggle-buttons button.active {
+            background: rgb(255, 174, 0);
+            color: black;
+        }
+        #ese {
+            font-size: 24px;
+            color: rgb(255, 174, 0);
+            margin: 10px 0;
+        }
+        .back-button {
+            margin-top: 20px;
+            background: rgba(100, 100, 100, 0.8);
+        }
+        .back-button:hover {
+            background: rgba(150, 150, 150, 0.8);
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+        .message.error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid red;
+            color: #ff6b6b;
+            display: block;
+        }
+        .message.success {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid green;
+            color: #51cf66;
+            display: block;
+        }
+        img {
+            width: 150px;
+            height: 150px;
+            border: 3px solid rgb(255, 174, 0);
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        p {
+            color: rgb(255, 174, 0);
+            font-size: 14px;
+        }
+        a {
+            color: rgb(255, 102, 0);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Espaduarys</h1>
+        
+        <!-- Seção de Login -->
+        <div class="login-section active">
+            <h2>Login</h2>
+            <div id="mensagemLogin" class="message"></div>
+            <input type="email" id="loginEmail" placeholder="Email">
+            <input type="password" id="loginPassword" placeholder="Senha">
+            <button onclick="fazerLogin()">Entrar</button>
+            <p style="text-align: center; margin-top: 15px;">
+                Não tem conta? <a href="#" onclick="mostrarRegistro(); return false;">Cadastre-se</a>
+            </p>
+        </div>
+
+        <!-- Seção de Cadastro -->
+        <div class="register-section">
+            <h2>Criar Conta</h2>
+            <div id="mensagemRegistro" class="message"></div>
+            <input type="text" id="registerName" placeholder="Nome do Jogador">
+            <input type="email" id="registerEmail" placeholder="Email">
+            <input type="password" id="registerPassword" placeholder="Senha">
+            <input type="password" id="registerConfirmPassword" placeholder="Confirmar Senha">
+            <button onclick="fazerCadastro()">Cadastrar</button>
+            <p style="text-align: center; margin-top: 15px;">
+                Já tem conta? <a href="#" onclick="mostrarLogin(); return false;">Faça login</a>
+            </p>
+        </div>
+
+        <!-- Seção de Perfil -->
+        <div class="profile-section">
+            <h2>👤 Meu Perfil</h2>
+            <img src="cea.png" alt="Perfil">
+            
+            <div class="profile-info">
+                <p><strong>Nome:</strong> <span id="profileName"></span></p>
+                <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+                <p><strong>Personagem:</strong> <span id="profileChar">-</span></p>
+                <div id="ese">💰 ESE: <span id="eseAmount">0</span></div>
+            </div>
+
+            <h2>📊 Seus Dados</h2>
+            <div class="profile-info">
+                <p><strong>Total ganho:</strong> <span id="eseTotal">0</span> ESE</p>
+                <p><strong>Nível:</strong> <span id="userLevel">1</span></p>
+                <p><strong>Membro desde:</strong> <span id="memberSince">-</span></p>
+            </div>
+
+            <button onclick="fazerLogout()" style="background: rgb(255, 50, 50); margin-top: 20px;">Sair da Conta</button>
+        </div>
+
+        <button onclick="voltarMenu()" class="back-button">← Voltar ao Menu</button>
+    </div>
+
+    <script>
+        function mostrarLogin() {
+            document.querySelector('.login-section').classList.add('active');
+            document.querySelector('.register-section').classList.remove('active');
+            document.querySelector('.profile-section').classList.remove('active');
+        }
+
+        function mostrarRegistro() {
+            document.querySelector('.register-section').classList.add('active');
+            document.querySelector('.login-section').classList.remove('active');
+            document.querySelector('.profile-section').classList.remove('active');
+        }
+
+        function mostrarPerfil() {
+            document.querySelector('.profile-section').classList.add('active');
+            document.querySelector('.login-section').classList.remove('active');
+            document.querySelector('.register-section').classList.remove('active');
+            atualizarPerfil();
+        }
+
+        function fazerLogin() {
+            var email = document.getElementById('loginEmail').value.trim();
+            var password = document.getElementById('loginPassword').value;
+            var msg = document.getElementById('mensagemLogin');
+
+            if (!email || !password) {
+                mostrarMensagem(msg, 'Preencha todos os campos!', 'error');
+                return;
+            }
+
+            var users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (users[email] && users[email].password === password) {
+                localStorage.setItem('usuarioLogado', email);
+                mostrarMensagem(msg, 'Login realizado! ✓', 'success');
+                setTimeout(() => mostrarPerfil(), 1000);
+            } else {
+                mostrarMensagem(msg, 'Email ou senha incorretos!', 'error');
+            }
+        }
+
+        function fazerCadastro() {
+            var name = document.getElementById('registerName').value.trim();
+            var email = document.getElementById('registerEmail').value.trim();
+            var password = document.getElementById('registerPassword').value;
+            var confirmPassword = document.getElementById('registerConfirmPassword').value;
+            var msg = document.getElementById('mensagemRegistro');
+
+            if (!name || !email || !password || !confirmPassword) {
+                mostrarMensagem(msg, 'Preencha todos os campos!', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                mostrarMensagem(msg, 'As senhas não correspondem!', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                mostrarMensagem(msg, 'Senha deve ter pelo menos 6 caracteres!', 'error');
+                return;
+            }
+
+            var users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (users[email]) {
+                mostrarMensagem(msg, 'Este email já está cadastrado!', 'error');
+                return;
+            }
+
+            users[email] = {
+                name: name,
+                password: password,
+                ese: 0,
+                character: 'guerreiro',
+                joinDate: new Date().toLocaleDateString('pt-BR'),
+                level: 1
+            };
+
+            localStorage.setItem('users', JSON.stringify(users));
+            mostrarMensagem(msg, 'Cadastro realizado! Redirecionando...', 'success');
+            setTimeout(() => {
+                localStorage.setItem('usuarioLogado', email);
+                mostrarPerfil();
+            }, 1500);
+        }
+
+        function fazerLogout() {
+            localStorage.removeItem('usuarioLogado');
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerConfirmPassword').value = '';
+            mostrarLogin();
+        }
+
+        function atualizarPerfil() {
+            var email = localStorage.getItem('usuarioLogado');
+            if (!email) {
+                mostrarLogin();
+                return;
+            }
+
+            var users = JSON.parse(localStorage.getItem('users') || '{}');
+            var user = users[email];
+
+            if (user) {
+                document.getElementById('profileName').textContent = user.name;
+                document.getElementById('profileEmail').textContent = email;
+                document.getElementById('profileChar').textContent = user.character || 'guerreiro';
+                document.getElementById('eseAmount').textContent = user.ese || 0;
+                document.getElementById('eseTotal').textContent = user.ese || 0;
+                document.getElementById('userLevel').textContent = user.level || 1;
+                document.getElementById('memberSince').textContent = user.joinDate || new Date().toLocaleDateString('pt-BR');
+            }
+        }
+
+        function mostrarMensagem(elemento, texto, tipo) {
+            elemento.textContent = texto;
+            elemento.className = 'message ' + tipo;
+            setTimeout(() => {
+                elemento.className = 'message';
+            }, 3000);
+        }
+
+        function voltarMenu() {
+            window.location.href = "index.html";
+        }
+
+        // Verificar se usuário está logado ao carregar
+        window.addEventListener('load', function() {
+            var usuarioLogado = localStorage.getItem('usuarioLogado');
+            if (usuarioLogado) {
+                mostrarPerfil();
+            } else {
+                mostrarLogin();
+            }
+        });
+    </script>
+</body>
+</html>
