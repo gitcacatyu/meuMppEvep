@@ -478,6 +478,7 @@ class Stage {
     const danoEspecial = Math.round(attacker.attack * 3.0 * rand * tipo);
 
     defender.life -= danoEspecial;
+    attacker.specialUsed = true;
 
     const somAtaque = document.getElementById('somAtaque');
     if (somAtaque) { somAtaque.currentTime = 0; somAtaque.play(); }
@@ -580,16 +581,26 @@ function playSomMorte() {
   }
 }
 
-// ✅ Inicializa moedas e status dos passes
-let moedas = parseInt(localStorage.getItem("moedas")) || 0;
-let passeLiberado = moedas >= 1500;
-let passe2Liberado = moedas >= 4000;
+// ✅ Inicializa moedas e chaves de passes
+const PASS_KEYS = {
+  passe1: "passeEspertos",
+  passe2: "passePosses",
+  passeAtivo: "passeAtivo"
+};
 
-// ✅ Inicializa status de compra do passe 2
-if (localStorage.getItem("passe2Comprado") === null) {
-  localStorage.setItem("passe2Comprado", "false");
+function getMoedas() {
+  return parseInt(localStorage.getItem("moedas") || "0");
 }
-let passe2Comprado = localStorage.getItem("passe2Comprado") === "true";
+
+function hasPasse1() {
+  return localStorage.getItem(PASS_KEYS.passe1) === "true"
+      || localStorage.getItem(PASS_KEYS.passeAtivo) === "true";
+}
+
+function hasPasse2() {
+  return localStorage.getItem(PASS_KEYS.passe2) === "true"
+      || localStorage.getItem("passe2Comprado") === "true";
+}
 
 // ✅ Lista de dragões
 const todosOsDragoes = [
@@ -638,62 +649,73 @@ function preencherSelectComDragoes(idSelect) {
   const seletor = document.getElementById(idSelect);
   if (!seletor) return;
 
-  todosOsDragoes.forEach(dr => {
-    const opt = document.createElement("option");
-    opt.value = dr.value;
-    opt.textContent = dr.nome;
+  const passe1 = hasPasse1();
+  const passe2 = hasPasse2();
 
-    if ((dr.passe && !passeLiberado) || (dr.passe2 && !passe2Comprado)) {
-      opt.disabled = true;
-      opt.textContent += dr.passe ? " 🔒 (Passe 1)" : " 🔒 (Passe 2)";
-    }
+  if (seletor.options.length === 0) {
+    todosOsDragoes.forEach(dr => {
+      const opt = document.createElement("option");
+      opt.value = dr.value;
+      opt.textContent = dr.nome;
 
-    seletor.appendChild(opt);
-  });
+      if ((dr.passe && !passe1) || (dr.passe2 && !passe2)) {
+        opt.disabled = true;
+        opt.textContent += dr.passe ? " 🔒 (Passe 1)" : " 🔒 (Passe 2)";
+      }
+
+      seletor.appendChild(opt);
+    });
+  } else {
+    // Atualiza opções já existentes sem duplicar
+    Array.from(seletor.options).forEach(opt => {
+      const dr = todosOsDragoes.find(item => item.value === opt.value);
+      if (!dr) return;
+
+      if ((dr.passe && !passe1) || (dr.passe2 && !passe2)) {
+        opt.disabled = true;
+        if (!opt.textContent.includes("🔒")) {
+          opt.textContent += dr.passe ? " 🔒 (Passe 1)" : " 🔒 (Passe 2)";
+        }
+      }
+    });
+  }
 }
 
-// ✅ Função para bloquear dragões após a luta
+// ✅ Função para bloquear dragões por passe
 function bloquearDragoesDoPasse() {
-  const moedasAtualizadas = parseInt(localStorage.getItem("moedas") || "0");
-
-  const dragoesPasse1 = todosOsDragoes.filter(dr => dr.passe).map(dr => dr.value);
-  const dragoesPasse2 = todosOsDragoes.filter(dr => dr.passe2).map(dr => dr.value);
+  const passe1 = hasPasse1();
+  const passe2 = hasPasse2();
 
   ["player1-select", "player2-select"].forEach(id => {
     const select = document.getElementById(id);
     if (!select) return;
 
     Array.from(select.options).forEach(opt => {
-      if (moedasAtualizadas < 1500 && dragoesPasse1.includes(opt.value)) {
+      const dr = todosOsDragoes.find(item => item.value === opt.value);
+      if (!dr) return;
+
+      if ((dr.passe && !passe1) || (dr.passe2 && !passe2)) {
         opt.disabled = true;
-        opt.text += " (Bloqueado - Passe 1)";
-      }
-      if (moedasAtualizadas < 4000 && dragoesPasse2.includes(opt.value)) {
-        opt.disabled = true;
-        opt.text += " (Bloqueado - Passe 2)";
+        if (!opt.textContent.includes("🔒")) {
+          opt.textContent += dr.passe ? " 🔒 (Passe 1)" : " 🔒 (Passe 2)";
+        }
       }
     });
   });
 }
 
 // ✅ Inicialização ao carregar a página
-window.onload = () => {
-  console.log("Moedas:", moedas);
-  console.log("Passe 1 liberado:", passeLiberado);
-  console.log("Passe 2 comprado:", passe2Comprado);
+window.addEventListener('load', () => {
+  console.log("Moedas:", getMoedas());
+  console.log("Passe 1 desbloqueado:", hasPasse1());
+  console.log("Passe 2 desbloqueado:", hasPasse2());
   console.log("Lista de dragões:", todosOsDragoes);
 
   preencherSelectComDragoes("player1-select");
   preencherSelectComDragoes("player2-select");
   bloquearDragoesDoPasse();
-};
+});
 
-const recompensa = Math.floor(Math.random() * 100000) + 20;
-moedas += recompensa;
-Log.innerHTML += `<li>💰 Você ganhou ${recompensa} moedas!</li>`;
-
-document.body.classList.add('fim-da-luta');
-setTimeout(() => document.body.classList.remove('fim-da-luta'), 2000);
 
 function pegarImagemDoDragao(nome) {
   nome = nome
