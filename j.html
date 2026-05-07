@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogar</title>
+    <script src="config.js"></script>
     <style>
         body{
             background-color: rgb(119, 119, 119);
@@ -116,6 +117,143 @@
             background: rgb(255, 102, 0);
             transform: scale(1.1);
         }
+        /* Controles móveis */
+        .mobile-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: none;
+            z-index: 1000;
+        }
+        .dpad {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 5px;
+            width: 120px;
+            height: 120px;
+        }
+        .dpad-btn {
+            background: rgba(0,0,0,0.7);
+            border: 2px solid #fff;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        .dpad-btn:active {
+            background: rgba(255,255,255,0.3);
+        }
+        .dpad-btn.up { grid-column: 2; grid-row: 1; }
+        .dpad-btn.left { grid-column: 1; grid-row: 2; }
+        .dpad-btn.right { grid-column: 3; grid-row: 2; }
+        .dpad-btn.down { grid-column: 2; grid-row: 3; }
+        .dpad-center { grid-column: 2; grid-row: 2; background: rgba(0,0,0,0.5); border: none; }
+
+        .action-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .action-btn {
+            width: 60px;
+            height: 60px;
+            background: rgba(0,0,0,0.7);
+            border: 2px solid #fff;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        .action-btn:active {
+            background: rgba(255,255,255,0.3);
+        }
+        .run-btn { background: rgba(255,165,0,0.7); border-color: orange; }
+        .attack-btn { background: rgba(255,0,0,0.7); border-color: red; }
+        .shoot-btn { background: rgba(0,255,0,0.7); border-color: green; }
+        .weapon-btn { background: rgba(128,0,128,0.7); border-color: purple; }
+
+        .orientation-notice {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 2000;
+            display: none;
+        }
+        .orientation-notice.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-controls { display: block; }
+            .action-buttons { display: flex; }
+        }
+
+        /* Menu de upgrades */
+        .upgrade-menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1500;
+            max-width: 400px;
+            display: none;
+        }
+        .upgrade-menu.show {
+            display: block;
+        }
+        .upgrade-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+        }
+        .upgrade-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .upgrade-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -131,6 +269,7 @@
         <p><strong>I</strong> para informações.</p>
         <button onclick="startGame()">Começar</button>
         <button onclick="abrirInformacoes()">Informações</button>
+        <button onclick="abrirUpgradeMenu()">💰 Loja de Upgrades</button>
         <button onclick="irPerfil()">Meu Perfil</button>
     </div>
 
@@ -138,6 +277,7 @@
         <h1>PAUSADO</h1>
         <button onclick="continuarJogo()">Continuar</button>
         <button onclick="reiniciarJogo()">Reiniciar</button>
+        <button onclick="abrirUpgradeMenu()">💰 Loja de Upgrades</button>
         <button onclick="voltarMenu()">Menu</button>
     </div>
 
@@ -186,7 +326,58 @@
         <button onclick="fecharInformacoes()">Voltar</button>
     </div>
 
+    <div id="upgradeMenu" class="upgrade-menu">
+        <h2>💰 Loja de Upgrades (ESE)</h2>
+        <p>ESE Atual: <span id="eseDisplay">0</span></p>
+        <div class="upgrade-item">
+            <span>Vida Máxima (+50)</span>
+            <button class="upgrade-btn" onclick="comprarUpgrade('vida', 50)">50 ESE</button>
+        </div>
+        <div class="upgrade-item">
+            <span>Velocidade (+1)</span>
+            <button class="upgrade-btn" onclick="comprarUpgrade('velocidade', 30)">30 ESE</button>
+        </div>
+        <div class="upgrade-item">
+            <span>Dano Espada (+5)</span>
+            <button class="upgrade-btn" onclick="comprarUpgrade('danoEspada', 40)">40 ESE</button>
+        </div>
+        <div class="upgrade-item">
+            <span>Dano Pistola (+10)</span>
+            <button class="upgrade-btn" onclick="comprarUpgrade('danoPistola', 60)">60 ESE</button>
+        </div>
+        <div class="upgrade-item">
+            <span>Energia Máxima (+20)</span>
+            <button class="upgrade-btn" onclick="comprarUpgrade('energia', 35)">35 ESE</button>
+        </div>
+        <button onclick="fecharUpgradeMenu()">Voltar ao Jogo</button>
+    </div>
+
     <canvas id="gameCanvas"></canvas>
+
+    <!-- Controles móveis -->
+    <div class="mobile-controls">
+        <div class="dpad">
+            <div class="dpad-btn up">↑</div>
+            <div class="dpad-center"></div>
+            <div class="dpad-btn left">←</div>
+            <div class="dpad-btn right">→</div>
+            <div class="dpad-btn down">↓</div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <div class="action-btn run-btn">🏃<br>RUN</div>
+        <div class="action-btn attack-btn">⚔️<br>ATK</div>
+        <div class="action-btn shoot-btn">🔫<br>SHOOT</div>
+        <div class="action-btn weapon-btn">🔄<br>WEAPON</div>
+    </div>
+
+    <div class="orientation-notice" id="orientationNotice">
+        <h3>📱 Gire o dispositivo</h3>
+        <p>Para uma melhor experiência, gire seu dispositivo para orientação horizontal.</p>
+        <button onclick="dismissOrientationNotice()">OK</button>
+    </div>
+
     <script>
     var canvas = document.getElementById('gameCanvas');
     var ctx = canvas.getContext('2d');
@@ -254,6 +445,20 @@
         gun: { name: 'Pistola', damage: 35, range: 200, cooldown: 15, energyCost: 15 }
     };
 
+    // Controles móveis
+    var mobileKeys = {};
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    var orientationNotice = document.getElementById('orientationNotice');
+
+    // Upgrades
+    var upgrades = {
+        vida: { level: 0, cost: 50 },
+        velocidade: { level: 0, cost: 30 },
+        danoEspada: { level: 0, cost: 40 },
+        danoPistola: { level: 0, cost: 60 },
+        energia: { level: 0, cost: 35 }
+    };
+
     var phases = [
         {
             title: 'Sala 1',
@@ -289,10 +494,10 @@
         {
             title: 'Sala Final',
             enemyTypes: [
-                { type: 'tank', count: 5 },
-                { type: 'boss', count: 7 },
-                { type: 'archer', count: 10 },
-                { type: 'knight', count: 3 }
+                { type: 'tank', count: 3 },
+                { type: 'boss', count: 2 },
+                { type: 'archer', count: 5 },
+                { type: 'knight', count: 2 }
             ],
             pointGoal: 250,
             key: { x: 400, y: 100, r: 10 },
@@ -362,12 +567,12 @@
     }
 
     function playHitSound() {
-        playTone(400, 0.08, 0.15);
+        playTone(1000, 0.08, 0.15);
     }
 
     function playShootSound() {
-        playTone(800, 0.05, 0.2);
-        playTone(600, 0.05, 0.15);
+        playTone(300, 0.05, 0.2);
+        playTone(400, 0.05, 0.15);
     }
 
     function playKeySound() {
@@ -764,11 +969,11 @@
 
         player.velocityX = 0;
         player.velocityY = 0;
-        var currentSpeed = isShiftPressed ? player.speed * runSpeedMultiplier : player.speed;
-        if (keys['ArrowUp']) player.velocityY -= currentSpeed;
-        if (keys['ArrowDown']) player.velocityY += currentSpeed;
-        if (keys['ArrowLeft']) player.velocityX -= currentSpeed;
-        if (keys['ArrowRight']) player.velocityX += currentSpeed;
+        var currentSpeed = isShiftPressed || mobileKeys['run'] ? player.speed * runSpeedMultiplier : player.speed;
+        if (keys['ArrowUp'] || mobileKeys['up']) player.velocityY -= currentSpeed;
+        if (keys['ArrowDown'] || mobileKeys['down']) player.velocityY += currentSpeed;
+        if (keys['ArrowLeft'] || mobileKeys['left']) player.velocityX -= currentSpeed;
+        if (keys['ArrowRight'] || mobileKeys['right']) player.velocityX += currentSpeed;
         
         player.x += player.velocityX;
         player.y += player.velocityY;
@@ -780,8 +985,8 @@
         }
 
         // Ataque do jogador (espaço = corpo a corpo se espada, E = tiro se pistola)
-        var isAttacking = keys[' '] || keys['Spacebar'];
-        var isShooting = keys['e'] || keys['E'];
+        var isAttacking = keys[' '] || keys['Spacebar'] || mobileKeys['attack'];
+        var isShooting = keys['e'] || keys['E'] || mobileKeys['shoot'];
 
         if (player.velocityX !== 0 || player.velocityY !== 0) {
             var len = Math.sqrt(player.velocityX * player.velocityX + player.velocityY * player.velocityY);
@@ -1030,6 +1235,55 @@
             isShiftPressed = false;
         }
     });
+
+    // Controles móveis
+    function setupMobileControls() {
+        function bindButton(selector, key, onTouchOnly) {
+            var el = document.querySelector(selector);
+            if (!el) return;
+            el.addEventListener('touchstart', function(e) { e.preventDefault(); mobileKeys[key] = true; });
+            el.addEventListener('touchend', function(e) { e.preventDefault(); mobileKeys[key] = false; });
+            el.addEventListener('touchcancel', function(e) { e.preventDefault(); mobileKeys[key] = false; });
+            if (!onTouchOnly) {
+                el.addEventListener('mousedown', function(e) { e.preventDefault(); mobileKeys[key] = true; });
+                el.addEventListener('mouseup', function(e) { e.preventDefault(); mobileKeys[key] = false; });
+                el.addEventListener('mouseleave', function(e) { e.preventDefault(); mobileKeys[key] = false; });
+            }
+        }
+
+        bindButton('.dpad-btn.up', 'up');
+        bindButton('.dpad-btn.down', 'down');
+        bindButton('.dpad-btn.left', 'left');
+        bindButton('.dpad-btn.right', 'right');
+        bindButton('.run-btn', 'run');
+        bindButton('.attack-btn', 'attack', true);
+        bindButton('.shoot-btn', 'shoot', true);
+
+        var weaponBtn = document.querySelector('.weapon-btn');
+        if (weaponBtn) {
+            weaponBtn.addEventListener('touchstart', function(e) { e.preventDefault(); currentWeapon = currentWeapon === 'sword' ? 'gun' : 'sword'; });
+            weaponBtn.addEventListener('mousedown', function(e) { e.preventDefault(); currentWeapon = currentWeapon === 'sword' ? 'gun' : 'sword'; });
+        }
+    }
+
+    // Orientação
+    function checkOrientation() {
+        if (!isMobile) return;
+        var isLandscape = window.innerWidth > window.innerHeight;
+        if (!isLandscape && localStorage.getItem('notificacao') === 'true') {
+            orientationNotice.classList.add('show');
+        } else {
+            orientationNotice.classList.remove('show');
+        }
+    }
+
+    function dismissOrientationNotice() {
+        orientationNotice.classList.remove('show');
+    }
+
+    window.addEventListener('orientationchange', checkOrientation);
+    window.addEventListener('resize', checkOrientation);
+
     function gameLoop() {
         update();
         draw();
@@ -1079,6 +1333,61 @@
     function voltarMenu() {
         resetGame(true);
         pauseMenuOverlay.classList.add('hidden');
+    }
+
+    // Funções de upgrades
+    function abrirUpgradeMenu() {
+        if (gameRunning) {
+            paused = true;
+            pauseMenuOverlay.classList.add('hidden');
+        }
+        document.getElementById('upgradeMenu').classList.add('show');
+        atualizarESEDisplay();
+    }
+
+    function fecharUpgradeMenu() {
+        document.getElementById('upgradeMenu').classList.remove('show');
+        if (gameRunning) {
+            paused = false;
+        }
+    }
+
+    function atualizarESEDisplay() {
+        document.getElementById('eseDisplay').textContent = playerEse;
+    }
+
+    function comprarUpgrade(tipo, custo) {
+        if (playerEse >= custo) {
+            playerEse -= custo;
+            upgrades[tipo].level++;
+            
+            // Aplicar upgrade
+            switch(tipo) {
+                case 'vida':
+                    player.maxHealth += 50;
+                    playerHealth = Math.min(playerHealth + 50, player.maxHealth);
+                    break;
+                case 'velocidade':
+                    player.speed += 1;
+                    break;
+                case 'danoEspada':
+                    weapons.sword.damage += 5;
+                    break;
+                case 'danoPistola':
+                    weapons.gun.damage += 10;
+                    break;
+                case 'energia':
+                    maxEnergy += 20;
+                    energy = Math.min(energy + 20, maxEnergy);
+                    break;
+            }
+            
+            atualizarESEDisplay();
+            salvarEseJogador();
+            alert('Upgrade comprado com sucesso!');
+        } else {
+            alert('ESE insuficiente!');
+        }
     }
 
     function setGameOver(title) {
@@ -1171,6 +1480,14 @@
                 playerEse = user.ese || 0;
                 atualizarStatsPersonagem();
             }
+        }
+        setupMobileControls();
+        checkOrientation();
+        if (!isMobile) {
+            var mobileControls = document.querySelector('.mobile-controls');
+            var actionButtons = document.querySelector('.action-buttons');
+            if (mobileControls) mobileControls.style.display = 'none';
+            if (actionButtons) actionButtons.style.display = 'none';
         }
     });
     // Jogo implementado: inimigos, combate, pontos e objetivo de 100 pontos para vencer!

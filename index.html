@@ -118,6 +118,65 @@
       --button: linear-gradient(135deg, #2f3fff, #48e4ff);
       --shadow: 0 26px 60px rgba(255, 255, 255, 0.06);
     }
+
+    /* Modal de validação de idade */
+    .age-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+    .age-modal.hidden {
+      display: none;
+    }
+    .age-content {
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius);
+      padding: 38px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+    .age-content h2 {
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+    .age-content p {
+      margin-bottom: 30px;
+      color: var(--muted);
+    }
+    .age-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+    .age-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 999px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.25s ease;
+    }
+    .age-btn.yes {
+      background: var(--button);
+      color: var(--button-text);
+    }
+    .age-btn.no {
+      background: #f44336;
+      color: white;
+    }
+    .age-btn:hover {
+      transform: translateY(-2px);
+    }
   </style>
   <link rel="stylesheet" href="common.css">
   <script src="config.js"></script>
@@ -141,8 +200,20 @@
     <button id="notifyBtn" onclick="pedirNotificacao()" style="display:none;">🔔 Ativar Notificações</button>
 
     <h6>Em desenvolvimento...</h6>
-    <h5>Version 8.0.0</h5>
+    <h5>Version VOM 1.0</h5>
     <footer><h5>@EVEP MPP da EVEP</h5></footer>
+  </div>
+
+  <!-- Modal de validação de idade -->
+  <div class="age-modal" id="ageModal">
+    <div class="age-content">
+      <h2>Validação de Idade</h2>
+      <p>Este site contém conteúdo para maiores de 6 anos. Você confirma que tem 6 anos ou mais?</p>
+      <div class="age-buttons">
+        <button class="age-btn yes" onclick="confirmarIdade(true)">Sim, tenho 6+</button>
+        <button class="age-btn no" onclick="confirmarIdade(false)">Não, sou menor</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -221,7 +292,26 @@
       }
     }
 
+    // Validação de idade
+    function confirmarIdade(confirmado) {
+      if (confirmado) {
+        localStorage.setItem('idadeValidada', 'true');
+        document.getElementById('ageModal').classList.add('hidden');
+      } else {
+        alert('Desculpe, este site é apenas para maiores de 18 anos.');
+        window.location.href = 'https://www.google.com'; // Redireciona para outro site
+      }
+    }
+
+    function verificarIdade() {
+      if (localStorage.getItem('idadeValidada') !== 'true') {
+        document.getElementById('ageModal').classList.remove('hidden');
+      }
+    }
+
     window.onload = () => {
+      verificarIdade();
+
       const modoSalvo = localStorage.getItem('modo');
       const logado = localStorage.getItem('logado');
 

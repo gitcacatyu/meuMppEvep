@@ -108,7 +108,7 @@
   </section>
 
   <footer>
-    <p>&copy; Mpp</p>
+    <p>&copy; MPP</p>
   </footer>
 
   <script>
@@ -129,16 +129,20 @@
         alert("⚠️ O ano de nascimento é muito antigo!");
         return;
       }
+      if (anoNascimento <= 6) {
+        alert("⚠️ Você é muito jovem para acessar este site!");
+        return;
+      }
       const idade = anoAtual - Number(anoNascimento);
       const sexoMasc = document.getElementById("masc").checked;
       const genero = sexoMasc ? "homem" : "mulher";
 
       res.innerHTML = `Detectamos um(a) <strong>${genero}</strong> de <strong>${idade} anos</strong>.`;
 
-      if (idade >= 5 && idade <= 100) {
+      if (idade >= 6 && idade <= 100) {
         setTimeout(() => {
-          location.href = "cadras.html";
-        }, 3000);
+          location.href = "vom.html";
+        }, 2000);
       }
     }
 

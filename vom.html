@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOM - MPP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #000;
+            text-align: center;
+            padding: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 200px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        input[type="button"] {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        input[type="button"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+     <link rel="stylesheet" href="common.css">
+</head>
+<body>
+    <h1>Qual o tamanho e largura do seu Celular?</h1>
+    <button onclick="pesquisa()">🔍</button>
+    <input type="text" class="resul" placeholder="Resolução aparecerá aqui..." readonly>
+    <p id="mensagem"></p>
+<script>
+    function pesquisa() {
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        var area = width * height;
+        var resultado = document.querySelector('.resul');
+        var mensagem = document.getElementById('mensagem');
+
+        resultado.value = width + 'px x ' + height + 'px';
+        mensagem.textContent = 'Área da tela: ' + area + ' pixels';
+
+        if (area <= 380 * 680) {
+            mensagem.textContent += ' — tela pequena detectada!';
+        } else {
+            mensagem.textContent += ' — tela grande o suficiente.';
+        }
+        location.href = 'cadras.html';
+    }
+</script>
+</body>
+</html>
