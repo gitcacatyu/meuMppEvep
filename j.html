@@ -192,6 +192,7 @@
         .attack-btn { background: rgba(255,0,0,0.7); border-color: red; }
         .shoot-btn { background: rgba(0,255,0,0.7); border-color: green; }
         .weapon-btn { background: rgba(128,0,128,0.7); border-color: purple; }
+        .reload-btn { background: rgba(0,0,255,0.75); border-color: #00f; }
 
         .orientation-notice {
             position: fixed;
@@ -269,7 +270,7 @@
         <p><strong>I</strong> para informações.</p>
         <button onclick="startGame()">Começar</button>
         <button onclick="abrirInformacoes()">Informações</button>
-        <button onclick="abrirUpgradeMenu()">💰 Loja de Upgrades</button>
+        <button onclick="abrirUpgradeMenu()">💰 Loja </button>
         <button onclick="irPerfil()">Meu Perfil</button>
     </div>
 
@@ -277,7 +278,7 @@
         <h1>PAUSADO</h1>
         <button onclick="continuarJogo()">Continuar</button>
         <button onclick="reiniciarJogo()">Reiniciar</button>
-        <button onclick="abrirUpgradeMenu()">💰 Loja de Upgrades</button>
+        <button onclick="abrirUpgradeMenu()">💰 Loja </button>
         <button onclick="voltarMenu()">Menu</button>
     </div>
 
@@ -292,7 +293,7 @@
             <h1>Informações do Jogo</h1>
             
             <h2>Objetivo</h2>
-            <p>Derrote os inimigos em cada sala acumulando pontos. Colete a chave para abrir a porta e avançar para a próxima sala.</p>
+            <p>Derrote os inimigos em cada sala acumulando pontos. Mate um zumbi para destrancar a porta e avançar para a próxima sala.</p>
             
             <h2>Controles</h2>
             <p><strong>Setas</strong>: Mover</p>
@@ -307,14 +308,18 @@
             
             <h2>Armas</h2>
             <p><strong>Espada</strong>: Ataque corpo a corpo. Dano 25, Alcance curto.</p>
-            <p><strong>Pistola</strong>: Tiro à distância. Dano 35, Alcance longo, consome 15 de energia.</p>
+            <p><strong>Pistola</strong>: Tiro à distância. Dano 35, Alcance longo, consome 15 de energia e tem munição limitada.</p>
+            <p><strong>SPAS</strong>: Shotgun com alto dano de curta distância. Usa 1 munição por disparo.</p>
+            <p><strong>Revolver</strong>: Dano estável, bom para médio alcance.</p>
+            <p><strong>AK-47</strong>: Arma automática com bom alcance e velocidade de tiro.</p>
+            <p><strong>SNIPER</strong>: Alto dano no longo alcance. Munição limitada.</p>
+            <p><strong>Bazzoca</strong>: Explosão de área com splash de dano. Cuidado com munição.</p>
+            <h2>Loja de Armas</h2>
+            <p>Use a loja para comprar novas armas com ESE. Depois de comprar, troque de arma com <strong>Q</strong>.</p>
+            <p>Pressione <strong>F</strong> para recarregar a arma manualmente quando a munição do carregador acabar.</p>
+            <p>Cada arma tem limite de munição e reserva de balas. A espada não usa munição.</p>
+            <p>Assista anúncios na loja para ganhar ESE extra.</p>
             
-            <h2>Tipos de Inimigos</h2>
-            <p><strong>Soldado (Vermelho)</strong>: Inimigo básico. Fraco e rápido.</p>
-            <p><strong>Archer (Laranja)</strong>: Atira flechas vermelhas. Médio, inteligente.</p>
-            <p><strong>Tank (Vermelho Escuro)</strong>: Forte e resistente. Lento.</p>
-            <p><strong>Cavaleiro (Cinza)</strong>: Inimigo equilibrado. Resistente e rápido.</p>
-            <p><strong>Boss (Roxo)</strong>: Chefe poderoso. Atira projéteis e é muito forte. Abate múltiplos inimigos!</p>
             
             <h2>Dicas</h2>
             <p>• Regenere energia pausando ou evitando combate.</p>
@@ -327,7 +332,7 @@
     </div>
 
     <div id="upgradeMenu" class="upgrade-menu">
-        <h2>💰 Loja de Upgrades (ESE)</h2>
+        <h2>💰 Loja (ESE)</h2>
         <p>ESE Atual: <span id="eseDisplay">0</span></p>
         <div class="upgrade-item">
             <span>Vida Máxima (+50)</span>
@@ -349,7 +354,64 @@
             <span>Energia Máxima (+20)</span>
             <button class="upgrade-btn" onclick="comprarUpgrade('energia', 35)">35 ESE</button>
         </div>
+        <div class="upgrade-item">
+            <span>Assistir anúncio</span>
+            <button class="upgrade-btn" onclick="assistirAnuncio()">+25 ESE</button>
+        </div>
+        <p id="adStatus" style="margin-top:0; font-size: 0.9rem; color: #ffd700;">Próximo anúncio disponível em breve.</p>
+        <h2>🛒 Loja de Armas</h2>
+        <div class="upgrade-item">
+            <span>SPAS - Shotgun, alto dano curto alcance</span>
+            <button class="upgrade-btn" data-weapon="SPAS" data-price="120" onclick="comprarWeapon('SPAS', 120)">120 ESE</button>
+        </div>
+        <div class="upgrade-item">
+            <span>SNIPER - Longo alcance, dano muito alto, cadência lenta</span>
+            <button class="upgrade-btn" data-weapon="SNIPER" data-price="220" onclick="comprarWeapon('SNIPER', 220)">220 ESE</button>
+        </div>
+        <div class="upgrade-item">
+            <span>AK-47 - Dano médio, boa cadência, alcance médio</span>
+            <button class="upgrade-btn" data-weapon="AK-47" data-price="160" onclick="comprarWeapon('AK-47', 160)">160 ESE</button>
+        </div>
+        <div class="upgrade-item">
+            <span>Revolver - Dano estável, alcance médio</span>
+            <button class="upgrade-btn" data-weapon="Revolver" data-price="100" onclick="comprarWeapon('Revolver', 100)">100 ESE</button>
+        </div>
+        <div class="upgrade-item">
+            <span>Bazzoca - Dano altíssimo, splash, recarga lenta</span>
+            <button class="upgrade-btn" data-weapon="BAZZOCA" data-price="260" onclick="comprarWeapon('BAZZOCA', 260)">260 ESE</button>
+        </div>
+        <h2>🔋 Comprar Munição</h2>
+        <div class="upgrade-item">
+            <span>Pistola - Recarregar reserva</span>
+            <button class="upgrade-btn" data-ammo="gun" data-price="25" onclick="comprarAmmo('gun', 25)">25 ESE</button>
+        </div>
+        <div class="upgrade-item">
+            <span>SPAS - Recarregar reserva</span>
+            <button class="upgrade-btn" data-ammo="SPAS" data-price="30" onclick="comprarAmmo('SPAS', 30)">30 ESE</button>
+        </div>
+        <div class="upgrade-item">
+            <span>Revolver - Recarregar reserva</span>
+            <button class="upgrade-btn" data-ammo="Revolver" data-price="20" onclick="comprarAmmo('Revolver', 20)">20 ESE</button>
+        </div>
+        <div class="upgrade-item">
+            <span>AK-47 - Recarregar reserva</span>
+            <button class="upgrade-btn" data-ammo="AK-47" data-price="40" onclick="comprarAmmo('AK-47', 40)">40 ESE</button>
+        </div>
+        <div class="upgrade-item">
+            <span>Sniper - Recarregar reserva</span>
+            <button class="upgrade-btn" data-ammo="SNIPER" data-price="50" onclick="comprarAmmo('SNIPER', 50)">50 ESE</button>
+        </div>
+        <div class="upgrade-item">
+            <span>Bazzoca - Recarregar reserva</span>
+            <button class="upgrade-btn" data-ammo="BAZZOCA" data-price="60" onclick="comprarAmmo('BAZZOCA', 60)">60 ESE</button>
+        </div>
         <button onclick="fecharUpgradeMenu()">Voltar ao Jogo</button>
+    </div>
+
+    <div id="adOverlay" class="overlay hidden">
+        <h1>Assistindo anúncio...</h1>
+        <p id="adTimerText">Aguarde 5 segundos para ganhar ESE.</p>
+        <button onclick="cancelarAnuncio()">Cancelar</button>
     </div>
 
     <canvas id="gameCanvas"></canvas>
@@ -369,6 +431,7 @@
         <div class="action-btn run-btn">🏃<br>RUN</div>
         <div class="action-btn attack-btn">⚔️<br>ATK</div>
         <div class="action-btn shoot-btn">🔫<br>SHOOT</div>
+        <div class="action-btn reload-btn">🔁<br>RELOAD</div>
         <div class="action-btn weapon-btn">🔄<br>WEAPON</div>
     </div>
 
@@ -405,10 +468,11 @@
         speed: 5,
         velocityX: 1,
         velocityY: 0,
-        character: 'guerreiro',
+        character: 'sobrevivente',
         email: '',
         maxHealth: 600
     };
+    var localSaveKey = 'mppGameSave';
     var sword = {
         x: 200,
         y: 200,
@@ -426,6 +490,12 @@
     var points = 0;
     var pointGoal = 100;
     var playerHealth = 100;
+    var playerHitCooldown = 0;
+    var lastAdWatchTime = 0;
+    var adCooldownMs = 60000;
+    var adTimerInterval = null;
+    var adCountdown = 0;
+    var isWatchingAd = false;
     var energy = 100;
     var maxEnergy = 100;
     var gameRunning = false;
@@ -436,14 +506,27 @@
     var soundOn = true;
     var audioContext;
     var facing = { x: 1, y: 0 };
-    var currentWeapon = 'sword'; // 'sword' ou 'gun'
     var isShiftPressed = false;
     var runSpeedMultiplier = 1.5; // Velocidade de corrida 50% mais rápido
     var playerEse = 0; // Moeda ESE
+    var ownedWeapons = { sword: true, gun: true, SPAS: false, Revolver: false, 'AK-47': false, SNIPER: false, BAZZOCA: false };
     var weapons = {
-        sword: { name: 'Espada', damage: 25, range: 60, cooldown: 30 },
-        gun: { name: 'Pistola', damage: 35, range: 200, cooldown: 15, energyCost: 15 }
+        sword: { name: 'Espada', damage: 250, range: 90, cooldown: 30 },
+        gun: { name: 'Pistola', damage: 45, range: 200, cooldown: 15, energyCost: 15 },
+        SPAS: { name: 'SPAS', damage: 80, range: 140, cooldown: 30, energyCost: 25 },
+        Revolver: { name: 'Revolver', damage: 45, range: 220, cooldown: 22, energyCost: 20 },
+        'AK-47': { name: 'AK-47', damage:65, range: 240, cooldown: 18, energyCost: 18 },
+        SNIPER: { name: 'Sniper', damage: 140, range: 650, cooldown: 50, energyCost: 40 },
+        BAZZOCA: { name: 'Bazzoca', damage: 180, range: 260, cooldown: 60, energyCost: 50, splash: 40 }
     };
+    var currentWeapon = 'sword';
+    var weaponOrder = ['sword', 'gun', 'SPAS', 'Revolver', 'AK-47', 'SNIPER', 'BAZZOCA'];
+    var ammo = { gun: 15, SPAS: 8, Revolver: 6, 'AK-47': 30, SNIPER: 5, BAZZOCA: 1 };
+    var maxAmmo = { gun: 15, SPAS: 8, Revolver: 6, 'AK-47': 30, SNIPER: 5, BAZZOCA: 1 };
+    var ammoReserve = { gun: 45, SPAS: 24, Revolver: 12, 'AK-47': 90, SNIPER: 15, BAZZOCA: 4 };
+    var maxReserve = { gun: 45, SPAS: 24, Revolver: 12, 'AK-47': 90, SNIPER: 15, BAZZOCA: 4 };
+    var dayMessage = '';
+    var dayMessageTimer = 0;
 
     // Controles móveis
     var mobileKeys = {};
@@ -461,10 +544,10 @@
 
     var phases = [
         {
-            title: 'Sala 1',
+            title: 'Dia 1',
             enemyTypes: [
-                { type: 'soldier', count: 2 },
-                { type: 'archer', count: 3 }
+                { type: 'zumbicommom', count: 3 },
+                { type: 'zumbielite', count: 3 }
             ],
             pointGoal: 80,
             key: { x: 100, y: 100, r: 10 },
@@ -475,12 +558,12 @@
             ]
         },
         {
-            title: 'Sala Atiradores',
+            title: 'Dia 2',
             enemyTypes: [
-                { type: 'soldier', count: 2 },
-                { type: 'tank', count: 6 },
-                { type: 'archer', count: 10},
-                { type: 'boss', count: 7 }
+                { type: 'zumbicommom', count: 4 },
+                { type: 'zumbielite', count: 3 },
+                { type: 'zumbiboss', count: 3},
+                { type: 'zumbichefe', count: 3 }
             ],
             pointGoal: 150,
             key: { x: 100, y: 500, r: 10 },
@@ -492,12 +575,12 @@
             ]
         },
         {
-            title: 'Sala Final',
+            title: 'Dia 3',
             enemyTypes: [
-                { type: 'tank', count: 3 },
-                { type: 'boss', count: 2 },
-                { type: 'archer', count: 5 },
-                { type: 'knight', count: 2 }
+                { type: 'zumbiexpert', count: 3 },
+                { type: 'zumbiboss', count: 2 },
+                { type: 'zumbielite', count: 5 },
+                { type: 'zumbichefe', count: 2 }
             ],
             pointGoal: 250,
             key: { x: 400, y: 100, r: 10 },
@@ -510,11 +593,11 @@
             ]
         },
         {
-            title: 'Sala 4 - Fortaleza',
+            title: 'Dia 4',
             enemyTypes: [
-                { type: 'tank', count: 2 },
-                { type: 'knight', count: 3 },
-                { type: 'boss', count: 1 }
+                { type: 'zumbiexpert', count: 4 },
+                { type: 'zumbichefe', count: 3 },
+                { type: 'zumbiboss', count: 2 }
             ],
             pointGoal: 300,
             key: { x: 200, y: 50, r: 10 },
@@ -526,11 +609,11 @@
             ]
         },
         {
-            title: 'Sala 5 - Câmara do Chefe',
+            title: 'Dia 5',
             enemyTypes: [
-                { type: 'boss', count: 2 },
-                { type: 'tank', count: 1 },
-                { type: 'knight', count: 2 }
+                { type: 'zumbiboss', count: 2 },
+                { type: 'zumbiexpert', count: 1 },
+                { type: 'zumbichefe', count: 2 }
             ],
             pointGoal: 400,
             key: { x: 400, y: 450, r: 10 },
@@ -545,6 +628,11 @@
 
     function getPhase() {
         return phases[Math.min(gamePhase, phases.length - 1)];
+    }
+
+    function showDayMessage(text) {
+        dayMessage = text;
+        dayMessageTimer = 120;
     }
 
     function initAudio() {
@@ -573,6 +661,11 @@
     function playShootSound() {
         playTone(300, 0.05, 0.2);
         playTone(400, 0.05, 0.15);
+    }
+
+    function playReloadSound() {
+        playTone(120, 0.12, 0.2);
+        playTone(180, 0.08, 0.15);
     }
 
     function playKeySound() {
@@ -606,11 +699,11 @@
     }
 
     var enemyTemplates = {
-        soldier: { color: 'red', speed: 2.5, health: 140, width: 40, height: 40, points: 20 },
-        tank: { color: 'darkred', speed: 2.0, health: 190, width: 55, height: 55, points: 40 },
-        boss: { color: 'purple', speed: 1.8, health: 280, width: 70, height: 70, points: 80 },
-        archer: { color: 'orange', speed: 2.2, health: 150, width: 45, height: 45, points: 25 },
-        knight: { color: 'gray', speed: 2.0, health: 200, width: 60, height: 60, points: 50 }
+        'zumbicommom': { color: 'green', speed: 2.5, health: 140, width: 40, height: 40, points: 20 },
+        'zumbielite': { color: 'darkgreen', speed: 2.0, health: 190, width: 55, height: 55, points: 40 },
+        'zumbiboss': { color: 'grey', speed: 1.8, health: 280, width: 70, height: 70, points: 80 },
+        'zumbiexpert': { color: 'limegreen', speed: 2.2, health: 150, width: 45, height: 45, points: 25 },
+        'zumbichefe': { color: 'darkred', speed: 2.0, health: 200, width: 60, height: 60, points: 50 }
     };
 
     function createEnemy(typeName) {
@@ -628,12 +721,6 @@
             var dist = Math.sqrt(dx * dx + dy * dy);
         } while (dist < minDistance);
 
-        // Patrulha simples: escolhe um ponto de patrulha aleatório
-        var patrolTarget = {
-            x: Math.random() * (canvas.width - (type.width || 50)),
-            y: Math.random() * (canvas.height - (type.height || 50))
-        };
-
         return {
             x: x,
             y: y,
@@ -644,8 +731,7 @@
             health: type.health || phase.enemyHealth,
             maxHealth: type.health || phase.enemyHealth,
             points: type.points || 20,
-            state: 'patrol',
-            patrolTarget: patrolTarget,
+            state: 'chase',
             viewRadius: 180,
             groupRadius: 140,
             type: typeName
@@ -660,6 +746,8 @@
                 enemies.push(createEnemy(entry.type));
             }
         });
+        console.log('Inimigos criados:', enemies.length);
+        console.log('Inimigos:', enemies);
     }
 
     function setupPhase() {
@@ -672,7 +760,7 @@
             return { x: o.x, y: o.y, width: o.width, height: o.height, color: '#5a3' };
         });
 
-        // Porta e chave (fases estilo sala)
+        // Porta visível e trancada até matar um inimigo
         doors = [];
         if (phase.door) {
             doors.push({
@@ -680,21 +768,14 @@
                 y: phase.door.y,
                 width: phase.door.width,
                 height: phase.door.height,
-                locked: phase.door.locked,
-                color: phase.door.locked ? 'brown' : 'green'
+                locked: true,
+                color: 'brown',
+                opening: false,
+                openProgress: 0
             });
         }
-
-        if (phase.key) {
-            keyItem = {
-                x: phase.key.x,
-                y: phase.key.y,
-                r: phase.key.r,
-                collected: false
-            };
-        } else {
-            keyItem = null;
-        }
+        keyItem = null;
+        showDayMessage(phase.title);
 
         // Posicionar o jogador no início da sala
         player.x = 60;
@@ -741,10 +822,32 @@
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        // DEBUG
+        if (enemies.length > 0) {
+            console.log('Desenhando', enemies.length, 'inimigos');
+        }
+
         // Desenhar obstáculos
         for (var i = 0; i < obstacles.length; i++) {
             ctx.fillStyle = obstacles[i].color;
             ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].width, obstacles[i].height);
+        }
+
+        // Desenhar portas
+        for (var i = 0; i < doors.length; i++) {
+            var door = doors[i];
+            if (door.opening) {
+                door.openProgress = Math.min(1, door.openProgress + 0.02);
+            }
+            if (door.openProgress >= 1) continue;
+            var doorColor = door.locked ? 'brown' : 'green';
+            var openOffset = door.openProgress * door.width;
+            var drawX = door.x + openOffset;
+            var drawWidth = door.width * (1 - door.openProgress);
+            ctx.fillStyle = doorColor;
+            ctx.fillRect(drawX, door.y, drawWidth, door.height);
+            ctx.strokeStyle = 'black';
+            ctx.strokeRect(drawX, door.y, drawWidth, door.height);
         }
 
         // Desenhar jogador
@@ -795,7 +898,7 @@
             ctx.fill();
             // Desenhar rastro vermelho
             ctx.strokeStyle = 'rgba(255,0,0,0.5)';
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 1.5;
             ctx.beginPath();
             ctx.moveTo(bullet.x, bullet.y);
             ctx.lineTo(bullet.x - bullet.dx, bullet.y - bullet.dy);
@@ -803,7 +906,7 @@
         }
 
         // Desenhar mira da arma (apontador luminoso)
-        if (currentWeapon === 'gun') {
+        if (currentWeapon !== 'sword') {
             var centerX = player.x + player.width / 2;
             var centerY = player.y + player.height / 2;
             var miraDistance = 150;
@@ -812,8 +915,8 @@
             
             // Laser apontando
             ctx.strokeStyle = 'rgba(255,0,0,0.7)';
-            ctx.lineWidth = 2;
-            ctx.setLineDash([5, 5]);
+            ctx.lineWidth = 3;
+            ctx.setLineDash([6, 6]);
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.lineTo(miraX, miraY);
@@ -838,9 +941,14 @@
         // HUD
         ctx.fillStyle = 'black';
         ctx.font = '20px Arial';
-        ctx.fillText('Fase: ' + (gamePhase + 1) + ' / ' + phases.length, 10, 30);
+        var phase = getPhase();
+        ctx.fillText(phase.title + ' (' + (gamePhase + 1) + ' / ' + phases.length + ')', 10, 30);
         ctx.fillText('Pontos: ' + points + ' / ' + pointGoal, 10, 55);
+        ctx.font = '26px Arial';
+        ctx.fillStyle = '#ffdd00';
         ctx.fillText('Arma: ' + weapons[currentWeapon].name, 10, 80);
+        ctx.fillStyle = 'black';
+        ctx.font = '20px Arial';
         ctx.fillText('Vida:', 10, 105);
         ctx.fillStyle = 'red';
         ctx.fillRect(70, 90, 100, 15);
@@ -854,7 +962,26 @@
         ctx.fillRect(90, 115, (energy / maxEnergy) * 100, 15);
         ctx.fillStyle = 'black';
         ctx.fillText('Som: ' + (soundOn ? 'ON' : 'OFF') + ' (M)', 10, 155);
-        ctx.fillText('ESE: ' + playerEse + ' 💰', 10, 175);
+        ctx.fillText('Porta: ' + (doors.length && doors[0].locked ? '🔒 TRANCADA' : '🔓 ABERTA'), 10, 175);
+        if (currentWeapon === 'sword') {
+            ctx.fillText('Munição: 🔥 ∞', 10, 195);
+        } else {
+            ctx.fillText('Munição: 🔫 ' + ammo[currentWeapon] + ' / ' + maxAmmo[currentWeapon] + ' (' + ammoReserve[currentWeapon] + ')', 10, 195);
+        }
+        ctx.fillText('ESE: ' + playerEse + ' 💰', 10, 235);
+
+        if (dayMessageTimer > 0) {
+            dayMessageTimer--;
+            ctx.fillStyle = 'rgba(0,0,0,0.75)';
+            ctx.fillRect(canvas.width / 2 - 240, canvas.height / 2 - 80, 480, 120);
+            ctx.fillStyle = 'white';
+            ctx.font = '44px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(dayMessage, canvas.width / 2, canvas.height / 2 - 10);
+            ctx.font = '20px Arial';
+            ctx.fillText('Prepare-se!', canvas.width / 2, canvas.height / 2 + 30);
+            ctx.textAlign = 'start';
+        }
 
         if (paused && gameRunning) {
             return;
@@ -911,53 +1038,37 @@
         if (!enemy.shootCooldown) enemy.shootCooldown = 0;
         if (enemy.shootCooldown > 0) enemy.shootCooldown--;
 
-        // Se estiver perto, perseguir
-        if (dist < enemy.viewRadius) {
-            enemy.state = 'chase';
-        } else if (enemy.state === 'chase') {
-            enemy.state = 'patrol';
+        // TODOS OS ZOMBIES SEMPRE PERSEGUEM O JOGADOR
+        enemy.state = 'chase';
+        
+        // Perseguir o jogador
+        var angle = Math.atan2(dy, dx);
+        resolveCollision(enemy, Math.cos(angle) * enemy.speed, Math.sin(angle) * enemy.speed);
+
+        // Se um inimigo estiver perseguindo, outros próximos também perseguem (já estão todos perseguindo)
+        for (var j = 0; j < enemies.length; j++) {
+            if (enemies[j] === enemy || enemies[j].dying) continue;
+            var dx2 = enemies[j].x - enemy.x;
+            var dy2 = enemies[j].y - enemy.y;
+            if (Math.sqrt(dx2 * dx2 + dy2 * dy2) < enemy.groupRadius) {
+                enemies[j].state = 'chase';
+            }
         }
-
-        if (enemy.state === 'patrol') {
-            // Mover em direção ao ponto de patrulha
-            if (Math.abs(enemy.x - enemy.patrolTarget.x) < 5 && Math.abs(enemy.y - enemy.patrolTarget.y) < 5) {
-                enemy.patrolTarget = {
-                    x: Math.random() * (canvas.width - enemy.width),
-                    y: Math.random() * (canvas.height - enemy.height)
-                };
-            }
-            var angle = Math.atan2(enemy.patrolTarget.y - enemy.y, enemy.patrolTarget.x - enemy.x);
-            resolveCollision(enemy, Math.cos(angle) * enemy.speed, Math.sin(angle) * enemy.speed);
-        } else {
-            // Perseguir o jogador
-            var angle = Math.atan2(dy, dx);
-            resolveCollision(enemy, Math.cos(angle) * enemy.speed, Math.sin(angle) * enemy.speed);
-
-            // Se um inimigo estiver perseguindo, outros próximos também perseguem
-            for (var j = 0; j < enemies.length; j++) {
-                if (enemies[j] === enemy || enemies[j].dying) continue;
-                var dx2 = enemies[j].x - enemy.x;
-                var dy2 = enemies[j].y - enemy.y;
-                if (Math.sqrt(dx2 * dx2 + dy2 * dy2) < enemy.groupRadius) {
-                    enemies[j].state = 'chase';
-                }
-            }
-            
-            // Inimigos tipo 'archer' e 'boss' atiram
-            if ((enemy.type === 'archer' || enemy.type === 'boss') && dist < 300 && enemy.shootCooldown <= 0) {
-                enemy.shootCooldown = enemy.type === 'archer' ? 60 : 40;
-                var bulletAngle = Math.atan2(dy, dx);
-                enemyBullets.push({
-                    x: enemy.x + enemy.width / 2,
-                    y: enemy.y + enemy.height / 2,
-                    width: 6,
-                    height: 6,
-                    dx: Math.cos(bulletAngle) * 7,
-                    dy: Math.sin(bulletAngle) * 7,
-                    life: 50,
-                    damage: 15
-                });
-            }
+        
+        // Inimigos tipo 'archer' e 'boss' atiram
+        if ((enemy.type === 'archer' || enemy.type === 'boss') && dist < 300 && enemy.shootCooldown <= 0) {
+            enemy.shootCooldown = enemy.type === 'archer' ? 60 : 40;
+            var bulletAngle = Math.atan2(dy, dx);
+            enemyBullets.push({
+                x: enemy.x + enemy.width / 2,
+                y: enemy.y + enemy.height / 2,
+                width: 6,
+                height: 6,
+                dx: Math.cos(bulletAngle) * 7,
+                dy: Math.sin(bulletAngle) * 7,
+                life: 50,
+                damage: 15
+            });
         }
 
         // Garantir que ele não fique preso em obstáculo
@@ -1007,15 +1118,17 @@
                     if (enemy.health <= 0) {
                         enemy.dying = true;
                         enemy.deathTimer = 30;
+                        doors.forEach(function(d) { d.locked = false; d.color = 'green'; d.opening = true; d.openProgress = 0; });
                     }
                 }
             }
         }
 
         // Ataque à distância (tiro)
-        if (currentWeapon === 'gun' && isShooting && bulletCooldown <= 0 && energy >= weapons.gun.energyCost) {
-            bulletCooldown = weapons.gun.cooldown;
-            energy -= weapons.gun.energyCost;
+        if (currentWeapon !== 'sword' && isShooting && bulletCooldown <= 0 && energy >= weapons[currentWeapon].energyCost && ammo[currentWeapon] > 0) {
+            bulletCooldown = weapons[currentWeapon].cooldown;
+            energy -= weapons[currentWeapon].energyCost;
+            ammo[currentWeapon] -= 1;
             var weaponTip = getWeaponTipPosition();
             bullets.push({
                 x: weaponTip.x,
@@ -1025,7 +1138,9 @@
                 dx: facing.x * 10,
                 dy: facing.y * 10,
                 life: 40,
-                damage: weapons.gun.damage
+                damage: weapons[currentWeapon].damage,
+                type: currentWeapon,
+                splash: weapons[currentWeapon].splash || 0
             });
             playShootSound();
         }
@@ -1045,11 +1160,28 @@
                     enemy.health -= b.damage;
                     addEffect(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
                     playHitSound();
+                    if (b.splash) {
+                        enemies.forEach(function(otherEnemy) {
+                            if (otherEnemy !== enemy && !otherEnemy.dying) {
+                                var dx2 = (otherEnemy.x + otherEnemy.width / 2) - (enemy.x + enemy.width / 2);
+                                var dy2 = (otherEnemy.y + otherEnemy.height / 2) - (enemy.y + enemy.height / 2);
+                                var dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+                                if (dist2 < b.splash) {
+                                    otherEnemy.health -= Math.floor(b.damage * 0.5);
+                                    if (otherEnemy.health <= 0) {
+                                        otherEnemy.dying = true;
+                                        otherEnemy.deathTimer = 30;
+                                    }
+                                }
+                            }
+                        });
+                    }
                     bullets.splice(i, 1);
                     removed = true;
                     if (enemy.health <= 0) {
                         enemy.dying = true;
                         enemy.deathTimer = 30;
+                        doors.forEach(function(d) { d.locked = false; d.color = 'green'; d.opening = true; d.openProgress = 0; });
                     }
                     break;
                 }
@@ -1119,20 +1251,7 @@
             if (b.life <= 0) enemyBullets.splice(i, 1);
         }
 
-        // Coleta de chave
-        if (keyItem && !keyItem.collected) {
-            var dx = (player.x + player.width / 2) - keyItem.x;
-            var dy = (player.y + player.height / 2) - keyItem.y;
-            if (Math.sqrt(dx * dx + dy * dy) < keyItem.r + player.width / 2) {
-                keyItem.collected = true;
-                playKeySound();
-                // Destranca portas
-                doors.forEach(function(d) {
-                    d.locked = false;
-                    d.color = 'green';
-                });
-            }
-        }
+        // A porta abre somente após matar um zumbi
 
         // Interação com portas
         for (var i = 0; i < doors.length; i++) {
@@ -1145,13 +1264,21 @@
         }
 
         // Ataque dos inimigos
+        if (playerHitCooldown > 0) {
+            playerHitCooldown--;
+        }
         for (var i = 0; i < enemies.length; i++) {
             var enemy = enemies[i];
+            if (enemy.dying) continue;
             if (isColliding(player, enemy)) {
-                playerHealth -= 10; // Dano do inimigo
-                points -= 5; // Perder pontos
-                if (points < 0) points = 0;
-                addEffect(player.x + player.width / 2, player.y + player.height / 2);
+                if (playerHitCooldown <= 0) {
+                    playerHealth -= 8; // Dano do inimigo por contato
+                    points -= 5; // Perder pontos
+                    if (points < 0) points = 0;
+                    addEffect(player.x + player.width / 2, player.y + player.height / 2);
+                    playHitSound();
+                    playerHitCooldown = 30; // evitar dano repetitivo instantâneo
+                }
             }
         }
 
@@ -1167,6 +1294,7 @@
                     enemies.splice(i, 1);
                     points += enemy.points || 20;
                     playerEse += Math.floor((enemy.points || 20) * 0.5); // Ganhar ESE (50% dos pontos)
+                    saveGameState();
                 }
             }
         }
@@ -1217,7 +1345,10 @@
             soundOn = !soundOn;
         }
         if (key === 'q') {
-            currentWeapon = currentWeapon === 'sword' ? 'gun' : 'sword';
+            cycleWeapon();
+        }
+        if (key === 'f') {
+            reloadWeapon();
         }
         if (key === 'i') {
             if (gameRunning && !gameOverOverlay.classList.contains('hidden')) return;
@@ -1261,8 +1392,14 @@
 
         var weaponBtn = document.querySelector('.weapon-btn');
         if (weaponBtn) {
-            weaponBtn.addEventListener('touchstart', function(e) { e.preventDefault(); currentWeapon = currentWeapon === 'sword' ? 'gun' : 'sword'; });
-            weaponBtn.addEventListener('mousedown', function(e) { e.preventDefault(); currentWeapon = currentWeapon === 'sword' ? 'gun' : 'sword'; });
+            weaponBtn.addEventListener('touchstart', function(e) { e.preventDefault(); cycleWeapon(); });
+            weaponBtn.addEventListener('mousedown', function(e) { e.preventDefault(); cycleWeapon(); });
+        }
+
+        var reloadBtn = document.querySelector('.reload-btn');
+        if (reloadBtn) {
+            reloadBtn.addEventListener('touchstart', function(e) { e.preventDefault(); reloadWeapon(); });
+            reloadBtn.addEventListener('mousedown', function(e) { e.preventDefault(); reloadWeapon(); });
         }
     }
 
@@ -1307,6 +1444,10 @@
         if (showMenu) menuOverlay.classList.remove('hidden');
         gameOverOverlay.classList.add('hidden');
         setupPhase();
+        for (var w in maxAmmo) {
+            ammo[w] = ownedWeapons[w] ? maxAmmo[w] : 0;
+            ammoReserve[w] = ownedWeapons[w] ? maxReserve[w] : 0;
+        }
     }
 
     function startGame() {
@@ -1316,6 +1457,7 @@
         menuOverlay.classList.add('hidden');
         pauseMenuOverlay.classList.add('hidden');
         spawnEnemies();
+        console.log('Jogo iniciado! gameRunning:', gameRunning, 'gamePhase:', gamePhase);
     }
 
     function continuarJogo() {
@@ -1343,6 +1485,8 @@
         }
         document.getElementById('upgradeMenu').classList.add('show');
         atualizarESEDisplay();
+        atualizarWeaponShopButtons();
+        atualizarAmmoShopButtons();
     }
 
     function fecharUpgradeMenu() {
@@ -1354,6 +1498,170 @@
 
     function atualizarESEDisplay() {
         document.getElementById('eseDisplay').textContent = playerEse;
+        atualizarAdStatus();
+    }
+
+    function atualizarAdStatus() {
+        var adStatus = document.getElementById('adStatus');
+        if (!adStatus) return;
+        var remaining = Math.max(0, adCooldownMs - (Date.now() - lastAdWatchTime));
+        adStatus.textContent = remaining <= 0 ? 'Anúncio disponível agora!' : 'Próximo anúncio em ' + Math.ceil(remaining / 1000) + 's.';
+    }
+
+    function assistirAnuncio() {
+        if (isWatchingAd) return;
+        var now = Date.now();
+        if (now - lastAdWatchTime < adCooldownMs) {
+            var remaining = Math.ceil((adCooldownMs - (now - lastAdWatchTime)) / 1000);
+            alert('Aguarde ' + remaining + ' segundos para assistir outro anúncio.');
+            return;
+        }
+        isWatchingAd = true;
+        adCountdown = 5;
+        var adOverlay = document.getElementById('adOverlay');
+        var adTimerText = document.getElementById('adTimerText');
+        if (!adOverlay || !adTimerText) return;
+        adOverlay.classList.remove('hidden');
+        if (gameRunning) paused = true;
+        adTimerText.textContent = 'Assistindo anúncio... ' + adCountdown + 's';
+        adTimerInterval = setInterval(function() {
+            adCountdown--;
+            if (adCountdown <= 0) {
+                clearInterval(adTimerInterval);
+                adTimerInterval = null;
+                adOverlay.classList.add('hidden');
+                if (gameRunning) paused = false;
+                playerEse += 25;
+                lastAdWatchTime = Date.now();
+                atualizarESEDisplay();
+                saveGameState();
+                alert('Você ganhou 25 ESE por assistir ao anúncio!');
+                isWatchingAd = false;
+            } else {
+                adTimerText.textContent = 'Assistindo anúncio... ' + adCountdown + 's';
+            }
+        }, 1000);
+        atualizarAdStatus();
+    }
+
+    function cancelarAnuncio() {
+        if (!isWatchingAd) return;
+        if (adTimerInterval) {
+            clearInterval(adTimerInterval);
+            adTimerInterval = null;
+        }
+        var adOverlay = document.getElementById('adOverlay');
+        if (adOverlay) adOverlay.classList.add('hidden');
+        isWatchingAd = false;
+        if (gameRunning) paused = false;
+        alert('Anúncio cancelado. Tente novamente mais tarde.');
+    }
+
+    function atualizarWeaponShopButtons() {
+        var shopButtons = document.querySelectorAll('[data-weapon]');
+        shopButtons.forEach(function(button) {
+            var weapon = button.getAttribute('data-weapon');
+            var price = button.getAttribute('data-price');
+            if (ownedWeapons[weapon]) {
+                button.textContent = 'Já possui';
+                button.disabled = true;
+            } else {
+                button.textContent = price + ' ESE';
+                button.disabled = false;
+            }
+        });
+    }
+
+    function comprarWeapon(weapon, custo) {
+        if (ownedWeapons[weapon]) {
+            alert('Você já possui essa arma.');
+            return;
+        }
+        if (playerEse >= custo) {
+            playerEse -= custo;
+            ownedWeapons[weapon] = true;
+            ammo[weapon] = maxAmmo[weapon];
+            ammoReserve[weapon] = maxReserve[weapon];
+            currentWeapon = weapon;
+            atualizarESEDisplay();
+            atualizarWeaponShopButtons();
+            atualizarAmmoShopButtons();
+            saveGameState();
+            alert('Arma comprada! Equipando ' + weapons[weapon].name + '.');
+        } else {
+            alert('ESE insuficiente!');
+        }
+    }
+
+    function comprarAmmo(weapon, custo) {
+        if (!ownedWeapons[weapon]) {
+            alert('Você precisa comprar a arma primeiro.');
+            return;
+        }
+        if (playerEse < custo) {
+            alert('ESE insuficiente!');
+            return;
+        }
+        var reserve = ammoReserve[weapon] || 0;
+        var maxReserveForWeapon = maxReserve[weapon] || 0;
+        if (reserve >= maxReserveForWeapon) {
+            alert('A reserva de munição já está cheia!');
+            return;
+        }
+        playerEse -= custo;
+        ammoReserve[weapon] = maxReserveForWeapon;
+        atualizarESEDisplay();
+        atualizarAmmoShopButtons();
+        saveGameState();
+        alert('Munição comprada para ' + weapons[weapon].name + '. Reserva cheia.');
+    }
+
+    function atualizarAmmoShopButtons() {
+        var ammoButtons = document.querySelectorAll('[data-ammo]');
+        ammoButtons.forEach(function(button) {
+            var weapon = button.getAttribute('data-ammo');
+            if (!ownedWeapons[weapon]) {
+                button.textContent = 'Compre arma primeiro';
+                button.disabled = true;
+            } else {
+                var price = button.getAttribute('data-price');
+                button.textContent = price + ' ESE';
+                button.disabled = false;
+            }
+        });
+    }
+
+    function reloadWeapon() {
+        if (currentWeapon === 'sword') {
+            alert('A espada não usa munição.');
+            return;
+        }
+        var reserve = ammoReserve[currentWeapon] || 0;
+        if (reserve <= 0) {
+            alert('Sem munição reserva!');
+            return;
+        }
+        var needed = maxAmmo[currentWeapon] - ammo[currentWeapon];
+        if (needed <= 0) {
+            alert('Munição cheia!');
+            return;
+        }
+        var load = Math.min(needed, reserve);
+        ammo[currentWeapon] += load;
+        ammoReserve[currentWeapon] -= load;
+        playReloadSound();
+        alert('Recarregado ' + load + ' balas de ' + weapons[currentWeapon].name + '.');
+    }
+
+    function cycleWeapon() {
+        var currentIndex = weaponOrder.indexOf(currentWeapon);
+        for (var i = 1; i < weaponOrder.length; i++) {
+            var next = weaponOrder[(currentIndex + i) % weaponOrder.length];
+            if (ownedWeapons[next]) {
+                currentWeapon = next;
+                break;
+            }
+        }
     }
 
     function comprarUpgrade(tipo, custo) {
@@ -1383,7 +1691,7 @@
             }
             
             atualizarESEDisplay();
-            salvarEseJogador();
+            saveGameState();
             alert('Upgrade comprado com sucesso!');
         } else {
             alert('ESE insuficiente!');
@@ -1467,7 +1775,43 @@
             localStorage.setItem('users', JSON.stringify(users));
         }
     }
-    
+
+    function saveGameState() {
+        try {
+            var saveData = {
+                playerEse: playerEse,
+                ownedWeapons: ownedWeapons,
+                currentWeapon: currentWeapon,
+                upgrades: upgrades,
+                ammo: ammo,
+                ammoReserve: ammoReserve,
+                playerCharacter: player.character,
+                lastAdWatchTime: lastAdWatchTime
+            };
+            localStorage.setItem(localSaveKey, JSON.stringify(saveData));
+        } catch (e) {
+            console.warn('Falha ao salvar o estado do jogo:', e);
+        }
+        salvarEseJogador();
+    }
+
+    function loadGameState() {
+        try {
+            var saveData = JSON.parse(localStorage.getItem(localSaveKey) || 'null');
+            if (!saveData) return;
+            if (typeof saveData.playerEse === 'number') playerEse = saveData.playerEse;
+            if (saveData.ownedWeapons) ownedWeapons = saveData.ownedWeapons;
+            if (typeof saveData.currentWeapon === 'string') currentWeapon = saveData.currentWeapon;
+            if (saveData.upgrades) upgrades = saveData.upgrades;
+            if (saveData.ammo) ammo = saveData.ammo;
+            if (saveData.ammoReserve) ammoReserve = saveData.ammoReserve;
+            if (typeof saveData.playerCharacter === 'string') player.character = saveData.playerCharacter;
+            if (typeof saveData.lastAdWatchTime === 'number') lastAdWatchTime = saveData.lastAdWatchTime;
+        } catch (e) {
+            console.warn('Falha ao carregar o estado do jogo:', e);
+        }
+    }
+
     // Carregar dados do usuário logado ao iniciar
     window.addEventListener('load', function() {
         var email = localStorage.getItem('usuarioLogado');
@@ -1481,6 +1825,7 @@
                 atualizarStatsPersonagem();
             }
         }
+        loadGameState();
         setupMobileControls();
         checkOrientation();
         if (!isMobile) {
@@ -1489,6 +1834,10 @@
             if (mobileControls) mobileControls.style.display = 'none';
             if (actionButtons) actionButtons.style.display = 'none';
         }
+        // Iniciar atualização contínua do contador de anúncio
+        setInterval(function() {
+            atualizarAdStatus();
+        }, 1000);
     });
     // Jogo implementado: inimigos, combate, pontos e objetivo de 100 pontos para vencer!
 

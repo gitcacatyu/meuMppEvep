@@ -95,6 +95,11 @@
                     border: 2px solid rgb(255, 0, 0);
                     border-radius: 15px;
                 }
+                .municoes {
+                    margin-top: 40px;
+                    border-top: 2px solid rgb(255, 187, 0);
+                    padding-top: 20px;
+                }
     </style>
 </head>
 <body>
@@ -149,6 +154,23 @@
         <h4>ESPADA de LENDÁRIA</h4>
         <input type="button" id="compraDeEspada23" value="COMPRAR ESPADA">
      </div>
+
+     <div class="municoes">
+        <h3>MUNIÇÕES</h3>
+        <h4>Munição para PISTOLA (15 tiros)</h4>
+        <input type="button" id="compraDeAmo1" value="COMPRAR MUNIÇÃO">
+        <h4>Munição para SPAS (8 tiros)</h4>
+        <input type="button" id="compraDeAmo2" value="COMPRAR MUNIÇÃO">
+        <h4>Munição para REVOLVER (6 tiros)</h4>
+        <input type="button" id="compraDeAmo3" value="COMPRAR MUNIÇÃO">
+        <h4>Munição para AK-47 (30 tiros)</h4>
+        <input type="button" id="compraDeAmo4" value="COMPRAR MUNIÇÃO">
+        <h4>Munição para SNIPER (5 tiros)</h4>
+        <input type="button" id="compraDeAmo5" value="COMPRAR MUNIÇÃO">
+        <h4>Munição para BAZUCA (1 tiro)</h4>
+        <input type="button" id="compraDeAmo6" value="COMPRAR MUNIÇÃO">
+     </div>
+
      <button onclick="volt1()">voltar</button>
         <script>
             
@@ -222,6 +244,27 @@
             document.getElementById("compraDeEspada23").addEventListener("click", function() {
                 alert("Parabéns! Você comprou a ESPADA de LENDÁRIA!");
             });
+
+            // Munições
+            document.getElementById("compraDeAmo1").addEventListener("click", function() {
+                alert("Parabéns! Você comprou munição para PISTOLA (15 tiros)!");
+            });
+            document.getElementById("compraDeAmo2").addEventListener("click", function() {
+                alert("Parabéns! Você comprou munição para SPAS (8 tiros)!");
+            });
+            document.getElementById("compraDeAmo3").addEventListener("click", function() {
+                alert("Parabéns! Você comprou munição para REVOLVER (6 tiros)!");
+            });
+            document.getElementById("compraDeAmo4").addEventListener("click", function() {
+                alert("Parabéns! Você comprou munição para AK-47 (30 tiros)!");
+            });
+            document.getElementById("compraDeAmo5").addEventListener("click", function() {
+                alert("Parabéns! Você comprou munição para SNIPER (5 tiros)!");
+            });
+            document.getElementById("compraDeAmo6").addEventListener("click", function() {
+                alert("Parabéns! Você comprou munição para BAZUCA (1 tiro)!");
+            });
+
             function volt1(){
                 window.location.href = "index.html";
             }
