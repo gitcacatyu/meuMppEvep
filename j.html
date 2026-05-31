@@ -164,21 +164,21 @@
 
         .action-buttons {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 12px;
+            right: 12px;
             display: flex;
             flex-direction: column;
             gap: 10px;
             flex-wrap: wrap;
-            max-width: 140px;
+            max-width: 160px;
         }
         .action-btn {
-            width: 60px;
-            height: 60px;
-            background: rgba(0,0,0,0.7);
+            width: 70px;
+            height: 70px;
+            background: rgba(0,0,0,0.75);
             border: 2px solid #fff;
             color: white;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 50%;
@@ -193,6 +193,37 @@
         }
         .action-btn:active {
             background: rgba(255,255,255,0.3);
+        }
+        @media (max-width: 768px) {
+            .upgrade-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .upgrade-item span {
+                margin-bottom: 8px;
+            }
+            .upgrade-btn {
+                width: 100%;
+                min-width: auto;
+            }
+            .action-buttons {
+                right: 8px;
+                bottom: 8px;
+                max-width: 100px;
+            }
+            .action-btn {
+                width: 72px;
+                height: 72px;
+                font-size: 14px;
+            }
+            .joystick {
+                width: 200px;
+                height: 200px;
+            }
+            .joystick-thumb {
+                width: 76px;
+                height: 76px;
+            }
         }
         .run-btn { background: rgba(255,165,0,0.7); border-color: orange; }
         .attack-btn { background: rgba(255,0,0,0.7); border-color: red; }
@@ -235,7 +266,7 @@
             border-radius: 10px;
             text-align: center;
             z-index: 1500;
-            width: min(90vw, 460px);
+            width: min(92vw, 480px);
             max-height: calc(100vh - 60px);
             overflow-y: auto;
             display: none;
@@ -248,17 +279,62 @@
             justify-content: space-between;
             align-items: center;
             margin: 10px 0;
-            padding: 10px;
+            padding: 12px;
             background: rgba(255,255,255,0.1);
-            border-radius: 5px;
+            border-radius: 8px;
+        }
+        .upgrade-item span {
+            flex: 1;
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+        .upgrade-item span small {
+            display: block;
+            margin-top: 6px;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.84rem;
         }
         .upgrade-btn {
             background: #4CAF50;
             color: white;
             border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
+            padding: 10px 14px;
+            border-radius: 6px;
             cursor: pointer;
+            min-width: 120px;
+        }
+        .shop-tabs {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 16px 0 12px;
+        }
+        .shop-tab {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            border-radius: 6px;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            min-width: 96px;
+        }
+        .shop-tab.active {
+            background: rgba(255,255,255,0.25);
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+        .shop-tab-panel {
+            display: none;
+        }
+        .shop-tab-panel.active {
+            display: block;
+        }
+        .upgrade-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
         }
         .upgrade-btn:disabled {
             background: #666;
@@ -343,76 +419,85 @@
     <div id="upgradeMenu" class="upgrade-menu">
         <h2>💰 Loja (ESE)</h2>
         <p>ESE Atual: <span id="eseDisplay">0</span></p>
-        <div class="upgrade-item">
-            <span>Vida Máxima (+50)</span>
-            <button class="upgrade-btn" onclick="comprarUpgrade('vida', 50)">50 ESE</button>
+        <div class="shop-tabs">
+            <button class="shop-tab active" data-tab="upgrades" onclick="switchShopTab('upgrades')">Upgrades</button>
+            <button class="shop-tab" data-tab="weapons" onclick="switchShopTab('weapons')">Armas</button>
+            <button class="shop-tab" data-tab="ammo" onclick="switchShopTab('ammo')">Munição</button>
         </div>
-        <div class="upgrade-item">
-            <span>Velocidade (+1)</span>
-            <button class="upgrade-btn" onclick="comprarUpgrade('velocidade', 30)">30 ESE</button>
+        <div class="shop-tab-panel active" id="tab-upgrades">
+            <div class="upgrade-item">
+                <span>Vida Máxima (+50)</span>
+                <button class="upgrade-btn" onclick="comprarUpgrade('vida', 50)">50 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Velocidade (+1)</span>
+                <button class="upgrade-btn" onclick="comprarUpgrade('velocidade', 30)">30 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Dano Espada (+5)</span>
+                <button class="upgrade-btn" onclick="comprarUpgrade('danoEspada', 40)">40 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Dano Pistola (+10)</span>
+                <button class="upgrade-btn" onclick="comprarUpgrade('danoPistola', 60)">60 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Energia Máxima (+20)</span>
+                <button class="upgrade-btn" onclick="comprarUpgrade('energia', 35)">35 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Assistir anúncio</span>
+                <button class="upgrade-btn" onclick="assistirAnuncio()">+25 ESE</button>
+            </div>
+            <p id="adStatus" style="margin-top:0; font-size: 0.9rem; color: #ffd700;">Próximo anúncio disponível em breve.</p>
         </div>
-        <div class="upgrade-item">
-            <span>Dano Espada (+5)</span>
-            <button class="upgrade-btn" onclick="comprarUpgrade('danoEspada', 40)">40 ESE</button>
+        <div class="shop-tab-panel" id="tab-weapons">
+            <div class="upgrade-item">
+                <span>SPAS<br><small>Shotgun, alto dano curto alcance</small></span>
+                <button class="upgrade-btn" data-weapon="SPAS" data-price="120" onclick="comprarWeapon('SPAS', 120)">120 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>SNIPER<br><small>Longo alcance, dano alto</small></span>
+                <button class="upgrade-btn" data-weapon="SNIPER" data-price="220" onclick="comprarWeapon('SNIPER', 220)">220 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>AK-47<br><small>Bom alcance e cadência</small></span>
+                <button class="upgrade-btn" data-weapon="AK-47" data-price="160" onclick="comprarWeapon('AK-47', 160)">160 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Revolver<br><small>Preciso, alcance médio</small></span>
+                <button class="upgrade-btn" data-weapon="Revolver" data-price="100" onclick="comprarWeapon('Revolver', 100)">100 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Bazzoca<br><small>Explosão em área, munição rara</small></span>
+                <button class="upgrade-btn" data-weapon="BAZZOCA" data-price="260" onclick="comprarWeapon('BAZZOCA', 260)">260 ESE</button>
+            </div>
         </div>
-        <div class="upgrade-item">
-            <span>Dano Pistola (+10)</span>
-            <button class="upgrade-btn" onclick="comprarUpgrade('danoPistola', 60)">60 ESE</button>
-        </div>
-        <div class="upgrade-item">
-            <span>Energia Máxima (+20)</span>
-            <button class="upgrade-btn" onclick="comprarUpgrade('energia', 35)">35 ESE</button>
-        </div>
-        <div class="upgrade-item">
-            <span>Assistir anúncio</span>
-            <button class="upgrade-btn" onclick="assistirAnuncio()">+25 ESE</button>
-        </div>
-        <p id="adStatus" style="margin-top:0; font-size: 0.9rem; color: #ffd700;">Próximo anúncio disponível em breve.</p>
-        <h2>🛒 Loja de Armas</h2>
-        <div class="upgrade-item">
-            <span>SPAS - Shotgun, alto dano curto alcance</span>
-            <button class="upgrade-btn" data-weapon="SPAS" data-price="120" onclick="comprarWeapon('SPAS', 120)">120 ESE</button>
-        </div>
-        <div class="upgrade-item">
-            <span>SNIPER - Longo alcance, dano muito alto, cadência lenta</span>
-            <button class="upgrade-btn" data-weapon="SNIPER" data-price="220" onclick="comprarWeapon('SNIPER', 220)">220 ESE</button>
-        </div>
-        <div class="upgrade-item">
-            <span>AK-47 - Dano médio, boa cadência, alcance médio</span>
-            <button class="upgrade-btn" data-weapon="AK-47" data-price="160" onclick="comprarWeapon('AK-47', 160)">160 ESE</button>
-        </div>
-        <div class="upgrade-item">
-            <span>Revolver - Dano estável, alcance médio</span>
-            <button class="upgrade-btn" data-weapon="Revolver" data-price="100" onclick="comprarWeapon('Revolver', 100)">100 ESE</button>
-        </div>
-        <div class="upgrade-item">
-            <span>Bazzoca - Dano altíssimo, splash, recarga lenta</span>
-            <button class="upgrade-btn" data-weapon="BAZZOCA" data-price="260" onclick="comprarWeapon('BAZZOCA', 260)">260 ESE</button>
-        </div>
-        <h2>🔋 Comprar Munição</h2>
-        <div class="upgrade-item">
-            <span>Pistola - Recarregar reserva</span>
-            <button class="upgrade-btn" data-ammo="gun" data-price="25" onclick="comprarAmmo('gun', 25)">25 ESE</button>
-        </div>
-        <div class="upgrade-item">
-            <span>SPAS - Recarregar reserva</span>
-            <button class="upgrade-btn" data-ammo="SPAS" data-price="30" onclick="comprarAmmo('SPAS', 30)">30 ESE</button>
-        </div>
-        <div class="upgrade-item">
-            <span>Revolver - Recarregar reserva</span>
-            <button class="upgrade-btn" data-ammo="Revolver" data-price="20" onclick="comprarAmmo('Revolver', 20)">20 ESE</button>
-        </div>
-        <div class="upgrade-item">
-            <span>AK-47 - Recarregar reserva</span>
-            <button class="upgrade-btn" data-ammo="AK-47" data-price="40" onclick="comprarAmmo('AK-47', 40)">40 ESE</button>
-        </div>
-        <div class="upgrade-item">
-            <span>Sniper - Recarregar reserva</span>
-            <button class="upgrade-btn" data-ammo="SNIPER" data-price="50" onclick="comprarAmmo('SNIPER', 50)">50 ESE</button>
-        </div>
-        <div class="upgrade-item">
-            <span>Bazzoca - Recarregar reserva</span>
-            <button class="upgrade-btn" data-ammo="BAZZOCA" data-price="60" onclick="comprarAmmo('BAZZOCA', 60)">60 ESE</button>
+        <div class="shop-tab-panel" id="tab-ammo">
+            <div class="upgrade-item">
+                <span>Pistola<br><small>Recarrega reserva +15</small></span>
+                <button class="upgrade-btn" data-ammo="gun" data-price="25" onclick="comprarAmmo('gun', 25)">25 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>SPAS<br><small>Recarrega reserva +8</small></span>
+                <button class="upgrade-btn" data-ammo="SPAS" data-price="30" onclick="comprarAmmo('SPAS', 30)">30 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Revolver<br><small>Recarrega reserva +6</small></span>
+                <button class="upgrade-btn" data-ammo="Revolver" data-price="20" onclick="comprarAmmo('Revolver', 20)">20 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>AK-47<br><small>Recarrega reserva +30</small></span>
+                <button class="upgrade-btn" data-ammo="AK-47" data-price="40" onclick="comprarAmmo('AK-47', 40)">40 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Sniper<br><small>Recarrega reserva +5</small></span>
+                <button class="upgrade-btn" data-ammo="SNIPER" data-price="50" onclick="comprarAmmo('SNIPER', 50)">50 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Bazzoca<br><small>Recarrega reserva +1</small></span>
+                <button class="upgrade-btn" data-ammo="BAZZOCA" data-price="60" onclick="comprarAmmo('BAZZOCA', 60)">60 ESE</button>
+            </div>
         </div>
         <button onclick="fecharUpgradeMenu()">Voltar ao Jogo</button>
     </div>
@@ -478,7 +563,7 @@
         velocityY: 0,
         character: 'sobrevivente',
         email: '',
-        maxHealth: 600
+        maxHealth: 900
     };
     var localSaveKey = 'mppGameSave';
     var sword = {
@@ -1569,6 +1654,24 @@
     }
 
     // Funções de upgrades
+    function fecharUpgradeMenu() {
+        document.getElementById('upgradeMenu').classList.remove('show');
+        if (gameRunning) {
+            paused = false;
+        }
+    }
+
+    function switchShopTab(tabName) {
+        var tabs = document.querySelectorAll('.shop-tab');
+        var panels = document.querySelectorAll('.shop-tab-panel');
+        tabs.forEach(function(tab) {
+            tab.classList.toggle('active', tab.getAttribute('data-tab') === tabName);
+        });
+        panels.forEach(function(panel) {
+            panel.classList.toggle('active', panel.id === 'tab-' + tabName);
+        });
+    }
+
     function abrirUpgradeMenu() {
         if (gameRunning) {
             paused = true;
@@ -1578,13 +1681,7 @@
         atualizarESEDisplay();
         atualizarWeaponShopButtons();
         atualizarAmmoShopButtons();
-    }
-
-    function fecharUpgradeMenu() {
-        document.getElementById('upgradeMenu').classList.remove('show');
-        if (gameRunning) {
-            paused = false;
-        }
+        switchShopTab('upgrades');
     }
 
     function atualizarESEDisplay() {
@@ -1814,7 +1911,7 @@
     }
     
     function irPerfil() {
-        window.location.href = "perfil.html";
+        window.location.href = "pe.html";
     }
     
     function atualizarStatsPersonagem() {
