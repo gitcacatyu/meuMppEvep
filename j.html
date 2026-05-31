@@ -584,6 +584,10 @@
     var pointGoal = 100;
     var playerHealth = 100;
     var playerHitCooldown = 0;
+    var isInfected = false;
+    var zombiesKilledWhileInfected = 0;
+    var infectionDamageTimer = 60;
+    var loadedGameState = false;
     var lastAdWatchTime = 0;
     var adCooldownMs = 60000;
     var adTimerInterval = null;
@@ -596,6 +600,8 @@
     var attackCooldown = 0;
     var bulletCooldown = 0;
     var gamePhase = 0;
+    var phaseOrder = [];
+    var maxPhases = 50;
     var soundOn = true;
     var audioContext;
     var facing = { x: 1, y: 0 };
@@ -719,8 +725,36 @@
         }
     ];
 
+    function generatePhaseOrder() {
+        phaseOrder = [];
+        var phasesPerCycle = phases.length; // 5 dias
+        var cyclesNeeded = Math.ceil(maxPhases / phasesPerCycle); // quantos ciclos para 50 fases
+        
+        for (var cycle = 0; cycle < cyclesNeeded; cycle++) {
+            // Fazer shuffle de uma cópia das fases base para cada ciclo
+            var shuffledCycle = phases.slice(); // cria cópia
+            for (var i = shuffledCycle.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = shuffledCycle[i];
+                shuffledCycle[i] = shuffledCycle[j];
+                shuffledCycle[j] = temp;
+            }
+            phaseOrder = phaseOrder.concat(shuffledCycle);
+        }
+        // Garantir que tém exatamente 50 fases
+        phaseOrder = phaseOrder.slice(0, maxPhases);
+    }
+
+    function getDayNumber() {
+        // Retorna o dia real (1-5) baseado no progresso
+        return (gamePhase % phases.length) + 1;
+    }
+
     function getPhase() {
-        return phases[Math.min(gamePhase, phases.length - 1)];
+        if (!phaseOrder.length) {
+            generatePhaseOrder();
+        }
+        return phaseOrder[Math.min(gamePhase, phaseOrder.length - 1)] || phases[0];
     }
 
     function showDayMessage(text) {
@@ -868,7 +902,7 @@
             });
         }
         keyItem = null;
-        showDayMessage(phase.title);
+        showDayMessage('DIA ' + getDayNumber());
 
         // Posicionar o jogador no início da sala
         player.x = 60;
@@ -877,7 +911,7 @@
 
     function nextPhase() {
         gamePhase++;
-        if (gamePhase >= phases.length) {
+        if (gamePhase >= phaseOrder.length) {
             setGameOver('Você venceu!');
             playVictorySound();
             return;
@@ -1034,8 +1068,8 @@
         // HUD
         ctx.fillStyle = 'black';
         ctx.font = '20px Arial';
-        var phase = getPhase();
-        ctx.fillText(phase.title + ' (' + (gamePhase + 1) + ' / ' + phases.length + ')', 10, 30);
+        var dayNumber = getDayNumber();
+        ctx.fillText('DIA ' + dayNumber + ' (' + (gamePhase + 1) + ' / ' + phaseOrder.length + ')', 10, 30);
         ctx.fillText('Pontos: ' + points + ' / ' + pointGoal, 10, 55);
         ctx.font = '26px Arial';
         ctx.fillStyle = '#ffdd00';
@@ -1047,6 +1081,15 @@
         ctx.fillRect(70, 90, 100, 15);
         ctx.fillStyle = 'green';
         ctx.fillRect(70, 90, (playerHealth / 100) * 100, 15);
+        
+        // Mostrar se está infectado
+        if (isInfected) {
+            ctx.fillStyle = 'darkred';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText('🦠 INFECTADO! (' + (2 - zombiesKilledWhileInfected) + ' zumbis restantes)', 10, 122);
+            ctx.font = '20px Arial';
+        }
+        
         ctx.fillStyle = 'black';
         ctx.fillText('Energia: ' + Math.floor(energy) + ' / ' + maxEnergy, 10, 130);
         ctx.fillStyle = 'blue';
@@ -1222,6 +1265,7 @@
             bulletCooldown = weapons[currentWeapon].cooldown;
             energy -= weapons[currentWeapon].energyCost;
             ammo[currentWeapon] -= 1;
+            saveGameState();
             var weaponTip = getWeaponTipPosition();
             bullets.push({
                 x: weaponTip.x,
@@ -1377,6 +1421,24 @@
 
         // Energia se regenerando
         energy = Math.min(maxEnergy, energy + 0.5);
+        
+        // Verificar se ficou infectado (vida <= 50%)
+        if (!isInfected && playerHealth <= player.maxHealth * 0.5) {
+            isInfected = true;
+            zombiesKilledWhileInfected = 0;
+            infectionDamageTimer = 60;
+            saveGameState();
+        }
+
+        // Dano por infecção aos pouquinhos
+        if (isInfected) {
+            infectionDamageTimer--;
+            if (infectionDamageTimer <= 0) {
+                infectionDamageTimer = 60;
+                playerHealth = Math.max(0, playerHealth - 1);
+                saveGameState();
+            }
+        }
 
         // Atualizar inimigos morrendo
         for (var i = enemies.length - 1; i >= 0; i--) {
@@ -1388,6 +1450,16 @@
                     points += enemy.points || 20;
                     playerEse += Math.floor((enemy.points || 20) * 0.5); // Ganhar ESE (50% dos pontos)
                     saveGameState();
+                    
+                    // Se está infectado, contar zúbis mortos
+                    if (isInfected) {
+                        zombiesKilledWhileInfected++;
+                        if (zombiesKilledWhileInfected >= 2) {
+                            // Se matou 2 zúbis, se cura da infecção
+                            isInfected = false;
+                            zombiesKilledWhileInfected = 0;
+                        }
+                    }
                 }
             }
         }
@@ -1604,7 +1676,9 @@
     }
     gameLoop();
     function resetGame(showMenu = true) {
+        loadedGameState = false;
         gamePhase = 0;
+        generatePhaseOrder();
         enemies = [];
         obstacles = [];
         effects = [];
@@ -1612,6 +1686,9 @@
         enemyBullets = [];
         points = 0;
         playerHealth = player.maxHealth;
+        isInfected = false;
+        zombiesKilledWhileInfected = 0;
+        infectionDamageTimer = 60;
         paused = false;
         gameRunning = false;
         attackCooldown = 0;
@@ -1627,12 +1704,20 @@
     }
 
     function startGame() {
-        resetGame(false);
+        if (!loadedGameState) {
+            resetGame(false);
+        } else {
+            if (!phaseOrder.length) {
+                generatePhaseOrder();
+            }
+            setupPhase();
+            spawnEnemies();
+        }
         atualizarStatsPersonagem();
         gameRunning = true;
         menuOverlay.classList.add('hidden');
         pauseMenuOverlay.classList.add('hidden');
-        spawnEnemies();
+        loadedGameState = false;
         console.log('Jogo iniciado! gameRunning:', gameRunning, 'gamePhase:', gamePhase);
     }
 
@@ -1838,6 +1923,7 @@
         ammo[currentWeapon] += load;
         ammoReserve[currentWeapon] -= load;
         playReloadSound();
+        saveGameState();
         alert('Recarregado ' + load + ' balas de ' + weapons[currentWeapon].name + '.');
     }
 
@@ -1847,6 +1933,7 @@
             var next = weaponOrder[(currentIndex + i) % weaponOrder.length];
             if (ownedWeapons[next]) {
                 currentWeapon = next;
+                saveGameState();
                 break;
             }
         }
@@ -1973,6 +2060,12 @@
                 upgrades: upgrades,
                 ammo: ammo,
                 ammoReserve: ammoReserve,
+                playerHealth: playerHealth,
+                points: points,
+                isInfected: isInfected,
+                zombiesKilledWhileInfected: zombiesKilledWhileInfected,
+                gamePhase: gamePhase,
+                phaseOrder: phaseOrder,
                 playerCharacter: player.character,
                 lastAdWatchTime: lastAdWatchTime
             };
@@ -1993,8 +2086,15 @@
             if (saveData.upgrades) upgrades = saveData.upgrades;
             if (saveData.ammo) ammo = saveData.ammo;
             if (saveData.ammoReserve) ammoReserve = saveData.ammoReserve;
+            if (typeof saveData.playerHealth === 'number') playerHealth = saveData.playerHealth;
+            if (typeof saveData.points === 'number') points = saveData.points;
+            if (typeof saveData.isInfected === 'boolean') isInfected = saveData.isInfected;
+            if (typeof saveData.zombiesKilledWhileInfected === 'number') zombiesKilledWhileInfected = saveData.zombiesKilledWhileInfected;
+            if (typeof saveData.gamePhase === 'number') gamePhase = saveData.gamePhase;
+            if (saveData.phaseOrder) phaseOrder = saveData.phaseOrder;
             if (typeof saveData.playerCharacter === 'string') player.character = saveData.playerCharacter;
             if (typeof saveData.lastAdWatchTime === 'number') lastAdWatchTime = saveData.lastAdWatchTime;
+            loadedGameState = true;
         } catch (e) {
             console.warn('Falha ao carregar o estado do jogo:', e);
         }
