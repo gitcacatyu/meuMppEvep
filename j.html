@@ -124,39 +124,43 @@
             left: 20px;
             display: none;
             z-index: 1000;
-        }
-        .dpad {
+            gap: 12px;
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 1fr 1fr 1fr;
-            gap: 5px;
-            width: 120px;
-            height: 120px;
+            grid-template-columns: auto;
+            justify-items: center;
         }
-        .dpad-btn {
-            background: rgba(0,0,0,0.7);
-            border: 2px solid #fff;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
+        .joystick {
+            width: 180px;
+            height: 180px;
+            border: 3px solid rgba(255,255,255,0.85);
+            border-radius: 50%;
+            background: rgba(0,0,0,0.25);
+            position: relative;
+            touch-action: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
         }
-        .dpad-btn:active {
-            background: rgba(255,255,255,0.3);
+        .joystick-base {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
         }
-        .dpad-btn.up { grid-column: 2; grid-row: 1; }
-        .dpad-btn.left { grid-column: 1; grid-row: 2; }
-        .dpad-btn.right { grid-column: 3; grid-row: 2; }
-        .dpad-btn.down { grid-column: 2; grid-row: 3; }
-        .dpad-center { grid-column: 2; grid-row: 2; background: rgba(0,0,0,0.5); border: none; }
+        .joystick-thumb {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            border: 2px solid #fff;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.05s ease;
+            touch-action: none;
+        }
 
         .action-buttons {
             position: fixed;
@@ -165,6 +169,8 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            flex-wrap: wrap;
+            max-width: 140px;
         }
         .action-btn {
             width: 60px;
@@ -193,6 +199,7 @@
         .shoot-btn { background: rgba(0,255,0,0.7); border-color: green; }
         .weapon-btn { background: rgba(128,0,128,0.7); border-color: purple; }
         .reload-btn { background: rgba(0,0,255,0.75); border-color: #00f; }
+        .pause-btn { background: rgba(255,255,0,0.8); border-color: #ff0; color: black; }
 
         .orientation-notice {
             position: fixed;
@@ -222,13 +229,15 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             color: white;
             padding: 20px;
             border-radius: 10px;
             text-align: center;
             z-index: 1500;
-            max-width: 400px;
+            width: min(90vw, 460px);
+            max-height: calc(100vh - 60px);
+            overflow-y: auto;
             display: none;
         }
         .upgrade-menu.show {
@@ -418,12 +427,10 @@
 
     <!-- Controles móveis -->
     <div class="mobile-controls">
-        <div class="dpad">
-            <div class="dpad-btn up">↑</div>
-            <div class="dpad-center"></div>
-            <div class="dpad-btn left">←</div>
-            <div class="dpad-btn right">→</div>
-            <div class="dpad-btn down">↓</div>
+        <div class="joystick">
+            <div class="joystick-base">
+                <div class="joystick-thumb"></div>
+            </div>
         </div>
     </div>
 
@@ -433,6 +440,7 @@
         <div class="action-btn shoot-btn">🔫<br>SHOOT</div>
         <div class="action-btn reload-btn">🔁<br>RELOAD</div>
         <div class="action-btn weapon-btn">🔄<br>WEAPON</div>
+        <div class="action-btn pause-btn">⏸️<br>PAUSE</div>
     </div>
 
     <div class="orientation-notice" id="orientationNotice">
@@ -1382,10 +1390,6 @@
             }
         }
 
-        bindButton('.dpad-btn.up', 'up');
-        bindButton('.dpad-btn.down', 'down');
-        bindButton('.dpad-btn.left', 'left');
-        bindButton('.dpad-btn.right', 'right');
         bindButton('.run-btn', 'run');
         bindButton('.attack-btn', 'attack', true);
         bindButton('.shoot-btn', 'shoot', true);
@@ -1401,6 +1405,93 @@
             reloadBtn.addEventListener('touchstart', function(e) { e.preventDefault(); reloadWeapon(); });
             reloadBtn.addEventListener('mousedown', function(e) { e.preventDefault(); reloadWeapon(); });
         }
+
+        var pauseBtn = document.querySelector('.pause-btn');
+        if (pauseBtn) {
+            pauseBtn.addEventListener('touchstart', function(e) { e.preventDefault(); togglePause(); });
+            pauseBtn.addEventListener('mousedown', function(e) { e.preventDefault(); togglePause(); });
+        }
+
+        setupJoystickControl();
+    }
+
+    function togglePause() {
+        if (!gameRunning || !pauseMenuOverlay) return;
+        paused = !paused;
+        if (paused) {
+            pauseMenuOverlay.classList.remove('hidden');
+        } else {
+            pauseMenuOverlay.classList.add('hidden');
+        }
+    }
+
+    function setupJoystickControl() {
+        var joystick = document.querySelector('.joystick');
+        var thumb = document.querySelector('.joystick-thumb');
+        if (!joystick || !thumb) return;
+
+        var centerX = 0;
+        var centerY = 0;
+        var activePointerId = null;
+
+        function setJoystickPosition(dx, dy) {
+            thumb.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+        }
+
+        function resetJoystick() {
+            setJoystickPosition(0, 0);
+            mobileKeys.up = mobileKeys.down = mobileKeys.left = mobileKeys.right = false;
+            activePointerId = null;
+        }
+
+        function updateDirection(dx, dy) {
+            var threshold = 20;
+            mobileKeys.up = dy < -threshold;
+            mobileKeys.down = dy > threshold;
+            mobileKeys.left = dx < -threshold;
+            mobileKeys.right = dx > threshold;
+        }
+
+        function handlePointerMove(e) {
+            if (activePointerId !== null && e.pointerId !== activePointerId) return;
+            var dx = e.clientX - centerX;
+            var dy = e.clientY - centerY;
+            var max = 40;
+            dx = Math.max(-max, Math.min(max, dx));
+            dy = Math.max(-max, Math.min(max, dy));
+            setJoystickPosition(dx, dy);
+            updateDirection(dx, dy);
+        }
+
+        joystick.addEventListener('pointerdown', function(e) {
+            e.preventDefault();
+            joystick.setPointerCapture(e.pointerId);
+            activePointerId = e.pointerId;
+            var rect = joystick.getBoundingClientRect();
+            centerX = rect.left + rect.width / 2;
+            centerY = rect.top + rect.height / 2;
+            handlePointerMove(e);
+        });
+
+        joystick.addEventListener('pointermove', function(e) {
+            if (activePointerId === null) return;
+            handlePointerMove(e);
+        });
+
+        joystick.addEventListener('pointerup', function(e) {
+            if (activePointerId !== e.pointerId) return;
+            resetJoystick();
+        });
+
+        joystick.addEventListener('pointercancel', function(e) {
+            if (activePointerId !== e.pointerId) return;
+            resetJoystick();
+        });
+
+        joystick.addEventListener('pointerleave', function(e) {
+            if (activePointerId !== e.pointerId) return;
+            resetJoystick();
+        });
     }
 
     // Orientação
