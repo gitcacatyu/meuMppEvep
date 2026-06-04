@@ -399,6 +399,30 @@
             <p><strong>AK-47</strong>: Arma automática com bom alcance e velocidade de tiro.</p>
             <p><strong>SNIPER</strong>: Alto dano no longo alcance. Munição limitada.</p>
             <p><strong>Bazzoca</strong>: Explosão de área com splash de dano. Cuidado com munição.</p>
+            <p><strong>Minigun</strong>: Cadência rápida de tiro. Consome muita munição mas causa dano contínuo.</p>
+            <p><strong>Katana</strong>: Espada samurai com dano extraordinário. Ataque corpo a corpo potente.</p>
+            <p><strong>Tanque</strong>: Arma pesada com dano massivo em área. Munição muito limitada.</p>
+            
+            <h2>Personagens</h2>
+            <p><strong>Guerreiro</strong>: Defesa aprimorada com +50 vida máxima. Resistência aumentada.</p>
+            <p><strong>Arqueiro</strong>: Preciso em combate. Críticos causam +30% de dano extra.</p>
+            <p><strong>Mago</strong>: +50% de energia máxima e regeneração acelerada.</p>
+            <p><strong>Ninja</strong>: +40% de velocidade de movimento para escapar rapidamente.</p>
+            <p><strong>Mecânico</strong>: Recupera 5 de vida a cada inimigo derrotado (auto-reparo).</p>
+            <p><strong>Assassino</strong>: Primeiro ataque causa +100% dano (ataque furtivo).</p>
+            <p><strong>Paladino</strong>: Escudo divino reduz dano recebido em 30%.</p>
+            <p><strong>Caçador</strong>: Detecta inimigos a maior distância que outros personagens.</p>
+            <div class="character-select" style="margin-top:12px;">
+                <button class="character-btn" onclick="setCharacter('guerreiro')">Guerreiro</button>
+                <button class="character-btn" onclick="setCharacter('arqueiro')">Arqueiro</button>
+                <button class="character-btn" onclick="setCharacter('mago')">Mago</button>
+                <button class="character-btn" onclick="setCharacter('ninja')">Ninja</button>
+                <button class="character-btn" onclick="setCharacter('mecânico')">Mecânico</button>
+                <button class="character-btn" onclick="setCharacter('assassino')">Assassino</button>
+                <button class="character-btn" onclick="setCharacter('paladino')">Paladino</button>
+                <button class="character-btn" onclick="setCharacter('caçador')">Caçador</button>
+            </div>
+            
             <h2>Loja de Armas</h2>
             <p>Use a loja para comprar novas armas com ESE. Depois de comprar, troque de arma com <strong>Q</strong>.</p>
             <p>Pressione <strong>F</strong> para recarregar a arma manualmente quando a munição do carregador acabar.</p>
@@ -423,27 +447,28 @@
             <button class="shop-tab active" data-tab="upgrades" onclick="switchShopTab('upgrades')">Upgrades</button>
             <button class="shop-tab" data-tab="weapons" onclick="switchShopTab('weapons')">Armas</button>
             <button class="shop-tab" data-tab="ammo" onclick="switchShopTab('ammo')">Munição</button>
+            <button class="shop-tab" data-tab="characters" onclick="switchShopTab('characters')">Personagens</button>
         </div>
         <div class="shop-tab-panel active" id="tab-upgrades">
             <div class="upgrade-item">
                 <span>Vida Máxima (+50)</span>
-                <button class="upgrade-btn" onclick="comprarUpgrade('vida', 50)">50 ESE</button>
+                <button class="upgrade-btn" onclick="comprarUpgrade('vida', 500)">500 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>Velocidade (+1)</span>
-                <button class="upgrade-btn" onclick="comprarUpgrade('velocidade', 30)">30 ESE</button>
+                <button class="upgrade-btn" onclick="comprarUpgrade('velocidade', 300)">300 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>Dano Espada (+5)</span>
-                <button class="upgrade-btn" onclick="comprarUpgrade('danoEspada', 40)">40 ESE</button>
+                <button class="upgrade-btn" onclick="comprarUpgrade('danoEspada', 400)">400 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>Dano Pistola (+10)</span>
-                <button class="upgrade-btn" onclick="comprarUpgrade('danoPistola', 60)">60 ESE</button>
+                <button class="upgrade-btn" onclick="comprarUpgrade('danoPistola', 600)">600 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>Energia Máxima (+20)</span>
-                <button class="upgrade-btn" onclick="comprarUpgrade('energia', 35)">35 ESE</button>
+                <button class="upgrade-btn" onclick="comprarUpgrade('energia', 350)">350 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>Assistir anúncio</span>
@@ -454,49 +479,99 @@
         <div class="shop-tab-panel" id="tab-weapons">
             <div class="upgrade-item">
                 <span>SPAS<br><small>Shotgun, alto dano curto alcance</small></span>
-                <button class="upgrade-btn" data-weapon="SPAS" data-price="120" onclick="comprarWeapon('SPAS', 120)">120 ESE</button>
+                <button class="upgrade-btn" data-weapon="SPAS" data-price="1200" onclick="comprarWeapon('SPAS', 1200)">1200 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>SNIPER<br><small>Longo alcance, dano alto</small></span>
-                <button class="upgrade-btn" data-weapon="SNIPER" data-price="220" onclick="comprarWeapon('SNIPER', 220)">220 ESE</button>
+                <button class="upgrade-btn" data-weapon="SNIPER" data-price="2200" onclick="comprarWeapon('SNIPER', 2200)">2200 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>AK-47<br><small>Bom alcance e cadência</small></span>
-                <button class="upgrade-btn" data-weapon="AK-47" data-price="160" onclick="comprarWeapon('AK-47', 160)">160 ESE</button>
+                <button class="upgrade-btn" data-weapon="AK-47" data-price="1600" onclick="comprarWeapon('AK-47', 1600)">1600 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>Revolver<br><small>Preciso, alcance médio</small></span>
-                <button class="upgrade-btn" data-weapon="Revolver" data-price="100" onclick="comprarWeapon('Revolver', 100)">100 ESE</button>
+                <button class="upgrade-btn" data-weapon="Revolver" data-price="1000" onclick="comprarWeapon('Revolver', 1000)">1000 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>Bazzoca<br><small>Explosão em área, munição rara</small></span>
-                <button class="upgrade-btn" data-weapon="BAZZOCA" data-price="260" onclick="comprarWeapon('BAZZOCA', 260)">260 ESE</button>
+                <button class="upgrade-btn" data-weapon="BAZZOCA" data-price="2600" onclick="comprarWeapon('BAZZOCA', 2600)">2600 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Minigun<br><small>Cadência rápida, dano médio</small></span>
+                <button class="upgrade-btn" data-weapon="MINIGUN" data-price="2000" onclick="comprarWeapon('MINIGUN', 2000)">2000 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Katana<br><small>Espada samurai, dano muito alto</small></span>
+                <button class="upgrade-btn" data-weapon="KATANA" data-price="3600" onclick="comprarWeapon('KATANA', 3600)">3600 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Tanque<br><small>Arma pesada, dano explosivo</small></span>
+                <button class="upgrade-btn" data-weapon="TANQUE" data-price="3200" onclick="comprarWeapon('TANQUE', 3200)">3200 ESE</button>
             </div>
         </div>
         <div class="shop-tab-panel" id="tab-ammo">
             <div class="upgrade-item">
                 <span>Pistola<br><small>Recarrega reserva +15</small></span>
-                <button class="upgrade-btn" data-ammo="gun" data-price="25" onclick="comprarAmmo('gun', 25)">25 ESE</button>
+                <button class="upgrade-btn" data-ammo="gun" data-price="250" onclick="comprarAmmo('gun', 250)">250 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>SPAS<br><small>Recarrega reserva +8</small></span>
-                <button class="upgrade-btn" data-ammo="SPAS" data-price="30" onclick="comprarAmmo('SPAS', 30)">30 ESE</button>
+                <button class="upgrade-btn" data-ammo="SPAS" data-price="300" onclick="comprarAmmo('SPAS', 300)">300 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>Revolver<br><small>Recarrega reserva +6</small></span>
-                <button class="upgrade-btn" data-ammo="Revolver" data-price="20" onclick="comprarAmmo('Revolver', 20)">20 ESE</button>
+                <button class="upgrade-btn" data-ammo="Revolver" data-price="200" onclick="comprarAmmo('Revolver', 200)">200 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>AK-47<br><small>Recarrega reserva +30</small></span>
-                <button class="upgrade-btn" data-ammo="AK-47" data-price="40" onclick="comprarAmmo('AK-47', 40)">40 ESE</button>
+                <button class="upgrade-btn" data-ammo="AK-47" data-price="400" onclick="comprarAmmo('AK-47', 400)">400 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>Sniper<br><small>Recarrega reserva +5</small></span>
-                <button class="upgrade-btn" data-ammo="SNIPER" data-price="50" onclick="comprarAmmo('SNIPER', 50)">50 ESE</button>
+                <button class="upgrade-btn" data-ammo="SNIPER" data-price="500" onclick="comprarAmmo('SNIPER', 500)">500 ESE</button>
             </div>
             <div class="upgrade-item">
                 <span>Bazzoca<br><small>Recarrega reserva +1</small></span>
-                <button class="upgrade-btn" data-ammo="BAZZOCA" data-price="60" onclick="comprarAmmo('BAZZOCA', 60)">60 ESE</button>
+                <button class="upgrade-btn" data-ammo="BAZZOCA" data-price="600" onclick="comprarAmmo('BAZZOCA', 600)">600 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Minigun<br><small>Recarrega reserva +120</small></span>
+                <button class="upgrade-btn" data-ammo="MINIGUN" data-price="500" onclick="comprarAmmo('MINIGUN', 500)">500 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Tanque<br><small>Recarrega reserva +2</small></span>
+                <button class="upgrade-btn" data-ammo="TANQUE" data-price="800" onclick="comprarAmmo('TANQUE', 800)">800 ESE</button>
+            </div>
+        </div>
+        <div class="shop-tab-panel" id="tab-characters">
+            <div class="upgrade-item">
+                <span>Arqueiro<br><small>Precisão e críticos</small></span>
+                <button class="upgrade-btn" data-character="arqueiro" data-price="1200" onclick="toggleCharacter('arqueiro', 1200)">1200 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Mago<br><small>Mais energia</small></span>
+                <button class="upgrade-btn" data-character="mago" data-price="1400" onclick="toggleCharacter('mago', 1400)">1400 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Ninja<br><small>Velocidade aumentada</small></span>
+                <button class="upgrade-btn" data-character="ninja" data-price="1600" onclick="toggleCharacter('ninja', 1600)">1600 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Mecânico<br><small>Repara ao matar inimigos</small></span>
+                <button class="upgrade-btn" data-character="mecânico" data-price="1800" onclick="toggleCharacter('mecânico', 1800)">1800 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Assassino<br><small>Primeiro ataque poderoso</small></span>
+                <button class="upgrade-btn" data-character="assassino" data-price="2000" onclick="toggleCharacter('assassino', 2000)">2000 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Paladino<br><small>Reduz dano recebido</small></span>
+                <button class="upgrade-btn" data-character="paladino" data-price="2200" onclick="toggleCharacter('paladino', 2200)">2200 ESE</button>
+            </div>
+            <div class="upgrade-item">
+                <span>Caçador<br><small>Detecta inimigos</small></span>
+                <button class="upgrade-btn" data-character="caçador" data-price="1500" onclick="toggleCharacter('caçador', 1500)">1500 ESE</button>
             </div>
         </div>
         <button onclick="fecharUpgradeMenu()">Voltar ao Jogo</button>
@@ -608,7 +683,8 @@
     var isShiftPressed = false;
     var runSpeedMultiplier = 1.5; // Velocidade de corrida 50% mais rápido
     var playerEse = 0; // Moeda ESE
-    var ownedWeapons = { sword: true, gun: true, SPAS: false, Revolver: false, 'AK-47': false, SNIPER: false, BAZZOCA: false };
+    var ownedWeapons = { sword: true, gun: true, SPAS: false, Revolver: false, 'AK-47': false, SNIPER: false, BAZZOCA: false, MINIGUN: false, KATANA: false, TANQUE: false };
+    var ownedCharacters = { 'guerreiro': true, 'arqueiro': false, 'mago': false, 'ninja': false, 'mecânico': false, 'assassino': false, 'paladino': false, 'caçador': false };
     var weapons = {
         sword: { name: 'Espada', damage: 250, range: 90, cooldown: 30 },
         gun: { name: 'Pistola', damage: 45, range: 200, cooldown: 15, energyCost: 15 },
@@ -616,14 +692,17 @@
         Revolver: { name: 'Revolver', damage: 45, range: 220, cooldown: 22, energyCost: 20 },
         'AK-47': { name: 'AK-47', damage:65, range: 240, cooldown: 18, energyCost: 18 },
         SNIPER: { name: 'Sniper', damage: 140, range: 650, cooldown: 50, energyCost: 40 },
-        BAZZOCA: { name: 'Bazzoca', damage: 180, range: 260, cooldown: 60, energyCost: 50, splash: 40 }
+        BAZZOCA: { name: 'Bazzoca', damage: 180, range: 260, cooldown: 60, energyCost: 50, splash: 40 },
+        MINIGUN: { name: 'Minigun', damage: 35, range: 220, cooldown: 8, energyCost: 30, rateOfFire: 0.3 },
+        KATANA: { name: 'Katana', damage: 350, range: 110, cooldown: 25 },
+        TANQUE: { name: 'Tanque', damage: 200, range: 300, cooldown: 70, energyCost: 60, splash: 60 }
     };
     var currentWeapon = 'sword';
-    var weaponOrder = ['sword', 'gun', 'SPAS', 'Revolver', 'AK-47', 'SNIPER', 'BAZZOCA'];
-    var ammo = { gun: 15, SPAS: 8, Revolver: 6, 'AK-47': 30, SNIPER: 5, BAZZOCA: 1 };
-    var maxAmmo = { gun: 15, SPAS: 8, Revolver: 6, 'AK-47': 30, SNIPER: 5, BAZZOCA: 1 };
-    var ammoReserve = { gun: 45, SPAS: 24, Revolver: 12, 'AK-47': 90, SNIPER: 15, BAZZOCA: 4 };
-    var maxReserve = { gun: 45, SPAS: 24, Revolver: 12, 'AK-47': 90, SNIPER: 15, BAZZOCA: 4 };
+    var weaponOrder = ['sword', 'gun', 'SPAS', 'Revolver', 'AK-47', 'SNIPER', 'BAZZOCA', 'MINIGUN', 'KATANA', 'TANQUE'];
+    var ammo = { gun: 15, SPAS: 8, Revolver: 6, 'AK-47': 30, SNIPER: 5, BAZZOCA: 1, MINIGUN: 120, KATANA: 0, TANQUE: 2 };
+    var maxAmmo = { gun: 15, SPAS: 8, Revolver: 6, 'AK-47': 30, SNIPER: 5, BAZZOCA: 1, MINIGUN: 120, KATANA: 0, TANQUE: 2 };
+    var ammoReserve = { gun: 45, SPAS: 24, Revolver: 12, 'AK-47': 90, SNIPER: 15, BAZZOCA: 4, MINIGUN: 360, KATANA: 0, TANQUE: 8 };
+    var maxReserve = { gun: 45, SPAS: 24, Revolver: 12, 'AK-47': 90, SNIPER: 15, BAZZOCA: 4, MINIGUN: 360, KATANA: 0, TANQUE: 8 };
     var dayMessage = '';
     var dayMessageTimer = 0;
 
@@ -826,11 +905,11 @@
     }
 
     var enemyTemplates = {
-        'zumbicommom': { color: 'green', speed: 2.5, health: 140, width: 40, height: 40, points: 20 },
-        'zumbielite': { color: 'darkgreen', speed: 2.0, health: 190, width: 55, height: 55, points: 40 },
-        'zumbiboss': { color: 'grey', speed: 1.8, health: 280, width: 70, height: 70, points: 80 },
-        'zumbiexpert': { color: 'limegreen', speed: 2.2, health: 150, width: 45, height: 45, points: 25 },
-        'zumbichefe': { color: 'darkred', speed: 2.0, health: 200, width: 60, height: 60, points: 50 }
+        'zumbicommom': { color: 'green', speed: 3.0, health: 200, width: 40, height: 40, points: 20 },
+        'zumbielite': { color: 'darkgreen', speed: 2.0, health: 290, width: 55, height: 55, points: 40 },
+        'zumbiboss': { color: 'grey', speed: 2.0, health: 380, width: 70, height: 70, points: 80 },
+        'zumbiexpert': { color: 'limegreen', speed: 2.2, health: 450, width: 45, height: 45, points: 25 },
+        'zumbichefe': { color: 'darkred', speed: 2.8, health: 500, width: 60, height: 60, points: 50 }
     };
 
     function createEnemy(typeName) {
@@ -931,11 +1010,12 @@
 
     function drawWeapon() {
         var weaponPos = getWeaponTipPosition();
-        var baseColor = currentWeapon === 'sword' ? 'gray' : 'orange';
+        var isMelee = (currentWeapon === 'sword' || currentWeapon === 'KATANA');
+        var baseColor = isMelee ? 'gray' : 'orange';
         
         ctx.save();
         ctx.strokeStyle = attackCooldown > 0 ? 'yellow' : baseColor;
-        ctx.lineWidth = currentWeapon === 'sword' ? 8 : 5;
+        ctx.lineWidth = isMelee ? 8 : 5;
         ctx.lineCap = 'round';
         
         // Desenhar arma como linha rotacionada
@@ -1032,8 +1112,8 @@
             ctx.stroke();
         }
 
-        // Desenhar mira da arma (apontador luminoso)
-        if (currentWeapon !== 'sword') {
+        // Desenhar mira da arma (apontador luminoso) — não mostrar para armas corpo-a-corpo (Katana)
+        if (currentWeapon !== 'sword' && currentWeapon !== 'KATANA') {
             var centerX = player.x + player.width / 2;
             var centerY = player.y + player.height / 2;
             var miraDistance = 150;
@@ -1084,9 +1164,17 @@
         
         // Mostrar se está infectado
         if (isInfected) {
-            ctx.fillStyle = 'darkred';
+            var infectionText = '🦠 INFECTADO! Mate 3 zumbis (' + (3 - zombiesKilledWhileInfected) + ' restantes)';
+            var blinkOn = Math.floor(Date.now() / 300) % 2 === 0;
             ctx.font = 'bold 16px Arial';
-            ctx.fillText('🦠 INFECTADO! (' + (2 - zombiesKilledWhileInfected) + ' zumbis restantes)', 10, 122);
+            ctx.fillStyle = blinkOn ? 'rgba(200, 0, 0, 0.85)' : 'rgba(120, 0, 0, 0.75)';
+            var textWidth = ctx.measureText(infectionText).width;
+            ctx.fillRect(5, 104, textWidth + 20, 24);
+            ctx.fillStyle = 'yellow';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 6;
+            ctx.fillText(infectionText, 15, 122);
+            ctx.shadowBlur = 0;
             ctx.font = '20px Arial';
         }
         
@@ -1099,12 +1187,28 @@
         ctx.fillStyle = 'black';
         ctx.fillText('Som: ' + (soundOn ? 'ON' : 'OFF') + ' (M)', 10, 155);
         ctx.fillText('Porta: ' + (doors.length && doors[0].locked ? '🔒 TRANCADA' : '🔓 ABERTA'), 10, 175);
-        if (currentWeapon === 'sword') {
+        if (currentWeapon === 'sword' || currentWeapon === 'KATANA') {
             ctx.fillText('Munição: 🔥 ∞', 10, 195);
         } else {
-            ctx.fillText('Munição: 🔫 ' + ammo[currentWeapon] + ' / ' + maxAmmo[currentWeapon] + ' (' + ammoReserve[currentWeapon] + ')', 10, 195);
+            ctx.fillText('Munição: 🔫 ' + ammo[currentWeapon] + ' / ' + (maxAmmo[currentWeapon] || 0) + ' (' + (ammoReserve[currentWeapon] || 0) + ')', 10, 195);
         }
         ctx.fillText('ESE: ' + playerEse + ' 💰', 10, 235);
+
+        // Mostrar personagem e poder no HUD
+        ctx.fillStyle = 'black';
+        ctx.font = '16px Arial';
+        try {
+            var charName = (player.character || '').charAt(0).toUpperCase() + (player.character || '').slice(1);
+            ctx.fillText('Personagem: ' + charName, 10, 260);
+            if (player.power) {
+                ctx.font = 'italic 14px Arial';
+                ctx.fillStyle = 'darkblue';
+                ctx.fillText('Poder: ' + player.power, 10, 280);
+                // restaurar fonte padrão
+                ctx.font = '20px Arial';
+                ctx.fillStyle = 'black';
+            }
+        } catch (e) {}
 
         if (dayMessageTimer > 0) {
             dayMessageTimer--;
@@ -1217,6 +1321,10 @@
         player.velocityX = 0;
         player.velocityY = 0;
         var currentSpeed = isShiftPressed || mobileKeys['run'] ? player.speed * runSpeedMultiplier : player.speed;
+            // Poder do Ninja: +40% de velocidade de movimento
+            if (player.character === 'ninja') {
+                currentSpeed *= 1.4;
+            }
         if (keys['ArrowUp'] || mobileKeys['up']) player.velocityY -= currentSpeed;
         if (keys['ArrowDown'] || mobileKeys['down']) player.velocityY += currentSpeed;
         if (keys['ArrowLeft'] || mobileKeys['left']) player.velocityX -= currentSpeed;
@@ -1240,33 +1348,56 @@
             facing = { x: player.velocityX / len, y: player.velocityY / len };
         }
 
-        if (currentWeapon === 'sword' && isAttacking && attackCooldown <= 0) {
-            attackCooldown = weapons.sword.cooldown;
+        if ((currentWeapon === 'sword' || currentWeapon === 'KATANA') && isAttacking && attackCooldown <= 0) {
+            attackCooldown = weapons[currentWeapon].cooldown || weapons.sword.cooldown;
             for (var i = 0; i < enemies.length; i++) {
                 var enemy = enemies[i];
-                var dx = (player.x + player.width / 2) - (enemy.x + enemy.width / 2);
-                var dy = (player.y + player.height / 2) - (enemy.y + enemy.height / 2);
+                var centerPX = player.x + player.width / 2;
+                var centerPY = player.y + player.height / 2;
+                var enemyCenterX = enemy.x + enemy.width / 2;
+                var enemyCenterY = enemy.y + enemy.height / 2;
+                var dx = centerPX - enemyCenterX;
+                var dy = centerPY - enemyCenterY;
                 var dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < weapons.sword.range && enemy.x > player.x + player.width / 2) {
-                    enemy.health -= weapons.sword.damage;
+                // Verificar se inimigo está na frente do jogador usando produto escalar
+                var vx = enemyCenterX - centerPX;
+                var vy = enemyCenterY - centerPY;
+                var dot = vx * facing.x + vy * facing.y;
+                if (dist < (weapons[currentWeapon].range || weapons.sword.range) && dot > 0) {
+                    var damage = weapons[currentWeapon].damage || weapons.sword.damage;
+                    // Aplicar poder do personagem Assassino no primeiro ataque
+                    if (player.character === 'assassino' && enemy.firstHit !== true) {
+                        damage *= 2; // +100% de dano
+                        enemy.firstHit = true;
+                    }
+                    enemy.health -= damage;
                     addEffect(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
                     playHitSound();
                     if (enemy.health <= 0) {
                         enemy.dying = true;
                         enemy.deathTimer = 30;
                         doors.forEach(function(d) { d.locked = false; d.color = 'green'; d.opening = true; d.openProgress = 0; });
+                        // Poder do Mecânico: recupera vida ao derrotar inimigo
+                        if (player.character === 'mecânico') {
+                            playerHealth = Math.min(playerHealth + 5, player.maxHealth);
+                        }
                     }
                 }
             }
         }
 
         // Ataque à distância (tiro)
-        if (currentWeapon !== 'sword' && isShooting && bulletCooldown <= 0 && energy >= weapons[currentWeapon].energyCost && ammo[currentWeapon] > 0) {
+        if (currentWeapon !== 'sword' && currentWeapon !== 'KATANA' && isShooting && bulletCooldown <= 0 && energy >= (weapons[currentWeapon] && weapons[currentWeapon].energyCost) && (ammo[currentWeapon] > 0 || typeof ammo[currentWeapon] === 'undefined')) {
             bulletCooldown = weapons[currentWeapon].cooldown;
             energy -= weapons[currentWeapon].energyCost;
             ammo[currentWeapon] -= 1;
             saveGameState();
             var weaponTip = getWeaponTipPosition();
+            var damageMultiplier = 1.0;
+            // Poder do Arqueiro: crítico com +30% de dano
+            if (player.character === 'arqueiro' && Math.random() < 0.3) {
+                damageMultiplier = 1.3;
+            }
             bullets.push({
                 x: weaponTip.x,
                 y: weaponTip.y,
@@ -1275,7 +1406,7 @@
                 dx: facing.x * 10,
                 dy: facing.y * 10,
                 life: 40,
-                damage: weapons[currentWeapon].damage,
+                damage: weapons[currentWeapon].damage * damageMultiplier,
                 type: currentWeapon,
                 splash: weapons[currentWeapon].splash || 0
             });
@@ -1409,7 +1540,12 @@
             if (enemy.dying) continue;
             if (isColliding(player, enemy)) {
                 if (playerHitCooldown <= 0) {
-                    playerHealth -= 8; // Dano do inimigo por contato
+                    var incomingDamage = 8;
+                    // Poder do Paladino: reduz dano em 30%
+                    if (player.character === 'paladino') {
+                        incomingDamage = Math.floor(incomingDamage * 0.7);
+                    }
+                    playerHealth -= incomingDamage;
                     points -= 5; // Perder pontos
                     if (points < 0) points = 0;
                     addEffect(player.x + player.width / 2, player.y + player.height / 2);
@@ -1420,7 +1556,12 @@
         }
 
         // Energia se regenerando
-        energy = Math.min(maxEnergy, energy + 0.5);
+        // Poder do Mago: regeneração de energia 50% mais rápida
+        var energyRegen = 0.5;
+        if (player.character === 'mago') {
+            energyRegen = 0.75; // Regeneração mais rápida
+        }
+        energy = Math.min(maxEnergy, energy + energyRegen);
         
         // Verificar se ficou infectado (vida <= 50%)
         if (!isInfected && playerHealth <= player.maxHealth * 0.5) {
@@ -1454,8 +1595,8 @@
                     // Se está infectado, contar zúbis mortos
                     if (isInfected) {
                         zombiesKilledWhileInfected++;
-                        if (zombiesKilledWhileInfected >= 2) {
-                            // Se matou 2 zúbis, se cura da infecção
+                        if (zombiesKilledWhileInfected >= 3) {
+                            // Se matou 3 zúbis, se cura da infecção
                             isInfected = false;
                             zombiesKilledWhileInfected = 0;
                         }
@@ -1766,6 +1907,7 @@
         atualizarESEDisplay();
         atualizarWeaponShopButtons();
         atualizarAmmoShopButtons();
+        atualizarCharacterShopButtons();
         switchShopTab('upgrades');
     }
 
@@ -2006,23 +2148,51 @@
             'guerreiro': { 
                 color: 'darkblue', 
                 speed: 4, 
-                maxHealth: 150
+                maxHealth: 150,
+                power: 'Defesa: +50 de vida máxima e resistência aumentada'
             },
             'arqueiro': { 
                 color: 'orange', 
                 speed: 7, 
-                maxHealth: 80
+                maxHealth: 90,
+                power: 'Precisão: Crítico com 30% de dano extra'
             },
             'mago': { 
                 color: 'purple', 
                 speed: 5, 
                 maxHealth: 90,
-                energyMult: 1.5
+                energyMult: 1.5,
+                power: 'Magia: +50% de energia e regeneração de energia aumentada'
             },
             'ninja': { 
                 color: 'black', 
-                speed: 8, 
-                maxHealth: 70
+                speed: 9, 
+                maxHealth: 100,
+                power: 'Velocidade: +40% de velocidade de movimento'
+            },
+            'mecânico': { 
+                color: 'gray', 
+                speed: 4, 
+                maxHealth: 130,
+                power: 'Reparo: Recupera 5 de vida a cada inimigo derrotado'
+            },
+            'assassino': { 
+                color: 'darkred', 
+                speed: 9, 
+                maxHealth: 100,
+                power: 'Furtivo: Primeiro ataque causa +100% dano'
+            },
+            'paladino': { 
+                color: 'gold', 
+                speed: 3, 
+                maxHealth: 200,
+                power: 'Escudo Divino: Reduz dano recebido em 30%'
+            },
+            'caçador': { 
+                color: 'brown', 
+                speed: 6, 
+                maxHealth: 110,
+                power: 'Rastreamento: Detecta inimigos a maior distância'
             }
         };
         
@@ -2031,6 +2201,7 @@
         player.speed = char.speed;
         player.maxHealth = char.maxHealth;
         playerHealth = char.maxHealth;
+        player.power = char.power;
         
         if (char.energyMult) {
             maxEnergy = 100 * char.energyMult;
@@ -2039,6 +2210,72 @@
             maxEnergy = 100;
             energy = 100;
         }
+    }
+
+    function setCharacter(name) {
+        if (!ownedCharacters[name] && name !== 'sobrevivente') {
+            alert('Você não possui esse personagem. Compre-o na loja primeiro.');
+            return;
+        }
+        player.character = name;
+        atualizarStatsPersonagem();
+        saveGameState();
+        alert('Personagem definido: ' + name);
+        // Atualizar UI de seleção (visual)
+        var btns = document.querySelectorAll('.character-btn');
+        btns.forEach(function(b) {
+            if (b.textContent.toLowerCase() === name) b.classList.add('selected'); else b.classList.remove('selected');
+        });
+        atualizarCharacterShopButtons();
+    }
+
+    function toggleCharacter(name, custo) {
+        if (!ownedCharacters[name]) {
+            comprarPersonagem(name, custo);
+            return;
+        }
+        if (player.character === name) {
+            setCharacter('sobrevivente');
+            alert('Personagem desequipado.');
+        } else {
+            setCharacter(name);
+        }
+    }
+
+    function comprarPersonagem(name, custo) {
+        if (ownedCharacters[name]) {
+            alert('Você já possui esse personagem.');
+            return;
+        }
+        if (playerEse < custo) {
+            alert('ESE insuficiente!');
+            return;
+        }
+        playerEse -= custo;
+        ownedCharacters[name] = true;
+        saveGameState();
+        atualizarESEDisplay();
+        atualizarCharacterShopButtons();
+        alert('Personagem comprado: ' + name);
+    }
+
+    function atualizarCharacterShopButtons() {
+        var charButtons = document.querySelectorAll('[data-character]');
+        charButtons.forEach(function(button) {
+            var name = button.getAttribute('data-character');
+            var price = button.getAttribute('data-price');
+            if (ownedCharacters[name]) {
+                if (player.character === name) {
+                    button.textContent = 'Desequipar';
+                } else {
+                    button.textContent = 'Equipar';
+                }
+                button.disabled = false;
+            } else {
+                button.textContent = price + ' ESE';
+                button.disabled = false;
+            }
+        });
     }
     
     function salvarEseJogador() {
@@ -2067,6 +2304,7 @@
                 gamePhase: gamePhase,
                 phaseOrder: phaseOrder,
                 playerCharacter: player.character,
+                ownedCharacters: ownedCharacters,
                 lastAdWatchTime: lastAdWatchTime
             };
             localStorage.setItem(localSaveKey, JSON.stringify(saveData));
@@ -2093,6 +2331,7 @@
             if (typeof saveData.gamePhase === 'number') gamePhase = saveData.gamePhase;
             if (saveData.phaseOrder) phaseOrder = saveData.phaseOrder;
             if (typeof saveData.playerCharacter === 'string') player.character = saveData.playerCharacter;
+            if (saveData.ownedCharacters) ownedCharacters = saveData.ownedCharacters;
             if (typeof saveData.lastAdWatchTime === 'number') lastAdWatchTime = saveData.lastAdWatchTime;
             loadedGameState = true;
         } catch (e) {
@@ -2115,6 +2354,16 @@
         }
         loadGameState();
         setupMobileControls();
+        atualizarCharacterShopButtons();
+        // Atualizar visual dos botões de personagem
+        setTimeout(function() {
+            try {
+                var btns = document.querySelectorAll('.character-btn');
+                btns.forEach(function(b) {
+                    if (b.getAttribute && b.textContent.toLowerCase() === (player.character || '').toLowerCase()) b.classList.add('selected'); else b.classList.remove('selected');
+                });
+            } catch (e) {}
+        }, 50);
         checkOrientation();
         if (!isMobile) {
             var mobileControls = document.querySelector('.mobile-controls');
