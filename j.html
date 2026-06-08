@@ -370,7 +370,7 @@
     <div id="gameOver" class="overlay hidden">
         <h1 id="gameOverTitle">Game Over</h1>
         <p id="gameOverText"></p>
-        <button onclick="resetGame()">Jogar novamente</button>
+        <button onclick="startGame()">Jogar novamente</button>
     </div>
 
     <div id="infoScreen" class="overlay hidden">
@@ -603,6 +603,11 @@
         <div class="action-btn pause-btn">⏸️<br>PAUSE</div>
     </div>
 
+    <div id="saveControls" style="position:fixed;right:12px;top:12px;z-index:9999;">
+        <button id="exportSaveBtn" style="margin:2px;padding:6px 8px;">Exportar Save</button>
+        <button id="importSaveBtn" style="margin:2px;padding:6px 8px;">Importar Save</button>
+    </div>
+
     <div class="orientation-notice" id="orientationNotice">
         <h3>📱 Gire o dispositivo</h3>
         <p>Para uma melhor experiência, gire seu dispositivo para orientação horizontal.</p>
@@ -649,6 +654,7 @@
         color: 'gray'
     };
     var enemies = [];
+    var corpses = [];
     var obstacles = [];
     var doors = [];
     var keyItem = null;
@@ -659,6 +665,12 @@
     var pointGoal = 100;
     var playerHealth = 100;
     var playerHitCooldown = 0;
+    var previousPlayerHealth = playerHealth;
+    // Animação do jogador (protótipo frame-based)
+    player.frameIndex = player.frameIndex || 0;
+    player.frameTimer = player.frameTimer || 0;
+    player.frameInterval = player.frameInterval || 8; // ticks por frame
+    player.state = player.state || 'idle'; // idle, walk, attack, hurt
     var isInfected = false;
     var zombiesKilledWhileInfected = 0;
     var infectionDamageTimer = 60;
@@ -904,6 +916,49 @@
         effects.push({ x: x, y: y, r: 10, life: 20 });
     }
 
+    function addBloodEffect(x, y, count) {
+        count = count || 10;
+        for (var i = 0; i < count; i++) {
+            var angle = Math.random() * Math.PI * 2;
+            var speed = 1 + Math.random() * 3;
+            effects.push({ x: x + Math.cos(angle) * 4, y: y + Math.sin(angle) * 4, r: 4 + Math.random() * 6, life: 20 + Math.floor(Math.random() * 20), dx: Math.cos(angle) * speed, dy: Math.sin(angle) * speed, blood: true });
+        }
+    }
+
+    function handleEnemyDeath(enemy) {
+        // color based on lastDamage ratio
+        var last = enemy.lastDamage || enemy.maxHealth || 50;
+        var ratio = Math.min(1, last / (enemy.maxHealth || 100));
+        var red = 200;
+        var green = Math.max(10, Math.floor(100 * (1 - ratio)));
+        var blue = Math.max(10, Math.floor(100 * (1 - ratio)));
+        var corpseColor = 'rgba(' + red + ',' + green + ',' + blue + ',1)';
+
+        // create corpse (stays on ground)
+        corpses.push({ x: enemy.x, y: enemy.y, width: enemy.width, height: enemy.height, color: corpseColor, decay: 300, maxDecay: 300 });
+
+        // spawn blood particles
+        addBloodEffect(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, 14);
+
+        // award points and ESE immediately
+        points += enemy.points || 20;
+        playerEse += Math.floor((enemy.points || 20) * 0.5);
+        saveGameState();
+
+        // infection counter
+        if (isInfected) {
+            zombiesKilledWhileInfected++;
+            if (zombiesKilledWhileInfected >= 3) {
+                isInfected = false;
+                zombiesKilledWhileInfected = 0;
+            }
+        }
+
+        // remove enemy from active list
+        var idx = enemies.indexOf(enemy);
+        if (idx !== -1) enemies.splice(idx, 1);
+    }
+
     var enemyTemplates = {
         'zumbicommom': { color: 'green', speed: 3.0, health: 200, width: 40, height: 40, points: 20 },
         'zumbielite': { color: 'darkgreen', speed: 2.0, health: 290, width: 55, height: 55, points: 40 },
@@ -1026,6 +1081,163 @@
         ctx.restore();
     }
 
+    // Desenha o jogador com membros (braços, mãos, joelhos) e rotações
+    function drawPlayerAnimated() {
+        // Atualizar frame timer
+        player.frameTimer++;
+        if (player.frameTimer >= player.frameInterval) {
+            player.frameTimer = 0;
+            player.frameIndex = (player.frameIndex + 1) % 8;
+        }
+
+        var ex = player.x;
+        var ey = player.y;
+        var w = player.width;
+        var h = player.height;
+        var cx = ex + w / 2;
+        var cy = ey + h / 2;
+
+        // estado visual
+        var bodyColor = player.color || 'blue';
+        if (player.state === 'hurt') bodyColor = '#ff6666';
+        if (player.state === 'attack') bodyColor = '#ffd54a';
+
+        // calcular swing baseado no tempo/frames
+        var t = (player.frameIndex / 8) * Math.PI * 2;
+        var armSwing = Math.sin(t) * 0.6; // radianos pequenos
+        var legSwing = Math.cos(t) * 0.6;
+
+        // torso
+        ctx.fillStyle = bodyColor;
+        ctx.fillRect(ex, ey, w, h);
+
+        // cabeça (círculo simples)
+        ctx.fillStyle = 'black';
+        ctx.beginPath();
+        ctx.arc(cx, ey + Math.floor(h * 0.18), Math.max(4, Math.floor(w * 0.18)), 0, Math.PI * 2);
+        ctx.fill();
+
+        // membros: usar transform para rotacionar braços e pernas
+        var limbColor = 'rgba(60,40,30,1)';
+        if (player.state === 'hurt') limbColor = 'rgba(140,40,40,1)';
+
+        // braços
+        var shoulderY = ey + Math.floor(h * 0.35);
+        var armLength = Math.max(12, Math.floor(w * 0.6));
+        var armWidth = Math.max(5, Math.floor(w * 0.12));
+
+        // braço esquerdo
+        ctx.save();
+        ctx.translate(ex + Math.floor(w * 0.18), shoulderY);
+        var leftAngle = armSwing + (player.state === 'attack' ? -0.8 : 0);
+        ctx.rotate(leftAngle);
+        ctx.fillStyle = limbColor;
+        ctx.fillRect(0, -Math.floor(armWidth/2), armLength, armWidth);
+        // mão
+        ctx.fillStyle = 'black';
+        ctx.fillRect(armLength - 4, -Math.floor(armWidth/2) - 2, 6, 6);
+        ctx.restore();
+
+        // braço direito
+        ctx.save();
+        ctx.translate(ex + w - Math.floor(w * 0.18), shoulderY);
+        var rightAngle = -armSwing + (player.state === 'shoot' ? 0.6 : 0);
+        ctx.rotate(rightAngle);
+        ctx.fillStyle = limbColor;
+        ctx.fillRect(-armLength, -Math.floor(armWidth/2), armLength, armWidth);
+        // mão
+        ctx.fillStyle = 'black';
+        ctx.fillRect(-armLength - 2, -Math.floor(armWidth/2) - 2, 6, 6);
+        ctx.restore();
+
+        // pernas (com 'joelhos' simples: dois segmentos)
+        var hipY = ey + h;
+        var upperLeg = Math.max(10, Math.floor(h * 0.4));
+        var lowerLeg = Math.max(8, Math.floor(h * 0.35));
+        var legW = Math.max(6, Math.floor(w * 0.22));
+
+        // perna esquerda
+        ctx.save();
+        ctx.translate(ex + Math.floor(w * 0.28), hipY);
+        var la = legSwing * 0.8;
+        ctx.rotate(la);
+        ctx.fillStyle = limbColor;
+        // coxa
+        ctx.fillRect(-Math.floor(legW/2), 0, legW, upperLeg);
+        // joelho -> parte inferior
+        ctx.translate(0, upperLeg);
+        ctx.rotate(la * 0.6);
+        ctx.fillRect(-Math.floor(legW/2), 0, legW, lowerLeg);
+        ctx.restore();
+
+        // perna direita
+        ctx.save();
+        ctx.translate(ex + w - Math.floor(w * 0.28), hipY);
+        var ra = -legSwing * 0.8;
+        ctx.rotate(ra);
+        ctx.fillStyle = limbColor;
+        ctx.fillRect(-Math.floor(legW/2), 0, legW, upperLeg);
+        ctx.translate(0, upperLeg);
+        ctx.rotate(ra * 0.6);
+        ctx.fillRect(-Math.floor(legW/2), 0, legW, lowerLeg);
+        ctx.restore();
+
+        // olho/face marker
+        ctx.fillStyle = 'white';
+        ctx.fillRect(cx - 3, ey + Math.floor(h * 0.12), 2, 2);
+    }
+
+    // Desenha inimigo com animação simples
+    function drawEnemyAnimated(enemy) {
+        enemy.frameIndex = enemy.frameIndex || 0;
+        enemy.frameTimer = enemy.frameTimer || 0;
+        enemy.frameInterval = enemy.frameInterval || 12;
+        enemy.frameTimer++;
+        if (enemy.frameTimer >= enemy.frameInterval) {
+            enemy.frameTimer = 0;
+            enemy.frameIndex = (enemy.frameIndex + 1) % 4;
+        }
+
+        var wobble = (enemy.frameIndex % 2 === 0) ? -1.5 : 1.5;
+        var ex = enemy.x;
+        var ey = enemy.y + wobble;
+        var ew = enemy.width;
+        var eh = enemy.height;
+
+        // Corpo
+        ctx.fillStyle = enemy.dying ? 'darkred' : enemy.color;
+        ctx.fillRect(ex, ey, ew, eh);
+
+        // Membros simples: braços e pernas
+        // Swing baseado no frameIndex para animação
+        var t = (enemy.frameIndex / 4) * Math.PI * 2;
+        var armSwing = Math.sin(t) * Math.min(6, ew * 0.15);
+        var legSwing = Math.cos(t) * Math.min(4, eh * 0.12);
+
+        // Cor dos membros (tom mais escuro)
+        var limbColor = 'rgba(70,40,40,1)';
+        if (enemy.dying) limbColor = 'rgba(120,20,20,1)';
+        ctx.fillStyle = limbColor;
+
+        // Braços (acima do centro)
+        var armY = ey + Math.floor(eh * 0.25);
+        var armWidth = Math.max(4, Math.floor(ew * 0.12));
+        var armHeight = Math.max(8, Math.floor(eh * 0.25));
+        // Braço esquerdo
+        ctx.fillRect(ex - armWidth, armY + armSwing * 0.4, armWidth, armHeight);
+        // Braço direito
+        ctx.fillRect(ex + ew, armY - armSwing * 0.4, armWidth, armHeight);
+
+        // Pernas (abaixo do corpo)
+        var legY = ey + eh;
+        var legW = Math.max(6, Math.floor(ew * 0.22));
+        var legH = Math.max(10, Math.floor(eh * 0.35));
+        // Perna esquerda
+        ctx.fillRect(ex + Math.floor(ew * 0.12), legY, legW, legH + legSwing);
+        // Perna direita
+        ctx.fillRect(ex + ew - Math.floor(ew * 0.12) - legW, legY, legW, legH - legSwing);
+    }
+
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -1057,18 +1269,34 @@
             ctx.strokeRect(drawX, door.y, drawWidth, door.height);
         }
 
-        // Desenhar jogador
-        ctx.fillStyle = player.color;
-        ctx.fillRect(player.x, player.y, player.width, player.height);
-        
+        // Desenhar jogador (animação protótipo)
+        drawPlayerAnimated();
+
         // Desenhar arma rotacionada baseado na direção
         drawWeapon();
+
+        // Desenhar cadáveres (corpos no chão) com fade-out
+        for (var ci = 0; ci < corpses.length; ci++) {
+            var c = corpses[ci];
+            var md = c.maxDecay || c.decay || 300;
+            var alpha = Math.max(0, (c.decay || md) / md);
+            ctx.save();
+            ctx.globalAlpha = alpha;
+            ctx.fillStyle = c.color;
+            ctx.fillRect(c.x, c.y, c.width, c.height);
+            // mancha de sangue por baixo (também fadear)
+            ctx.fillStyle = 'rgba(120,0,0,0.6)';
+            ctx.beginPath();
+            ctx.arc(c.x + c.width / 2, c.y + c.height, Math.max(c.width, c.height) * 0.6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
 
         // Desenhar inimigos
         for (var i = 0; i < enemies.length; i++) {
             var enemy = enemies[i];
-            ctx.fillStyle = enemy.dying ? 'darkred' : enemy.color; // Vermelho escuro se morrendo
-            ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+            // Desenhar inimigo com animação protótipo
+            drawEnemyAnimated(enemy);
 
             // Barra de vida acima do inimigo
             var barWidth = enemy.width;
@@ -1136,13 +1364,34 @@
             ctx.arc(miraX, miraY, 6, 0, Math.PI * 2);
             ctx.fill();
         }
-        // Desenhar efeitos (sangue / impacto)
-        for (var i = 0; i < effects.length; i++) {
+        // Atualizar e desenhar efeitos (sangue / impacto)
+        for (var i = effects.length - 1; i >= 0; i--) {
             var fx = effects[i];
-            ctx.fillStyle = 'rgba(200,0,0,' + (fx.life / 20) + ')';
+            if (fx.dx) {
+                fx.x += fx.dx;
+                fx.y += fx.dy;
+                fx.dx *= 0.98;
+                fx.dy *= 0.98;
+            }
+            fx.life--;
+            if (fx.life <= 0) {
+                effects.splice(i, 1);
+                continue;
+            }
+            ctx.fillStyle = 'rgba(200,0,0,' + (fx.life / 30) + ')';
             ctx.beginPath();
             ctx.arc(fx.x, fx.y, fx.r, 0, Math.PI * 2);
             ctx.fill();
+        }
+
+        // Atualizar cadáveres (decay)
+        for (var ci = corpses.length - 1; ci >= 0; ci--) {
+            var c = corpses[ci];
+            if (typeof c.decay === 'undefined') c.decay = c.maxDecay || 300;
+            c.decay--;
+            if (c.decay <= 0) {
+                corpses.splice(ci, 1);
+            }
         }
 
         // HUD
@@ -1346,10 +1595,14 @@
         if (player.velocityX !== 0 || player.velocityY !== 0) {
             var len = Math.sqrt(player.velocityX * player.velocityX + player.velocityY * player.velocityY);
             facing = { x: player.velocityX / len, y: player.velocityY / len };
+            if (!isAttacking && !isShooting) player.state = 'walk';
+        } else {
+            if (!isAttacking && !isShooting) player.state = 'idle';
         }
 
         if ((currentWeapon === 'sword' || currentWeapon === 'KATANA') && isAttacking && attackCooldown <= 0) {
             attackCooldown = weapons[currentWeapon].cooldown || weapons.sword.cooldown;
+            player.state = 'attack';
             for (var i = 0; i < enemies.length; i++) {
                 var enemy = enemies[i];
                 var centerPX = player.x + player.width / 2;
@@ -1370,12 +1623,12 @@
                         damage *= 2; // +100% de dano
                         enemy.firstHit = true;
                     }
+                    enemy.lastDamage = damage;
                     enemy.health -= damage;
                     addEffect(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
                     playHitSound();
                     if (enemy.health <= 0) {
-                        enemy.dying = true;
-                        enemy.deathTimer = 30;
+                        handleEnemyDeath(enemy);
                         doors.forEach(function(d) { d.locked = false; d.color = 'green'; d.opening = true; d.openProgress = 0; });
                         // Poder do Mecânico: recupera vida ao derrotar inimigo
                         if (player.character === 'mecânico') {
@@ -1410,6 +1663,7 @@
                 type: currentWeapon,
                 splash: weapons[currentWeapon].splash || 0
             });
+            player.state = 'shoot';
             playShootSound();
         }
 
@@ -1435,10 +1689,11 @@
                                 var dy2 = (otherEnemy.y + otherEnemy.height / 2) - (enemy.y + enemy.height / 2);
                                 var dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
                                 if (dist2 < b.splash) {
-                                    otherEnemy.health -= Math.floor(b.damage * 0.5);
+                                    var splashDmg = Math.floor(b.damage * 0.5);
+                                    otherEnemy.lastDamage = splashDmg;
+                                    otherEnemy.health -= splashDmg;
                                     if (otherEnemy.health <= 0) {
-                                        otherEnemy.dying = true;
-                                        otherEnemy.deathTimer = 30;
+                                        handleEnemyDeath(otherEnemy);
                                     }
                                 }
                             }
@@ -1447,8 +1702,7 @@
                     bullets.splice(i, 1);
                     removed = true;
                     if (enemy.health <= 0) {
-                        enemy.dying = true;
-                        enemy.deathTimer = 30;
+                        handleEnemyDeath(enemy);
                         doors.forEach(function(d) { d.locked = false; d.color = 'green'; d.opening = true; d.openProgress = 0; });
                     }
                     break;
@@ -1494,6 +1748,9 @@
                 playerHealth -= b.damage;
                 addEffect(player.x + player.width / 2, player.y + player.height / 2);
                 playHitSound();
+                // animação de dano
+                player.hurtTimer = 30;
+                player.state = 'hurt';
                 enemyBullets.splice(i, 1);
                 removed = true;
             }
@@ -1518,6 +1775,17 @@
             
             if (b.life <= 0) enemyBullets.splice(i, 1);
         }
+
+        // atualizar animação de 'hurt' se necessário
+        if (player.hurtTimer > 0) {
+            player.hurtTimer--;
+            if (player.hurtTimer <= 0) {
+                player.state = (player.velocityX !== 0 || player.velocityY !== 0) ? 'walk' : 'idle';
+            }
+        }
+
+        // atualizar estado de vida anterior
+        previousPlayerHealth = playerHealth;
 
         // A porta abre somente após matar um zumbi
 
@@ -1577,33 +1845,14 @@
             if (infectionDamageTimer <= 0) {
                 infectionDamageTimer = 60;
                 playerHealth = Math.max(0, playerHealth - 1);
+                // animação de dano por infecção
+                player.hurtTimer = 20;
+                player.state = 'hurt';
                 saveGameState();
             }
         }
 
-        // Atualizar inimigos morrendo
-        for (var i = enemies.length - 1; i >= 0; i--) {
-            var enemy = enemies[i];
-            if (enemy.dying) {
-                enemy.deathTimer--;
-                if (enemy.deathTimer <= 0) {
-                    enemies.splice(i, 1);
-                    points += enemy.points || 20;
-                    playerEse += Math.floor((enemy.points || 20) * 0.5); // Ganhar ESE (50% dos pontos)
-                    saveGameState();
-                    
-                    // Se está infectado, contar zúbis mortos
-                    if (isInfected) {
-                        zombiesKilledWhileInfected++;
-                        if (zombiesKilledWhileInfected >= 3) {
-                            // Se matou 3 zúbis, se cura da infecção
-                            isInfected = false;
-                            zombiesKilledWhileInfected = 0;
-                        }
-                    }
-                }
-            }
-        }
+        // (mortes agora tratadas imediatamente em handleEnemyDeath)
 
         // Cooldown do ataque
         if (attackCooldown > 0) attackCooldown--;
@@ -1816,7 +2065,9 @@
         requestAnimationFrame(gameLoop);
     }
     gameLoop();
-    function resetGame(showMenu = true) {
+    function resetGame(showMenu = true, freshRestart = true) {
+        // freshRestart=true -> new run: refill ammo and reset points
+        // freshRestart=false -> respawn/try again: keep saved ammo and reserves
         loadedGameState = false;
         gamePhase = 0;
         generatePhaseOrder();
@@ -1825,7 +2076,8 @@
         effects = [];
         bullets = [];
         enemyBullets = [];
-        points = 0;
+        corpses = [];
+        points = freshRestart ? 0 : points;
         playerHealth = player.maxHealth;
         isInfected = false;
         zombiesKilledWhileInfected = 0;
@@ -1838,9 +2090,11 @@
         if (showMenu) menuOverlay.classList.remove('hidden');
         gameOverOverlay.classList.add('hidden');
         setupPhase();
-        for (var w in maxAmmo) {
-            ammo[w] = ownedWeapons[w] ? maxAmmo[w] : 0;
-            ammoReserve[w] = ownedWeapons[w] ? maxReserve[w] : 0;
+        if (freshRestart) {
+            for (var w in maxAmmo) {
+                ammo[w] = ownedWeapons[w] ? maxAmmo[w] : 0;
+                ammoReserve[w] = ownedWeapons[w] ? maxReserve[w] : 0;
+            }
         }
     }
 
@@ -2118,6 +2372,8 @@
     function setGameOver(title) {
         gameRunning = false;
         paused = false;
+        // salvar estado atual (inclui munição) para manter alterações ao reiniciar
+        saveGameState();
         salvarEseJogador();
         gameOverTitle.textContent = title;
         gameOverText.textContent = 'Pressione "Jogar novamente" ou R para tentar de novo. ESE Ganho: ' + playerEse;
@@ -2291,6 +2547,24 @@
     function saveGameState() {
         try {
             var saveData = {
+                meta: { savedAt: Date.now(), version: 1 },
+                player: {
+                    x: player.x,
+                    y: player.y,
+                    width: player.width,
+                    height: player.height,
+                    color: player.color,
+                    speed: player.speed,
+                    velocityX: player.velocityX,
+                    velocityY: player.velocityY,
+                    character: player.character,
+                    email: player.email,
+                    maxHealth: player.maxHealth,
+                    frameIndex: player.frameIndex,
+                    frameTimer: player.frameTimer,
+                    frameInterval: player.frameInterval,
+                    state: player.state
+                },
                 playerEse: playerEse,
                 ownedWeapons: ownedWeapons,
                 currentWeapon: currentWeapon,
@@ -2299,13 +2573,24 @@
                 ammoReserve: ammoReserve,
                 playerHealth: playerHealth,
                 points: points,
+                energy: energy,
+                maxEnergy: maxEnergy,
                 isInfected: isInfected,
                 zombiesKilledWhileInfected: zombiesKilledWhileInfected,
+                infectionDamageTimer: infectionDamageTimer,
                 gamePhase: gamePhase,
                 phaseOrder: phaseOrder,
                 playerCharacter: player.character,
                 ownedCharacters: ownedCharacters,
-                lastAdWatchTime: lastAdWatchTime
+                lastAdWatchTime: lastAdWatchTime,
+                enemies: enemies,
+                bullets: bullets,
+                enemyBullets: enemyBullets,
+                corpses: corpses,
+                obstacles: obstacles,
+                doors: doors,
+                effects: effects,
+                pointGoal: pointGoal
             };
             localStorage.setItem(localSaveKey, JSON.stringify(saveData));
         } catch (e) {
@@ -2318,6 +2603,24 @@
         try {
             var saveData = JSON.parse(localStorage.getItem(localSaveKey) || 'null');
             if (!saveData) return;
+            // player
+            if (saveData.player) {
+                player.x = saveData.player.x || player.x;
+                player.y = saveData.player.y || player.y;
+                player.width = saveData.player.width || player.width;
+                player.height = saveData.player.height || player.height;
+                player.color = saveData.player.color || player.color;
+                player.speed = saveData.player.speed || player.speed;
+                player.velocityX = saveData.player.velocityX || player.velocityX;
+                player.velocityY = saveData.player.velocityY || player.velocityY;
+                player.character = saveData.player.character || player.character;
+                player.email = saveData.player.email || player.email;
+                player.maxHealth = saveData.player.maxHealth || player.maxHealth;
+                player.frameIndex = saveData.player.frameIndex || player.frameIndex;
+                player.frameTimer = saveData.player.frameTimer || player.frameTimer;
+                player.frameInterval = saveData.player.frameInterval || player.frameInterval;
+                player.state = saveData.player.state || player.state;
+            }
             if (typeof saveData.playerEse === 'number') playerEse = saveData.playerEse;
             if (saveData.ownedWeapons) ownedWeapons = saveData.ownedWeapons;
             if (typeof saveData.currentWeapon === 'string') currentWeapon = saveData.currentWeapon;
@@ -2326,18 +2629,97 @@
             if (saveData.ammoReserve) ammoReserve = saveData.ammoReserve;
             if (typeof saveData.playerHealth === 'number') playerHealth = saveData.playerHealth;
             if (typeof saveData.points === 'number') points = saveData.points;
+            if (typeof saveData.energy === 'number') energy = saveData.energy;
+            if (typeof saveData.maxEnergy === 'number') maxEnergy = saveData.maxEnergy;
             if (typeof saveData.isInfected === 'boolean') isInfected = saveData.isInfected;
             if (typeof saveData.zombiesKilledWhileInfected === 'number') zombiesKilledWhileInfected = saveData.zombiesKilledWhileInfected;
+            if (typeof saveData.infectionDamageTimer === 'number') infectionDamageTimer = saveData.infectionDamageTimer;
             if (typeof saveData.gamePhase === 'number') gamePhase = saveData.gamePhase;
             if (saveData.phaseOrder) phaseOrder = saveData.phaseOrder;
             if (typeof saveData.playerCharacter === 'string') player.character = saveData.playerCharacter;
             if (saveData.ownedCharacters) ownedCharacters = saveData.ownedCharacters;
             if (typeof saveData.lastAdWatchTime === 'number') lastAdWatchTime = saveData.lastAdWatchTime;
+            if (Array.isArray(saveData.enemies)) enemies = saveData.enemies;
+            if (Array.isArray(saveData.bullets)) bullets = saveData.bullets;
+            if (Array.isArray(saveData.enemyBullets)) enemyBullets = saveData.enemyBullets;
+            if (Array.isArray(saveData.corpses)) corpses = saveData.corpses;
+            if (Array.isArray(saveData.obstacles)) obstacles = saveData.obstacles;
+            if (Array.isArray(saveData.doors)) doors = saveData.doors;
+            if (Array.isArray(saveData.effects)) effects = saveData.effects;
+            if (typeof saveData.pointGoal === 'number') pointGoal = saveData.pointGoal;
             loadedGameState = true;
         } catch (e) {
             console.warn('Falha ao carregar o estado do jogo:', e);
         }
     }
+
+    // Exporta o save atual como arquivo JSON para download
+    function exportSaveToFile() {
+        try {
+            saveGameState();
+            var data = localStorage.getItem(localSaveKey);
+            if (!data) return alert('Nenhum save encontrado para exportar.');
+            var blob = new Blob([data], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'mpp_save_' + new Date().toISOString().replace(/[:.]/g, '-') + '.json';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        } catch (e) {
+            console.warn('Erro ao exportar save:', e);
+        }
+    }
+
+    // Importa um arquivo de save JSON (usado pelo input file)
+    function importSaveFromFileInput(evt) {
+        var file = evt.target.files && evt.target.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                var text = e.target.result;
+                var parsed = JSON.parse(text);
+                // confirmar se existe um save atual
+                var existing = localStorage.getItem(localSaveKey);
+                if (existing) {
+                    var ok = confirm('Já existe um save salvo localmente. Deseja sobrescrever?');
+                    if (!ok) return alert('Importação cancelada.');
+                }
+                localStorage.setItem(localSaveKey, JSON.stringify(parsed));
+                loadGameState();
+                alert('Save importado com sucesso.');
+            } catch (er) {
+                alert('Arquivo inválido: ' + er.message);
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    // Cria um input oculto para importação e atalhos de teclado
+    (function setupSaveIO() {
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/json';
+        input.style.display = 'none';
+        input.addEventListener('change', importSaveFromFileInput);
+        document.body.appendChild(input);
+
+        // Atalhos: Shift+E exporta, Shift+I importa
+        window.addEventListener('keydown', function(e) {
+            if (e.shiftKey && e.key === 'E') {
+                exportSaveToFile();
+            }
+            if (e.shiftKey && e.key === 'I') {
+                input.value = null;
+                input.click();
+            }
+        });
+        // expõe função para abrir seletor via botão
+        window.triggerImportSave = function() { input.value = null; input.click(); };
+    })();
 
     // Carregar dados do usuário logado ao iniciar
     window.addEventListener('load', function() {
@@ -2375,6 +2757,15 @@
         setInterval(function() {
             atualizarAdStatus();
         }, 1000);
+        // conectar botões visíveis de export/import
+        try {
+            var exBtn = document.getElementById('exportSaveBtn');
+            var imBtn = document.getElementById('importSaveBtn');
+            if (exBtn) exBtn.addEventListener('click', exportSaveToFile);
+            if (imBtn) imBtn.addEventListener('click', function() {
+                if (window.triggerImportSave) window.triggerImportSave(); else alert('Import não disponível. Use Shift+I para importar.');
+            });
+        } catch (e) {}
     });
     // Jogo implementado: inimigos, combate, pontos e objetivo de 100 pontos para vencer!
 
